@@ -39,7 +39,11 @@ package projects.BaseTest;
 
 import javax.swing.JOptionPane;
 
+import sinalgo.Run;
 import sinalgo.runtime.AbstractCustomGlobal;
+import sinalgo.runtime.Global;
+import sinalgo.runtime.Runtime;
+import sinalgo.tools.Tools;
 
 /**
  * This class holds customized global state and methods for the framework. 
@@ -91,4 +95,16 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	public void sampleButton() {
 		JOptionPane.showMessageDialog(null, "You Pressed the 'GO' button.");
 	}
+
+	@Override
+	public void preRun() {
+		// TODO Auto-generated method stub
+		super.preRun();
+		Runtime.reevaluateConnections();
+	}
+
+	
+	
+	
+	
 }
