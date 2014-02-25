@@ -1,6 +1,7 @@
 package projects.BaseTest.nodes.nodeImplementations;
 
 import java.awt.Color;
+import java.util.Iterator;
 
 import projects.BaseTest.nodes.messages.MBT;
 import projects.BaseTest.nodes.timers.Temporizador;
@@ -9,6 +10,8 @@ import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.runtime.Global;
+import sinalgo.runtime.Runtime;
+import sinalgo.runtime.events.Event;
 import sinalgo.tools.Tools;
 
 public class NodeBT extends Node {
@@ -44,7 +47,16 @@ public class NodeBT extends Node {
 	public void init() {
 		// TODO Auto-generated method stub
 		if(this.ID == 1){
-			t.startRelative(.000000000000001, this);
+			t.startRelative(.01, this);
+			t = new Temporizador(new MBT("Ola2 sou o "+this.ID));
+			t.startRelative(.02, this);
+			Iterator<Event> it = Runtime.eventQueue.iterator();
+			Event e;
+			while(it.hasNext()){
+				e = it.next();
+				System.out.println("Id evento "+e.id+" time "+e.time);
+				e.time += 2;
+			}
 		}
 	}
 

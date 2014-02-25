@@ -127,6 +127,11 @@ public abstract class Timer implements Comparable<Timer> {
 		}
 	}
 
+	
+	public final void updateTimer(double updateTimer){
+		this.fireTime = fireTime + updateTimer;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */

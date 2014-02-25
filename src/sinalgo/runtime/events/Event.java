@@ -50,7 +50,7 @@ public abstract class Event implements DoublyLinkedListEntry {
 	public double time;
 	
 	//the id of this event (this id is just used interanally for ordering the events)
-	long id = 0;
+	public long id = 0;
 	protected static long nextId = 1;
 	
 	/**
