@@ -103,6 +103,12 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		Runtime.reevaluateConnections();
 	}
 
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		super.onExit();
+	}
+
 	
 	
 	

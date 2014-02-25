@@ -2,6 +2,8 @@ package projects.BaseTest.nodes.timers;
 
 import projects.BaseTest.nodes.messages.MBT;
 import projects.BaseTest.nodes.nodeImplementations.NodeBT;
+import sinalgo.nodes.messages.Message;
+import sinalgo.nodes.messages.Packet;
 import sinalgo.nodes.timers.Timer;
 
 public class Temporizador extends Timer {
@@ -23,7 +25,7 @@ public class Temporizador extends Timer {
 	@Override
 	public void fire() {
 		// TODO Auto-generated method stub
-		((NodeBT) this.node).broadcast(m);
+		((NodeBT) this.node).broadcast(m, 0.5);
 	}
 
 }

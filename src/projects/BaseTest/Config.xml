@@ -20,7 +20,7 @@
 		<!--  Simulation                                                           -->
 		<!--***********************************************************************-->
 		<!--Switches between synchronous and asynchronous mode.-->
-		<asynchronousMode value="false" />
+		<asynchronousMode value="true" />
 
 		<!--If set to true, the runtime obtains for each node a new position from the mobility model at the beginning of each round. This flag needs to be turned on if the chosen  mobility model of any node may change the node's position. Set this flag to FALSE for static graphs whose nodes do never change their position to increase performance.-->
 		<mobility value="false" />
@@ -44,7 +44,7 @@
 		<exitOnTerminationInGUI value="false" />
 
 		<!--If set true, in asynchronous mode the connections are initialized before the first event executes. Note that this flag is useless in synchronous mode as the connections are updated in every step anyway.-->
-		<initializeConnectionsOnStartup value="false" />
+		<initializeConnectionsOnStartup value="true" />
 
 		<!--Defines how often the GUI is updated. The GUI is redrawn after every refreshRate-th round.-->
 		<refreshRate value="1" />
@@ -131,10 +131,10 @@
 		<!--  Models                                                               -->
 		<!--***********************************************************************-->
 		<!--The message transmission model used when none is specified-->
-		<DefaultMessageTransmissionModel value="ConstantTime" />
+		<DefaultMessageTransmissionModel value="BaseTest:MyMsgTransModel" />
 
 		<!--Default connectivity model used when none is specified-->
-		<DefaultConnectivityModel value="UDG" />
+		<DefaultConnectivityModel value="BaseTest:MyConnectivityHelper" />
 
 		<!--Default distribution model used when none is specified-->
 		<DefaultDistributionModel value="Random" />
@@ -229,9 +229,9 @@
 	
 <Node defaultSize="10" />
 
-<GeometricNodeCollection rMax="1000"/>
+<GeometricNodeCollection rMax="793"/>
 
-<UDG rMax="1000"/>
+<UDG rMax="793"/>
 
 <SINR alpha="2" beta="0.7" noise="0"/>
 
@@ -247,6 +247,6 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-				</Custom>
+											</Custom>
 </Document>
 
