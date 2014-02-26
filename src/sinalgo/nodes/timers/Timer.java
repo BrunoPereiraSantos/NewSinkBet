@@ -37,10 +37,13 @@
 package sinalgo.nodes.timers;
 
 
+import java.util.Iterator;
+
 import sinalgo.nodes.Node;
 import sinalgo.runtime.Global;
 import sinalgo.runtime.Main;
 import sinalgo.runtime.Runtime;
+import sinalgo.runtime.events.Event;
 import sinalgo.runtime.events.TimerEvent;
 
 /**
@@ -128,8 +131,32 @@ public abstract class Timer implements Comparable<Timer> {
 	}
 
 	
-	public final void updateTimer(double updateTimer){
-		this.fireTime = fireTime + updateTimer;
+	public final void updateTimer(double updateTimer, Node n){
+		
+		if(updateTimer <= 0) {
+			Main.fatalError("A relative time indicating when a timer should start must be strictly positive.");
+		}
+		node = n;
+		//fireTime = Global.currentTime + updateTimer;
+		if(Global.isAsynchronousMode){
+			//Runtime.eventQueue.insert(TimerEvent.getNewTimerEvent(this, fireTime));
+			
+			Iterator<Event> it = Runtime.eventQueue.iterator();
+			Event e;
+			while(it.hasNext()){
+				e = it.next();
+				if(n.equals(e.getEventNode())){
+					e.time += updateTimer;
+				}
+			}
+			
+			System.out.println(fireTime);
+		}	
+//		else {
+//			node.getTimers().add(this);
+//		}
+		
+		
 	}
 	
 	/* (non-Javadoc)

@@ -80,6 +80,9 @@ public class NodeEtx extends Node {
 	//variavel para indicar qual o tempo de inicio do primerio evento deste no
 	private int timeEvent;
 	
+	//ID da mensagem que deve ser atrasada devido a varios caminhos
+	private int fwdMsgID;
+	
 	//variavel para gerar numeros aleatorios
 	private Random gerador = new Random();
 	
@@ -186,7 +189,8 @@ public class NodeEtx extends Node {
 			setPathsToSink(getPathsToSink() + message.getPath());
 			//setPathsToSink(getPathsToSink() + 1);
 			//fhp.updateTimer(2.0);
-			fhp.updateTimer(2.0);
+			
+			fhp.updateTimer(2.0, this);
 			//setSentMyHello(false);
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
