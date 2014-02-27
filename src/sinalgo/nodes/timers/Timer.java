@@ -103,7 +103,6 @@ public abstract class Timer implements Comparable<Timer> {
 		fireTime = Global.currentTime + relativeTime;
 		if(Global.isAsynchronousMode){
 			Runtime.eventQueue.insert(TimerEvent.getNewTimerEvent(this, fireTime));
-			System.out.println(fireTime);
 		}	else {
 			node.getTimers().add(this);
 		}
@@ -149,12 +148,10 @@ public abstract class Timer implements Comparable<Timer> {
 					e.time += updateTimer;
 				}
 			}
-			
-			System.out.println(fireTime);
 		}	
-//		else {
-//			node.getTimers().add(this);
-//		}
+		else {
+			fireTime = Global.currentTime + updateTimer;
+		}
 		
 		
 	}
