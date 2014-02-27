@@ -328,9 +328,7 @@ public class NodeEtx extends Node {
 		
 		// Uma mensagem foi recebida pelos ancestrais logo devo analisar se e o meu nextHop
 		if (message.getETX() + etxToNode <= getEtxPath()){
-			if(this.ID == 6){
-				System.out.println(message);
-			}
+			
 			if (message.getsBet() > getNeighborMaxSBet()) {
 				//System.out.println("Antes\n"+this);
 				setNeighborMaxSBet(message.getsBet());
