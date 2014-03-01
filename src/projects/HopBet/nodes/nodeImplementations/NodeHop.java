@@ -1,4 +1,4 @@
-package projects.EtxBet.nodes.nodeImplementations;
+package projects.HopBet.nodes.nodeImplementations;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -10,24 +10,26 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import projects.EtxBet.nodes.edges.EdgeEtx;
-import projects.EtxBet.nodes.messages.PackHelloEtx;
-import projects.EtxBet.nodes.messages.PackReplyEtx;
-import projects.EtxBet.nodes.timers.TimerFwdReplyEtx;
 import projects.EtxBet.nodes.timers.TimerSendHelloEtx;
 import projects.EtxBet.nodes.timers.TimerStartReplyFlood;
-import projects.EtxBet.nodes.timers.TimerStartSimulationEtx;
+import projects.HopBet.nodes.edges.EdgeHop;
+import projects.HopBet.nodes.messages.PackHelloHop;
 import projects.HopBet.nodes.messages.PackReplyHop;
+import projects.HopBet.nodes.timers.TimerFwdReplyHop;
+import projects.HopBet.nodes.timers.TimerSendHelloHopSbet;
+import projects.HopBet.nodes.timers.TimerStartSimulation;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 
-public class NodeEtx extends Node {
-	// Qual o papel do nodo
-	private NodeRoleEtx role;
-		
+public class NodeHop extends Node {
+
+	
+	// Qual o papel do nodo.
+	private NodeRoleHopSbet role;
+	
 	//private int sonsPath[];
 	//cada nodo mantem um map com chave(num de caminhos) e valor(quantos nodos descendentes tem 'num de caminhos'
 	private Map<Integer, Integer> sonsPathMap;	
@@ -54,7 +56,7 @@ public class NodeEtx extends Node {
 	//Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello;
 	
-	//Flag para indicar se o nodo ja enviou seu pkt border
+	//Flag para indicar se o nodo ja enviou seu pkt reply
 	private boolean sentMyReply;
 	
 	//Flag para indicar que o nodo recebeu um Ack
@@ -62,7 +64,7 @@ public class NodeEtx extends Node {
 	
 	//Flag para indicar se o nodo esta em periodo de agregacao
 	private boolean inAggregation;
-	
+
 	//Flag para informar se o nodo emitira evento
 	private boolean sendEvent;
 	
@@ -73,7 +75,7 @@ public class NodeEtx extends Node {
 	private ArrayList<Integer> sons;	
 	
 	//array com os vizinhos diretos do nodo.
-	private ArrayList<Integer> neighbors;	
+	private ArrayList<Integer> neighbors;
 	
 	//variavel para indicar quais nodos emitirao eventos
 	private static Set<Integer>  setNodesEv = new HashSet<Integer>();
@@ -81,141 +83,89 @@ public class NodeEtx extends Node {
 	//variavel para indicar qual o tempo de inicio do primerio evento deste no
 	private int timeEvent;
 	
-	//ID da mensagem que deve ser atrasada devido a varios caminhos
-	private int fwdMsgID;
-	
 	//variavel para gerar numeros aleatorios
 	private Random gerador = new Random();
-	
-	// etx acumulado do caminho ate o nodo
-	// Obs: note que o valor do etx acumulado
-		// sao sempre calculados com as arestas que
-		// apontam para o caminho ate o sink
-		// ex: 2 ~[3.0]> 1 e 3 ~[2.0]> 2
-		// entao etxPath (etx acumulado) do nodo 3 = 5
-	private double etxPath;
-	
+
 	//Disparadores de flood
-	TimerSendHelloEtx fhp = new TimerSendHelloEtx();
+	TimerSendHelloHopSbet fhp = new TimerSendHelloHopSbet();
 	TimerStartReplyFlood srf = new TimerStartReplyFlood();
 	
 	@Override
 	public void handleMessages(Inbox inbox) {
+		// TODO Auto-generated method stub
 		while (inbox.hasNext()) {
 			Message msg = inbox.next();
-			if (msg instanceof PackHelloEtx) {
-				
-				PackHelloEtx a = (PackHelloEtx) msg;
-				handlePackHello(inbox.getSender(), inbox.getReceiver(), a);
-				
-			}else if (msg instanceof PackReplyEtx) {
-				
-				PackReplyEtx b = (PackReplyEtx) msg;
-				handlePackReply(inbox.getSender(), inbox.getReceiver(), b);
-				
+			
+			if (msg instanceof PackHelloHop) {
+				PackHelloHop a = (PackHelloHop) msg;
+				handlePackHello(a);
+			}else if (msg instanceof PackReplyHop) {
+				PackReplyHop b = (PackReplyHop) msg;
+				handlePackReply(b);
 			}
 		}
-
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/*=============================================================
 	 *                 Manipulando o pacote Hello
 	 * ============================================================
 	 */
-	public void handlePackHello(Node sender, Node receiver, PackHelloEtx message) {
+	public void handlePackHello(PackHelloHop message) {
 		// no sink nao manipula pacotes hello
 		if (message.getSinkID() == this.ID){
 			message = null;	//drop message
 			return;
 		}
-		double etxToNode = getEtxToNode(sender.ID);
-		
+	
 		// o nodo e vizinho direto do sink (armazena o nextHop como id do sink
-		if (sender.ID == message.getSinkID()) {	
+		if (message.getSenderID() == message.getSinkID()) {	
 			setNextHop(message.getSinkID());
 			setNeighborMaxSBet(Double.MAX_VALUE);
 		}
 
 		// nodo acaba de ser descoberto ou acabou de encontrar um caminho mais curto
-		if ((message.getETX() + etxToNode) < getEtxPath() || (getEtxPath() == Double.MAX_VALUE)) {	
+		if ((message.getHops() + 1 < getHops()) || (getHops() == 0)) {	
 			this.setColor(Color.GREEN);
 			setHops(message.getHops() + 1);
 			message.setHops(getHops());
 			setPathsToSink(message.getPath());
 			setSinkID(message.getSinkID());
-			setNextHop(sender.ID);
-			setEtxPath(message.getETX() + etxToNode);
-			message.setETX(getEtxPath()); // e mesmo necessario fazer isso aqui?
-			//setSentMyHello(false);
+			setNextHop(message.getSenderID());
+			
 			
 			if(!neighbors.isEmpty()){
 				neighbors.removeAll(neighbors);
 			}
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
-			if(!neighbors.contains(sender.ID)){
-				neighbors.add(sender.ID);
+			if(!neighbors.contains(message.getSenderID())){
+				neighbors.add(message.getSenderID());
 			}
 		}
 
-		// existe mais de um caminho deste nodo ate o sink com a mesmo ETX acumulado
-		if ((message.getETX() + etxToNode) == getEtxPath()) { 
+		//existe mais de um caminho deste nodo ate o sink com a mesma quantidade de hops
+		if ((message.getHops() + 1 == getHops())) {	
 			this.setColor(Color.MAGENTA);
 			setPathsToSink(getPathsToSink() + message.getPath());
-			//setPathsToSink(getPathsToSink() + 1);
-			//fhp.updateTimer(2.0);
+			message.setHops(getHops());
 			
-			fhp.updateTimer(5.0, this);
-			//setSentMyHello(false);
+			fhp.updateTimer(2.0, this);
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
-			if(!neighbors.contains(sender.ID)){
-				neighbors.add(sender.ID);
+			if(!neighbors.contains(message.getSenderID())){
+				neighbors.add(message.getSenderID());
 			}
 		}
-		
-		
-		
+				
 		// eh a primeira vez que o nodo recebe um hello
 		// ele deve encaminhar um pacote com seus dados
 		// Essas flags ajudam para nao sobrecarregar a memoria com eventos 
 		// isto e, mandar mensagens com informa�oes desatualizadas
 		if(!isSentMyHello()){
 			//FwdPack fhp = new FwdPack(message, this.ID);
-			//fhp.setPkt(new PackHelloEtxBet(hops, pathsToSink, this.ID, 1));
-			/*message.setHops(getHops());
-			message.setETX(getEtxPath());
-			message.setSenderID(this.ID);
-			message.setSinkID(sinkID);
-			message.setPath(getPathsToSink());
-			fhp.setPkt(message);*/
-			fhp.startRelative(getHops(), this);	//Continuara o encaminhamento do pacote hello
+			//fhp.setPkt(new PackHelloHopSbet(hops, pathsToSink, this.ID, 1));
+			fhp.startRelative(getHops()+1, this);	//Continuara o encaminhamento do pacote hello
 			setSentMyHello(true);
 			
 			// Dispara um timer para enviar um pacote de borda
@@ -230,44 +180,30 @@ public class NodeEtx extends Node {
 			}
 		}
 		
-		/*System.out.println("======inicio===== node "+this.ID);
-		TimerCollection tc = getTimers();
-		System.out.println("size  "+tc.size());
-		Iterator<Timer> it = tc.iterator();
-		
-		while(it.hasNext()){
-			Timer tm = it.next();
-			if ( tm instanceof SendPackHelloEtxBet) {
-				SendPackHelloEtxBet a = (SendPackHelloEtxBet) tm;
-				System.out.println(tm.getFireTime());
-			}
-		}
-		System.out.println("======fim=====\n\n\n");*/
-		
 		message = null;	//drop message
 	}
 	
 	public void fwdHelloPack() {
 		// Encaminha um pacote com as informacoes atualizadas
-		broadcast(new PackHelloEtx(hops, pathsToSink, this.ID, sinkID, etxPath)); 
+		broadcast(new PackHelloHop(hops, pathsToSink, this.ID, sinkID)); 
 		setSentMyHello(true);
+		
 	}
 	
 	public void sendHelloFlooding() {
-		
 		//Somente o no que inicia o flood (neste caso o no 1) executa essa chamada
-		//System.out.println(pkt);
-		broadcast(new PackHelloEtx(hops, 1, this.ID, this.ID, 0.0));
+		broadcast(new PackHelloHop(hops, 1, this.ID, this.ID));
 		setSentMyHello(true);
+		
 	}
 
 	public void sendReplyFlooding(){ //Dispara o flooding das respostas dos nodos com papel BORDER e RELAY
-		if ((getRole() == NodeRoleEtx.BORDER) || 
-			(getRole() == NodeRoleEtx.RELAY)) {
+		if ((getRole() == NodeRoleHopSbet.BORDER) || 
+			(getRole() == NodeRoleHopSbet.RELAY)) {
 			this.setColor(Color.GRAY);
 			//Pack pkt = new Pack(this.hops, this.pathsToSink, this.ID, 1, this.sBet, TypeMessage.BORDER);
 			
-			PackReplyHop pkt = new PackReplyHop(hops, pathsToSink, this.ID, sinkID, nextHop, neighbors, neighborMaxSBet);
+			PackReplyHop pkt = new PackReplyHop(hops, pathsToSink, this.ID, sinkID, nextHop, neighbors, sBet);
 			broadcast(pkt);
 			
 			setSentMyReply(true);
@@ -289,52 +225,49 @@ public class NodeEtx extends Node {
 	 *                 Manipulando o pacote Reply
 	 * ============================================================
 	 */
-	public void handlePackReply(Node sender, Node receiver, PackReplyEtx message) {
+	public void handlePackReply(PackReplyHop message) {
 		
 		// o sink nao deve manipular pacotes do tipo Relay
 		if(this.ID == message.getSinkID()){
 			return;
 		}
 		
-		//ETX para o ultimo no que enviou a msg 
-		double etxToNode = getEtxToNode(sender.ID);
 		
-		// necessaria verificacao de que o no ja recebeu menssagem de um
-		// determinado descendente, isso e feito para evitar mensagens
-		// duplicadas.
-		// Se o nodo ainda nao recebeu menssagem de um descendente ele
-		// deve 'processar' (recalcular o sbet) e propagar o pacote
-		// desse descendente para que os outros nodos facam o mesmo
+		// o border e fonte nao devem manipular pacotes do tipo Relay
+		// necessaria verificacao de que o no ja recebeu menssagem 
+		// de um determinado descendente, isso e feito para evitar mensagens duplicadas.
+		// Se o nodo ainda nao recebeu menssagem de um descendente 
+		// ele deve 'processar' (recalcular o sbet) e propagar o pacote desse descendente
+		// para que os outros nodos tambem calculem seu sBet
 		if (!sons.contains(message.getSenderID()) && 
-			(message.getETX() > getEtxPath())	  && 
+			(message.getHops() > getHops())		  && 
 			(message.getSendToNodes().contains(this.ID))
 			/*(message.getSendTo() == this.ID)*/) { 
 			
 			sons.add(message.getSenderID());
 
-			// se o nodo faz essa operacao ele eh relay
 			this.setColor(Color.CYAN);
-			setRole(NodeRoleEtx.RELAY);
+			setRole(NodeRoleHopSbet.RELAY);
 			
 			processBet(message);
 			
 			message.setSendTo(getNextHop());
-			message.setFwdID(this.ID);
 			message.setSendToNodes(neighbors);
 			
-			TimerFwdReplyEtx fwdReply = new TimerFwdReplyEtx(message);
+			TimerFwdReplyHop fwdReply = new TimerFwdReplyHop(message);
+			
 			fwdReply.startRelative(1, this);
 					
 		}
 		
 		// Uma mensagem foi recebida pelos ancestrais logo devo analisar se e o meu nextHop
-		if (message.getETX() + etxToNode <= getEtxPath()){
-			
+		if (message.getHops() < getHops()){	
 			if (message.getsBet() > getNeighborMaxSBet()) {
-				//System.out.println("Antes\n"+this);
+				//System.out.println(message);
+				//System.out.println(this.ID+" Entrei e mudei meu nhop");
 				setNeighborMaxSBet(message.getsBet());
 				setNextHop(message.getSenderID());
-				//System.out.println("Depois\n"+this+"\n\n");
+				
 			}
 			message = null;
 		}
@@ -342,7 +275,7 @@ public class NodeEtx extends Node {
 		
 	}
 	
-	public void processBet(PackReplyEtx message) {	// faz o cal. do Sbet
+	public void processBet(PackReplyHop message) {	// faz o cal. do Sbet
 		// faz a adicao do par <chave, valor>
 		// chave = num de caminhos, valor = numero de nodos
 		// descendentes com 'aquela' quantidade de caminho
@@ -360,27 +293,19 @@ public class NodeEtx extends Node {
 		setsBet(tmp);
 	}
 	
-	public void fwdReply(PackReplyEtx pkt){//Dispara um broadcast com o pacote PackReplyEtxBet | metodo utilizado pelos timers
+	public void fwdReply(PackReplyHop pkt){//Dispara um broadcast com o pacote PackReplyHopSbet | metodo utilizado pelos timers
 		broadcast(pkt);
 	}
-		
-	@Override
-	public void preStep() {
-		
-	}
-
 	
 	
 	@Override
-	public void init() {
-		setRole(NodeRoleEtx.BORDER);
+	public void init() {		
+		setRole(NodeRoleHopSbet.BORDER);
 		setPathsToSink(0);
 		setHops(0);
 		setsBet(0.0);
 		setNextHop(Integer.MAX_VALUE);
 		setNeighborMaxSBet(Double.MIN_VALUE);
-		setEtxPath(Double.MAX_VALUE);
-		setRcvAck(false);
 		setSentMyReply(false);
 		setSentMyHello(false);
 		setInAggregation(false);
@@ -392,20 +317,24 @@ public class NodeEtx extends Node {
 
 		if (this.ID == 1) {
 			this.setColor(Color.BLUE);
-			setRole(NodeRoleEtx.SINK);
+			setRole(NodeRoleHopSbet.SINK);
 			
-			(new TimerStartSimulationEtx()).startRelative(3, this);
+			(new TimerStartSimulation()).startRelative(3, this);
 			
-			/*SendPackHelloEtxBet pkt = new SendPackHelloEtxBet(hops, 1, this.ID, this.ID);
+			/*SendPackHelloHopSbet pkt = new SendPackHelloHopSbet(hops, 1, this.ID, this.ID);
 			pkt.startRelative(2, this);*/
 			/*Pack p = new Pack(this.hops, this.pathsToSink, this.ID, this.ID, this.sBet, TypeMessage.HELLO);
 			
 			PackTimer pTimer = new PackTimer(p);
 			pTimer.startRelative(2, this);*/
-			
-			
-			//readConfigurationParameters();
 		}
+	}
+	
+	
+	@Override
+	public void preStep() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -426,7 +355,6 @@ public class NodeEtx extends Node {
 
 	}
 	
-	
 	public String toString() {
 
 		String str = "Dados do no ";
@@ -440,7 +368,6 @@ public class NodeEtx extends Node {
 		str = str.concat("SonspathMap -> "+sonsPathMap+"\n");
 		str = str.concat("sons -> "+sons+"\n");
 		str = str.concat("neighbors -> "+neighbors+"\n");
-		str = str.concat("etxPath "+etxPath+"\n");
 		str = str.concat("\n");
 		
 		return str;
@@ -448,8 +375,8 @@ public class NodeEtx extends Node {
 	/********************************************************************************
 	 *							Gets e Sets
 	 *********************************************************************************/
-	public NodeRoleEtx getRole() {return role;}
-	public void setRole(NodeRoleEtx role) {this.role = role;}
+	public NodeRoleHopSbet getRole() {return role;}
+	public void setRole(NodeRoleHopSbet role) {this.role = role;}
 	public Map<Integer, Integer> getSonsPathMap() {return sonsPathMap;}
 	public void setSonsPathMap(Map<Integer, Integer> sonsPathMap) {this.sonsPathMap = sonsPathMap;}
 	public int getPathsToSink() {return pathsToSink;}
@@ -463,8 +390,30 @@ public class NodeEtx extends Node {
 	public double getNeighborMaxSBet() {return neighborMaxSBet;}
 	public void setNeighborMaxSBet(double neighborMaxSBet) {this.neighborMaxSBet = neighborMaxSBet;}
 
-	
+	public double getEtxToMeFromNode(int nodeID) {
+		Iterator<Edge> it2 = this.outgoingConnections.iterator();
+		EdgeHop e;
+		while (it2.hasNext()) {
+			e = (EdgeHop) it2.next();
+			if (e.endNode.ID == nodeID){
+				e = (EdgeHop) e.getOppositeEdge();
+				return e.getEtx();
+			}
+		}
+		return 0.0;
+	}
 
+	public double getEtxToNode(int nodeID) {
+		Iterator<Edge> it2 = this.outgoingConnections.iterator();
+		EdgeHop e;
+		while (it2.hasNext()) {
+			e = (EdgeHop) it2.next();
+			if (e.endNode.ID == nodeID)
+				return e.getEtx();
+		}
+		return 0.0;
+	}
+	
 	public boolean isSentMyHello() {
 		return sentMyHello;
 	}
@@ -493,18 +442,28 @@ public class NodeEtx extends Node {
 		this.inAggregation = inAggregation;
 	}
 
-
-
-	public static Set<Integer> getSetNodesEv() {
-		return setNodesEv;
-	}
-
 	public Random getGerador() {
 		return gerador;
 	}
 
 	public void setGerador(Random gerador) {
 		this.gerador = gerador;
+	}
+
+	public TimerSendHelloHopSbet getFhp() {
+		return fhp;
+	}
+
+	public void setFhp(TimerSendHelloHopSbet fhp) {
+		this.fhp = fhp;
+	}
+
+	public TimerStartReplyFlood getSrf() {
+		return srf;
+	}
+
+	public void setSrf(TimerStartReplyFlood srf) {
+		this.srf = srf;
 	}
 
 	public int getSinkID() {
@@ -518,44 +477,11 @@ public class NodeEtx extends Node {
 	public static double getIntervalAggr() {
 		return intervalAggr;
 	}
-	
-	public double getEtxPath() {
-		return etxPath;
-	}
-
-	public void setEtxPath(double etxPath) {
-		this.etxPath = etxPath;
-	}
-
-	public double getEtxToNode(int nodeID) {
-		Iterator<Edge> it2 = this.outgoingConnections.iterator();
-		EdgeEtx e;
-		while (it2.hasNext()) {
-			e = (EdgeEtx) it2.next();
-			if (e.endNode.ID == nodeID)
-				return e.getEtx();
-		}
-		return 0.0;
-	}
-
-	public double getEtxToMeFromNode(int nodeID) {
-		Iterator<Edge> it2 = this.outgoingConnections.iterator();
-		EdgeEtx e;
-		while (it2.hasNext()) {
-			e = (EdgeEtx) it2.next();
-			if (e.endNode.ID == nodeID){
-				e = (EdgeEtx) e.getOppositeEdge();
-				return e.getEtx();
-			}
-		}
-		return 0.0;
-	}
-	
-	
 
 	public boolean isRcvAck() {
 		return rcvAck;
 	}
+
 
 	public void setRcvAck(boolean rcvAck) {
 		this.rcvAck = rcvAck;
@@ -565,16 +491,18 @@ public class NodeEtx extends Node {
 		return sendEvent;
 	}
 
+
 	public void setSendEvent(boolean sendEvent) {
 		this.sendEvent = sendEvent;
 	}
+
 
 	public int getTimeEvent() {
 		return timeEvent;
 	}
 
+
 	public void setTimeEvent(int timeEvent) {
 		this.timeEvent = timeEvent;
-	}	
-
+	}
 }

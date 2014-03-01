@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sinalgo>
+<<<<<<< HEAD
 	<ProjectSelector windowWidth="800" windowHeight="600" lastChosenProject="EtxBet" windowPosX="-2" windowPosY="25" isMaximized="true" selectedTab="2" />
 	<GUI windowWidth="1407" windowHeight="908" windowPosX="298" windowPosY="47" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
 	<RandomSeed seedFromPreviousRun="7302914057649867290" />
+=======
+	<ProjectSelector windowWidth="800" windowHeight="600" lastChosenProject="HopBet" windowPosX="-2" windowPosY="25" isMaximized="true" selectedTab="2" />
+	<GUI windowWidth="1162" windowHeight="754" windowPosX="0" windowPosY="25" isMaximized="true" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
+	<RandomSeed seedFromPreviousRun="-4272351118978460696" />
+>>>>>>> branch 'master' of git@github.com:BrunoPereiraSantos/NewSinkBet.git
 	<App lastSelectedFileDirectory="" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="" />
-	<GenNodesDlg numNodes="2" />
+	<GenNodesDlg numNodes="300" />
 </sinalgo>
 

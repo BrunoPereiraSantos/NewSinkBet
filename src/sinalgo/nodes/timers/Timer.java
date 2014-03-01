@@ -118,7 +118,7 @@ public abstract class Timer implements Comparable<Timer> {
 	 */
 	public final void startAbsolute(double absoluteTime, Node n){
 		if(absoluteTime <= Global.currentTime){
-			Main.fatalError("The absolute time when a timer goes off must be strictly larger than the current time.");
+			Main.fatalError("Bruno The absolute time when a timer goes off must be strictly larger than the current time.");
 		}
 		node = n;
 		fireTime = absoluteTime;
@@ -136,8 +136,9 @@ public abstract class Timer implements Comparable<Timer> {
 			Main.fatalError("A relative time indicating when a timer should start must be strictly positive.");
 		}
 		node = n;
-		//fireTime = Global.currentTime + updateTimer;
-		if(Global.isAsynchronousMode){
+		fireTime = Global.currentTime + updateTimer;
+		
+		/*if(Global.isAsynchronousMode){
 			//Runtime.eventQueue.insert(TimerEvent.getNewTimerEvent(this, fireTime));
 			
 			Iterator<Event> it = Runtime.eventQueue.iterator();
@@ -151,7 +152,11 @@ public abstract class Timer implements Comparable<Timer> {
 		}	
 		else {
 			fireTime = Global.currentTime + updateTimer;
+<<<<<<< HEAD
 		}
+=======
+		}*/
+>>>>>>> branch 'master' of git@github.com:BrunoPereiraSantos/NewSinkBet.git
 		
 		
 	}

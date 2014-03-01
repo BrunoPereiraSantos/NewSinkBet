@@ -20,7 +20,7 @@
 		<!--  Simulation                                                           -->
 		<!--***********************************************************************-->
 		<!--Switches between synchronous and asynchronous mode.-->
-		<asynchronousMode value="true" />
+		<asynchronousMode value="false" />
 
 		<!--If set to true, the runtime obtains for each node a new position from the mobility model at the beginning of each round. This flag needs to be turned on if the chosen  mobility model of any node may change the node's position. Set this flag to FALSE for static graphs whose nodes do never change their position to increase performance.-->
 		<mobility value="false" />
@@ -32,25 +32,25 @@
 		<interferenceIsAdditive value="false" />
 
 		<!--Set this flag to true if a node can receive messages while it is sending messages itself, otherwise to false. This flag is only relevant if interference is turned on, and it must be handled properly in the used interference model.-->
-		<canReceiveWhileSending value="false" />
+		<canReceiveWhileSending value="true" />
 
 		<!--Set this flag to true if a node can receive multiple messages in parallel, otherwise to false. When set to false, concurrent packets are all dropped. This flag is only relevant if interference is turned on, and it must be handled properly in the used interference model.-->
-		<canReceiveMultiplePacketsInParallel value="false" />
+		<canReceiveMultiplePacketsInParallel value="true" />
 
 		<!--The default type of edges to be used-->
-		<edgeType value="EtxBet:EdgeEtx" />
+		<edgeType value="HopBet:EdgeHop" />
 
 		<!--If set to true, the application exits as soon as the termination criteria is met. This flag only affects the GUI mode.-->
 		<exitOnTerminationInGUI value="false" />
 
 		<!--If set true, in asynchronous mode the connections are initialized before the first event executes. Note that this flag is useless in synchronous mode as the connections are updated in every step anyway.-->
-		<initializeConnectionsOnStartup value="true" />
+		<initializeConnectionsOnStartup value="false" />
 
 		<!--Defines how often the GUI is updated. The GUI is redrawn after every refreshRate-th round.-->
 		<refreshRate value="1" />
 
 		<!--If set to true, the framework will inform a sender whenever  a unicast message is dropped. In synchronous mode, the sender  is informed in the round after the message should have arrived, and  immediately upon arrival in asynchronous mode.-->
-		<generateNAckMessages value="true" />
+		<generateNAckMessages value="false" />
 
 		<!--This flag only affects the asynchronous simulation mode.  When set to true, the framework calls handleEmptyEventQueue  on the project specific CustomGlobal whenever the event queue  becomes empty.-->
 		<handleEmptyEventQueue value="true" />
@@ -59,7 +59,7 @@
 		<javaCmd value="java" />
 
 		<!--Maximum memory the Java VM is allowed to use (in MB)-->
-		<javaVMmaxMem value="2550" />
+		<javaVMmaxMem value="500" />
 
 		<!--***********************************************************************-->
 		<!--  Random number generators                                             -->
@@ -149,7 +149,7 @@
 		<DefaultReliabilityModel value="ReliableDelivery" />
 
 		<!--Default node implementation used when none is specified-->
-		<DefaultNodeImplementation value="EtxBet:NodeEtx" />
+		<DefaultNodeImplementation value="HopBet:NodeHop" />
 
 		<!--Show the models implemented by all projects in the drop down options. When set to false, only the models by the selected project and the default project are shown.-->
 		<showModelsOfAllProjects value="false" />
@@ -247,13 +247,6 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-<LossyDelivery dropRate="0.1"/>
-
-<NumberNodes value="9"/>		
-<EV value="50"/>	
-									
-<intervalAggr value="10.0"/>	
-<idTopology value="0"/>
-																																																																																																	</Custom>
+				</Custom>
 </Document>
 

@@ -1,17 +1,14 @@
-package projects.EtxBet.nodes.timers;
+package projects.HopBet.nodes.timers;
 
 import projects.HopBet.nodes.nodeImplementations.NodeHop;
 import sinalgo.nodes.timers.Timer;
 
-public class TimerStartReplyFlood extends Timer {
-
-	public TimerStartReplyFlood() {
-	}
+public class TimerStartSimulation extends Timer {
 
 	@Override
 	public void fire() {
 		// TODO Auto-generated method stub
-		((NodeHop)this.node).sendReplyFlooding();
+		( (NodeHop) this.node).sendHelloFlooding();
 	}
 
 }
