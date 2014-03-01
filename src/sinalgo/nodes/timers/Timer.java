@@ -156,7 +156,6 @@ public abstract class Timer implements Comparable<Timer> {
 		}
 =======
 		}*/
->>>>>>> branch 'master' of git@github.com:BrunoPereiraSantos/NewSinkBet.git
 		
 		
 	}
