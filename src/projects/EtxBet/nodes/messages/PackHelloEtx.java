@@ -92,8 +92,4 @@ public class PackHelloEtx extends Message {
 				+ "]";
 	}
 
-	
-	
-	
-
 }

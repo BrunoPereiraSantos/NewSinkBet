@@ -109,7 +109,6 @@ public class NodeEtx extends Node {
 				handlePackHello(inbox.getSender(), inbox.getReceiver(), a);
 				
 			}else if (msg instanceof PackReplyEtx) {
-				
 				PackReplyEtx b = (PackReplyEtx) msg;
 				handlePackReply(inbox.getSender(), inbox.getReceiver(), b);
 				
@@ -154,10 +153,11 @@ public class NodeEtx extends Node {
 			message = null;	//drop message
 			return;
 		}
-		double etxToNode = getEtxToNode(sender.ID);
+		
+		double etxToNode = getEtxToNode(message.getSenderID());
 		
 		// o nodo e vizinho direto do sink (armazena o nextHop como id do sink
-		if (sender.ID == message.getSinkID()) {	
+		if (message.getSenderID() == message.getSinkID()) {	
 			setNextHop(message.getSinkID());
 			setNeighborMaxSBet(Double.MAX_VALUE);
 		}
@@ -169,7 +169,7 @@ public class NodeEtx extends Node {
 			message.setHops(getHops());
 			setPathsToSink(message.getPath());
 			setSinkID(message.getSinkID());
-			setNextHop(sender.ID);
+			setNextHop(message.getSenderID());
 			setEtxPath(message.getETX() + etxToNode);
 			message.setETX(getEtxPath()); // e mesmo necessario fazer isso aqui?
 			//setSentMyHello(false);
@@ -179,8 +179,8 @@ public class NodeEtx extends Node {
 			}
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
-			if(!neighbors.contains(sender.ID)){
-				neighbors.add(sender.ID);
+			if(!neighbors.contains(message.getSenderID())){
+				neighbors.add(message.getSenderID());
 			}
 		}
 
@@ -189,14 +189,12 @@ public class NodeEtx extends Node {
 			this.setColor(Color.MAGENTA);
 			setPathsToSink(getPathsToSink() + message.getPath());
 			//setPathsToSink(getPathsToSink() + 1);
-			//fhp.updateTimer(2.0);
-			
-			fhp.updateTimer(5.0, this);
+			fhp.updateTimer(2.0, this);
 			//setSentMyHello(false);
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
-			if(!neighbors.contains(sender.ID)){
-				neighbors.add(sender.ID);
+			if(!neighbors.contains(message.getSenderID())){
+				neighbors.add(message.getSenderID());
 			}
 		}
 		
@@ -215,7 +213,7 @@ public class NodeEtx extends Node {
 			message.setSinkID(sinkID);
 			message.setPath(getPathsToSink());
 			fhp.setPkt(message);*/
-			fhp.startRelative(getHops(), this);	//Continuara o encaminhamento do pacote hello
+			fhp.startRelative(getHops()+1, this);	//Continuara o encaminhamento do pacote hello
 			setSentMyHello(true);
 			
 			// Dispara um timer para enviar um pacote de borda
@@ -223,7 +221,7 @@ public class NodeEtx extends Node {
 			// nodos do tipo border e relay devem enviar tal pacote
 			if(!isSentMyReply()){
 				
-				srf.startRelative((double) waitingTime(), this);
+				srf.startAbsolute((double) waitingTime(), this);
 				//srf.startRelative(getHops()*2, this);
 				//srf.startRelative(getHops()*3+200, this);
 				setSentMyReply(true);
@@ -259,6 +257,7 @@ public class NodeEtx extends Node {
 		//System.out.println(pkt);
 		broadcast(new PackHelloEtx(hops, 1, this.ID, this.ID, 0.0));
 		setSentMyHello(true);
+		
 	}
 
 	public void sendReplyFlooding(){ //Dispara o flooding das respostas dos nodos com papel BORDER e RELAY
@@ -267,11 +266,10 @@ public class NodeEtx extends Node {
 			this.setColor(Color.GRAY);
 			//Pack pkt = new Pack(this.hops, this.pathsToSink, this.ID, 1, this.sBet, TypeMessage.BORDER);
 			
-			PackReplyHop pkt = new PackReplyHop(hops, pathsToSink, this.ID, sinkID, nextHop, neighbors, neighborMaxSBet);
+			PackReplyEtx pkt = new PackReplyEtx(hops, pathsToSink, this.ID, sinkID, nextHop, neighbors, etxPath, sBet, this.ID);
 			broadcast(pkt);
 			
 			setSentMyReply(true);
-			
 		}
 	}
 	
@@ -284,7 +282,6 @@ public class NodeEtx extends Node {
 		return waitTime+100; //o flood somente inicia apos o tempo 100
 	}
 	
-	
 	/*=============================================================
 	 *                 Manipulando o pacote Reply
 	 * ============================================================
@@ -296,8 +293,7 @@ public class NodeEtx extends Node {
 			return;
 		}
 		
-		//ETX para o ultimo no que enviou a msg 
-		double etxToNode = getEtxToNode(sender.ID);
+		double etxToNode = getEtxToNode(message.getFwdID());
 		
 		// necessaria verificacao de que o no ja recebeu menssagem de um
 		// determinado descendente, isso e feito para evitar mensagens
@@ -328,8 +324,7 @@ public class NodeEtx extends Node {
 		}
 		
 		// Uma mensagem foi recebida pelos ancestrais logo devo analisar se e o meu nextHop
-		if (message.getETX() + etxToNode <= getEtxPath()){
-			
+		if (message.getETX() + etxToNode <= getEtxPath()){	
 			if (message.getsBet() > getNeighborMaxSBet()) {
 				//System.out.println("Antes\n"+this);
 				setNeighborMaxSBet(message.getsBet());
@@ -363,6 +358,7 @@ public class NodeEtx extends Node {
 	public void fwdReply(PackReplyEtx pkt){//Dispara um broadcast com o pacote PackReplyEtxBet | metodo utilizado pelos timers
 		broadcast(pkt);
 	}
+	
 		
 	@Override
 	public void preStep() {

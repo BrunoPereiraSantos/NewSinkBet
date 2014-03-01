@@ -127,4 +127,13 @@ public abstract class Event implements DoublyLinkedListEntry {
 	public DLLFingerList getDoublyLinkedListFinger() {
 		return dllFingerList;
 	}
+
+	public double getTime() {
+		return time;
+	}
+
+	public void setTime(double time) {
+		this.time = time;
+	}
+	
 }
