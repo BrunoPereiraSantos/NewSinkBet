@@ -44,6 +44,7 @@ import sinalgo.runtime.Main;
 import sinalgo.runtime.Runtime;
 import sinalgo.runtime.events.Event;
 import sinalgo.runtime.events.TimerEvent;
+import sinalgo.tools.Tools;
 
 /**
  * The superclass of all node timers.
@@ -158,7 +159,10 @@ public abstract class Timer implements Comparable<Timer> {
 			while (it.hasNext()) {
 				e = it.next();
 				if (n.equals(e.getEventNode())) {
-					e.time += updateTimer;
+					Runtime.eventQueue.dropEvent(e);
+					Runtime.eventQueue.insert(TimerEvent.getNewTimerEvent(this,
+							updateTimer+e.time));
+					break;
 					/*if(Global.currentTime < e.time + updateTimer){
 						e.time = Global.currentTime + updateTimer;
 						System.out.println("Entrei");

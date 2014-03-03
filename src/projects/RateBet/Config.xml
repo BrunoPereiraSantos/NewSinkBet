@@ -8,10 +8,10 @@
 		<dimensions value="2" />
 
 		<!--Length of the deployment field along the x-axis.-->
-		<dimX value="1000" />
+		<dimX value="2400" />
 
 		<!--Length of the deployment field along the y-axis.-->
-		<dimY value="1000" />
+		<dimY value="2400" />
 
 		<!--Length of the deployment field along the z-axis.-->
 		<dimZ value="500" />
@@ -38,13 +38,13 @@
 		<canReceiveMultiplePacketsInParallel value="true" />
 
 		<!--The default type of edges to be used-->
-		<edgeType value="HopBet:EdgeHop" />
+		<edgeType value="sinalgo.nodes.edges.Edge" />
 
 		<!--If set to true, the application exits as soon as the termination criteria is met. This flag only affects the GUI mode.-->
 		<exitOnTerminationInGUI value="false" />
 
 		<!--If set true, in asynchronous mode the connections are initialized before the first event executes. Note that this flag is useless in synchronous mode as the connections are updated in every step anyway.-->
-		<initializeConnectionsOnStartup value="true" />
+		<initializeConnectionsOnStartup value="false" />
 
 		<!--Defines how often the GUI is updated. The GUI is redrawn after every refreshRate-th round.-->
 		<refreshRate value="1" />
@@ -131,10 +131,11 @@
 		<!--  Models                                                               -->
 		<!--***********************************************************************-->
 		<!--The message transmission model used when none is specified-->
-		<DefaultMessageTransmissionModel value="ConstantTime" />
+		<!-- <DefaultMessageTransmissionModel value="ConstantTime" /> -->
+		<DefaultMessageTransmissionModel value="RateBet:MyMsgTransModel" />
 
 		<!--Default connectivity model used when none is specified-->
-		<DefaultConnectivityModel value="UDG" />
+		<DefaultConnectivityModel value="RateBet:MyConnectivityHelper" />
 
 		<!--Default distribution model used when none is specified-->
 		<DefaultDistributionModel value="Random" />
@@ -149,7 +150,7 @@
 		<DefaultReliabilityModel value="ReliableDelivery" />
 
 		<!--Default node implementation used when none is specified-->
-		<DefaultNodeImplementation value="HopBet:NodeHop" />
+		<DefaultNodeImplementation value="RateBet:NodeRate" />
 
 		<!--Show the models implemented by all projects in the drop down options. When set to false, only the models by the selected project and the default project are shown.-->
 		<showModelsOfAllProjects value="false" />
@@ -225,13 +226,13 @@
 
 	</Framework>
 	<Custom>
-<MessageTransmission ConstantTime="0.0000000000001"/>
+<MessageTransmission ConstantTime="1"/>
 	
 <Node defaultSize="10" />
 
-<GeometricNodeCollection rMax="100"/>
+<GeometricNodeCollection rMax="796"/>
 
-<UDG rMax="100"/>
+<UDG rMax="796"/>
 
 <SINR alpha="2" beta="0.7" noise="0"/>
 
@@ -247,6 +248,6 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-									</Custom>
+				</Custom>
 </Document>
 

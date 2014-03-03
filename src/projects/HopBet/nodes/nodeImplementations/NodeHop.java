@@ -150,7 +150,8 @@ public class NodeHop extends Node {
 			setPathsToSink(getPathsToSink() + message.getPath());
 			message.setHops(getHops());
 			
-			fhp.updateTimer(2.0, this);
+			//System.out.println(message);
+			fhp.updateTimer(1.0, this);
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
 			if(!neighbors.contains(message.getSenderID())){
@@ -256,7 +257,7 @@ public class NodeHop extends Node {
 			
 			TimerFwdReplyHop fwdReply = new TimerFwdReplyHop(message);
 			
-			fwdReply.startRelative(1, this);
+			fwdReply.startRelative(0.0000000000001, this);
 					
 		}
 		
@@ -319,7 +320,7 @@ public class NodeHop extends Node {
 			this.setColor(Color.BLUE);
 			setRole(NodeRoleHopSbet.SINK);
 			
-			(new TimerStartSimulation()).startRelative(3, this);
+			(new TimerStartSimulation()).startRelative(1, this);
 			
 			/*SendPackHelloHopSbet pkt = new SendPackHelloHopSbet(hops, 1, this.ID, this.ID);
 			pkt.startRelative(2, this);*/

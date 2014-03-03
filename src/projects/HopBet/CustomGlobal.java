@@ -42,8 +42,6 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import projects.EtxBet.nodes.edges.EdgeEtx;
-import projects.EtxBet.nodes.nodeImplementations.NodeEtx;
 import projects.HopBet.nodes.edges.EdgeHop;
 import projects.HopBet.nodes.nodeImplementations.NodeHop;
 import sinalgo.nodes.Node;
@@ -222,51 +220,51 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	}
 	
 	public void printGraphicsINGuI(){
-		Vector<NodeEtx> myNodes = new Vector<NodeEtx>();
+		Vector<NodeHop> myNodes = new Vector<NodeHop>();
 		
-		NodeEtx n = new NodeEtx();
+		NodeHop n = new NodeHop();
 		n.setPosition(300, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(350, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(400, 450, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(400, 550, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(450, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(450, 400, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(500, 450, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(500, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeEtx();
+		n = new NodeHop();
 		n.setPosition(550, 550, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
