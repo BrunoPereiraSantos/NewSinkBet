@@ -20,18 +20,11 @@ public class MyMsgTransModel extends MessageTransmissionModel {
 		//System.out.println("MTM distancia: "+Math.sqrt(dist));
 		System.out.println("MTM  Sem sqrt distancia: "+dist);
 		
-		if(dist < 399){
-			return 0.002542;
-		}
-		if(dist >= 399 && dist < 531){
-			return 0.003673;
-		}
-		if(dist >= 531 && dist < 669){
-			return 0.007634;
-		}
-		if(dist >= 669 && dist <= 796){
-			return 0.013858;
-		}
+		if(dist < 399)						return 0.002542;
+		if(dist >= 399 && dist < 531)		return 0.003673;
+		if(dist >= 531 && dist < 669)		return 0.007634;
+		if(dist >= 669 && dist <= 796)		return 0.013858;
+		
 		return 1;
 	}
 
