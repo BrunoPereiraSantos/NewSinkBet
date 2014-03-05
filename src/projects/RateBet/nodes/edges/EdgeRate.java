@@ -6,6 +6,7 @@ import sinalgo.tools.statistics.UniformDistribution;
 public class EdgeRate extends BidirectionalEdge {
 
 	private double etx;
+	private int rate;
 	
 	@Override
 	public void initializeEdge() {
@@ -17,21 +18,25 @@ public class EdgeRate extends BidirectionalEdge {
 		if(dist < 399){
 			v = new UniformDistribution(0.01d, 24.9d);
 			etx = v.nextSample();
+			rate = 11;
 			return;
 		}
 		if(dist >= 399 && dist < 531){
 			v = new UniformDistribution(25.0d, 49.9d);
 			etx = v.nextSample();
+			rate = 5;
 			return;
 		}
 		if(dist >= 531 && dist < 669){
 			v = new UniformDistribution(50.0d, 74.9d);
 			etx = v.nextSample();
+			rate = 2;
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
 			v = new UniformDistribution(75.0d, 99.d);
 			etx = v.nextSample();
+			rate = 1;
 			return;
 		}
 	}
@@ -39,12 +44,13 @@ public class EdgeRate extends BidirectionalEdge {
 	@Override
 	public String toString() {
 		
-		return "EdgeRate [etx=" + String.format("%.2f", etx) + ",\n"+
-				" startNode=" + startNode +",\n"+
-				" endNode=" + endNode +",\n"+
-				" numberOfMessagesOnThisEdge="+ numberOfMessagesOnThisEdge+",\n"+
-				" getID()=" + getID() +",\n"+
-				" toString()=" + super.toString() + "]";
+		return "EdgeRate [etx=" + String.format("%.2f", etx) +
+				"\nrate=" + rate +
+				"\nstartNode=" + startNode +
+				"\nendNode=" + endNode +
+				"\nnumberOfMessagesOnThisEdge="+ numberOfMessagesOnThisEdge+
+				"\ngetID()=" + getID()+
+				"\ntoString()=" + super.toString() + "]";
 	}
 
 	public double getEtx() {
@@ -54,6 +60,15 @@ public class EdgeRate extends BidirectionalEdge {
 	public void setEtx(double etx) {
 		this.etx = etx;
 	}
+
+	public int getRate() {
+		return rate;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+	
 	
 	
 	

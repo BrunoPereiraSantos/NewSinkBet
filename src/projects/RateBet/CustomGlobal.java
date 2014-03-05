@@ -37,9 +37,18 @@
 package projects.RateBet;
 
 
+import java.util.Iterator;
+import java.util.Vector;
+
 import javax.swing.JOptionPane;
 
+import projects.RateBet.nodes.edges.EdgeRate;
+import projects.RateBet.nodes.nodeImplementations.NodeRate;
+import sinalgo.nodes.Node;
+import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
+import sinalgo.runtime.Runtime;
+import sinalgo.tools.Tools;
 
 /**
  * This class holds customized global state and methods for the framework. 
@@ -83,12 +92,183 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	}
 	
 	/**
-	 * An example to add a button to the user interface. In this sample, the button is labeled
-	 * with a text 'GO'. Alternatively, you can specify an icon that is shown on the button. See
-	 * AbstractCustomGlobal.CustomButton for more details.   
+	 * Dummy button to create a tree.  
 	 */
-	@AbstractCustomGlobal.CustomButton(buttonText="GO", toolTipText="A sample button")
-	public void sampleButton() {
-		JOptionPane.showMessageDialog(null, "You Pressed the 'GO' button.");
+	@AbstractCustomGlobal.CustomButton(buttonText="Etx", toolTipText="Insert Etx")
+	public void Button() {
+		//int numNodes = Integer.parseInt(Tools.showQueryDialog("Number of nodes:"));
+		//int fanOut = Integer.parseInt(Tools.showQueryDialog("Max fanout:"));
+		//buildTree(fanOut, numLeaves);
+		insertEtx(); 
+	}
+	
+	public void insertEtx(){
+		Iterator<Node> it = Runtime.nodes.iterator();
+		NodeRate n;
+		/*Random generator = new Random(1);
+		while(it.hasNext()){
+			n = it.next();
+			//System.out.println(n);
+			Iterator<Edge> it2 = n.outgoingConnections.iterator();
+			EdgeWeightEtxBet e;
+			while(it2.hasNext()){
+				e = (EdgeWeightEtxBet) it2.next();
+				//e.setEtx(UniformDistribution.nextUniform(0, 1));
+				//e.setEtx(generator.nextDouble());
+				e.setEtx(1+generator.nextInt(9));
+				System.out.println("ID "+n.ID+" ~["+e.getEtx()+"]> "+e.endNode.ID);
+
+			}
+		}*/
+		
+		while(it.hasNext()){
+			n = (NodeRate) it.next();
+			//System.out.println(n);
+			Iterator<Edge> it2 = n.outgoingConnections.iterator();
+			EdgeRate e;
+			while(it2.hasNext()){
+				e = (EdgeRate) it2.next();
+				if(n.ID == 1){
+					if(e.endNode.ID == 2)
+						e.setEtx(2);
+				}
+				
+				if(n.ID == 2){
+					if(e.endNode.ID == 1)
+						e.setEtx(1);
+					if(e.endNode.ID == 3)
+						e.setEtx(1);
+					if(e.endNode.ID == 4)
+						e.setEtx(1);
+				}
+
+				if(n.ID == 3){
+					if(e.endNode.ID == 2)
+						e.setEtx(2);
+					if(e.endNode.ID == 5)
+						e.setEtx(1);
+					if(e.endNode.ID == 6)
+						e.setEtx(1);
+				}
+
+				if(n.ID == 4){
+					if(e.endNode.ID == 2)
+						e.setEtx(2);
+					if(e.endNode.ID == 5)
+						e.setEtx(1);
+				}
+
+				if(n.ID == 5){
+					if(e.endNode.ID == 3)
+						e.setEtx(2);
+					if(e.endNode.ID == 4)
+						e.setEtx(2);
+					if(e.endNode.ID == 7)
+						e.setEtx(1);
+					if(e.endNode.ID == 8)
+						e.setEtx(1);
+				}
+
+				if(n.ID == 6){
+					if(e.endNode.ID == 3)
+						e.setEtx(9);
+					if(e.endNode.ID == 7)
+						e.setEtx(1);
+				}
+
+				if(n.ID == 7){
+					if(e.endNode.ID == 5)
+						e.setEtx(2);
+					if(e.endNode.ID == 6)
+						e.setEtx(1);
+					if(e.endNode.ID == 8)
+						e.setEtx(2);
+				}
+
+				if(n.ID == 8){
+					if(e.endNode.ID == 5)
+						e.setEtx(4);
+					if(e.endNode.ID == 7)
+						e.setEtx(2);
+					if(e.endNode.ID == 9)
+						e.setEtx(2);
+				}
+
+				if(n.ID == 9){
+					if(e.endNode.ID == 8)
+						e.setEtx(1);
+				}
+				
+				//e.setEtx(1+generator.nextInt(9));
+				System.out.println("ID "+ e.getID()+"      " +n.ID+" ~["+e.getEtx()+"]> "+e.endNode.ID);
+
+			}
+		}
+	}
+	
+	/**
+	 * Dummy button to create a tree.  
+	 */
+	@AbstractCustomGlobal.CustomButton(buttonText="Graphics", toolTipText="Show Graphics")
+	public void Button3() {
+		//int numNodes = Integer.parseInt(Tools.showQueryDialog("Number of nodes:"));
+		//int fanOut = Integer.parseInt(Tools.showQueryDialog("Max fanout:"));
+		//buildTree(fanOut, numLeaves);
+		printGraphicsINGuI();
+		
+	}
+	
+	public void printGraphicsINGuI(){
+		Vector<NodeRate> myNodes = new Vector<NodeRate>();
+		
+		NodeRate n = new NodeRate();
+		n.setPosition(300, 500, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeRate();
+		n.setPosition(350, 500, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		
+		n = new NodeRate();
+		n.setPosition(400, 450, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeRate();
+		n.setPosition(400, 550, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeRate();
+		n.setPosition(450, 500, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeRate();
+		n.setPosition(450, 400, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeRate();
+		n.setPosition(500, 450, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		
+		n = new NodeRate();
+		n.setPosition(500, 500, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeRate();
+		n.setPosition(550, 550, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		// Repaint the GUI as we have added some nodes
+		Tools.repaintGUI();
+		
 	}
 }
