@@ -3,15 +3,14 @@ package projects.RateBet.nodes.nodeImplementations;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import projects.EtxBet.nodes.nodeImplementations.NodeRoleEtx;
 import projects.RateBet.nodes.edges.EdgeRate;
 import projects.RateBet.nodes.messages.RateHelloMessage;
+import projects.RateBet.nodes.timers.RateMessageTimer;
 import projects.defaultProject.nodes.messages.StringMessage;
 import projects.defaultProject.nodes.timers.MessageTimer;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.gui.transformation.PositionTransformation;
 import sinalgo.nodes.Node;
-import sinalgo.nodes.edges.Edge;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
@@ -34,13 +33,17 @@ public class NodeRate extends Node {
 	private int pathsToSink;	
 	
 	//rate acumulado do caminho
-	private int pathRate = Integer.MIN_VALUE;
+	private double pathRate = Integer.MIN_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
 
 	// Flag para indicar se o nodo ja enviou seu pkt border
 	private boolean sentMyReply = false;
+	
+	//Disparadores de flood
+	RateMessageTimer fhp;
+	RateMessageTimer frp;
 
 	@Override
 	public void handleMessages(Inbox inbox) {
@@ -99,7 +102,7 @@ public class NodeRate extends Node {
 		}
 		
 		// nodo acaba de ser descoberto ou acabou de encontrar um caminho mais curto
-		if((msg.getPathRate() + incomingEdge.getRate() > pathRate) 
+		if((msg.getPathRate() + incomingEdge.getRate() < pathRate) 
 				|| pathRate == Integer.MIN_VALUE){
 			
 			sinkID = msg.getSinkID();
@@ -118,14 +121,15 @@ public class NodeRate extends Node {
 		}
 		
 		// existe mais de um caminho deste no ate o sink com a mesmo rate acumulado
-//		if(msg.getPathRate() + incomingEdge.getRate() == pathRate){
-//			pathsToSink += msg.getPaths();
-//			
-//		}
+		if(msg.getPathRate() + incomingEdge.getRate() == pathRate){
+			pathsToSink += msg.getPaths();
+			fhp.updateTimer(2, this);
+			
+		}
 		
 		if(!isSentMyHello()){
-			MessageTimer mt = new MessageTimer(msg);
-			mt.startRelative(1, this);
+			fhp = new RateMessageTimer(msg);
+			fhp.startRelative(1, this);
 			sentMyHello = true;
 		}
 		
@@ -184,6 +188,23 @@ public class NodeRate extends Node {
 		// super.drawAsRoute(g, pt, highlight, 30);
 	}
 
+	public void sendUnicastRateMsg(Message msg, Node receiver) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void broadcastRateMsg(Message msg) {
+		if(msg instanceof RateHelloMessage){
+			RateHelloMessage m = (RateHelloMessage) msg;
+			m.setHops(hops);
+			m.setPathRate(pathRate);
+			m.setPaths(pathsToSink);
+			m.setSinkID(sinkID);
+			
+			broadcast(m);
+		}
+		
+	}
 	
 	
 	@Override
@@ -205,4 +226,5 @@ public class NodeRate extends Node {
 	public boolean isSentMyReply() {
 		return sentMyReply;
 	}
+	
 }

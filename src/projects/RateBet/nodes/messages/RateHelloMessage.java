@@ -7,7 +7,7 @@ public class RateHelloMessage extends Message {
 	private int hops; //numero de hops do nodo que o enviou o pacote
 	private int paths; //numeros de caminho do nodo que o enviou o pacote
 	private int sinkID; // ID do sink
-	private int pathRate; // ID do sink
+	private double pathRate; // ID do sink
 	
 	
 	/**
@@ -15,7 +15,7 @@ public class RateHelloMessage extends Message {
 	 * @param path
 	 * @param sinkID
 	 */
-	public RateHelloMessage(int hops, int paths, int sinkID, int pathRate) {
+	public RateHelloMessage(int hops, int paths, int sinkID, double pathRate) {
 		super();
 		this.hops = hops;
 		this.paths = paths;
@@ -47,11 +47,11 @@ public class RateHelloMessage extends Message {
 				+ ", sinkID=" + sinkID + ", pathRate=" + pathRate + "]";
 	}
 
-	public int getPathRate() {
+	public double getPathRate() {
 		return pathRate;
 	}
 
-	public void setPathRate(int pathRate) {
+	public void setPathRate(double pathRate) {
 		this.pathRate = pathRate;
 	}
 
