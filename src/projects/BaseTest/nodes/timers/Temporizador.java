@@ -2,8 +2,6 @@ package projects.BaseTest.nodes.timers;
 
 import projects.BaseTest.nodes.messages.MBT;
 import projects.BaseTest.nodes.nodeImplementations.NodeBT;
-import sinalgo.nodes.messages.Message;
-import sinalgo.nodes.messages.Packet;
 import sinalgo.nodes.timers.Timer;
 
 public class Temporizador extends Timer {

@@ -1,14 +1,10 @@
 package projects.BaseTest.models.connectivityModels;
 
-import java.util.Iterator;
-
-import projects.BaseTest.nodes.edges.MyEdge;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.models.ConnectivityModelHelper;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.Position;
-import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.Global;
 import sinalgo.runtime.Main;
 

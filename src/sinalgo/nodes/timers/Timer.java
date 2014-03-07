@@ -44,7 +44,6 @@ import sinalgo.runtime.Main;
 import sinalgo.runtime.Runtime;
 import sinalgo.runtime.events.Event;
 import sinalgo.runtime.events.TimerEvent;
-import sinalgo.tools.Tools;
 
 /**
  * The superclass of all node timers.

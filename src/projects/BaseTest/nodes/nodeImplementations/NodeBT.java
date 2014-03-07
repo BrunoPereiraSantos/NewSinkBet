@@ -1,6 +1,5 @@
 package projects.BaseTest.nodes.nodeImplementations;
 
-import java.awt.Color;
 import java.util.Iterator;
 
 import projects.BaseTest.nodes.messages.MBT;
@@ -9,10 +8,8 @@ import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
-import sinalgo.runtime.Global;
 import sinalgo.runtime.Runtime;
 import sinalgo.runtime.events.Event;
-import sinalgo.tools.Tools;
 
 public class NodeBT extends Node {
 	

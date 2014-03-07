@@ -1,6 +1,5 @@
 package projects.BaseTest.nodes.edges;
 
-import sinalgo.nodes.Position;
 import sinalgo.nodes.edges.BidirectionalEdge;
 
 public class MyEdge extends BidirectionalEdge {

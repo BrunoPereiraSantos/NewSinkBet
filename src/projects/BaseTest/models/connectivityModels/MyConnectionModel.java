@@ -1,13 +1,9 @@
 package projects.BaseTest.models.connectivityModels;
 
-import java.util.Iterator;
 
-import projects.BaseTest.nodes.edges.MyEdge;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.models.ConnectivityModel;
 import sinalgo.nodes.Node;
-import sinalgo.nodes.Position;
-import sinalgo.nodes.edges.Edge;
 
 public class MyConnectionModel extends ConnectivityModel {
 

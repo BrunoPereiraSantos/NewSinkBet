@@ -39,11 +39,8 @@ package projects.BaseTest;
 
 import javax.swing.JOptionPane;
 
-import sinalgo.Run;
 import sinalgo.runtime.AbstractCustomGlobal;
-import sinalgo.runtime.Global;
 import sinalgo.runtime.Runtime;
-import sinalgo.tools.Tools;
 
 /**
  * This class holds customized global state and methods for the framework. 
