@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import projects.BetRate.nodes.edges.EdgeBetRate;
 import projects.BetRate.nodes.messages.BetRateHelloMessage;
+import projects.BetRate.nodes.messages.BetRateReplyMessage;
 import projects.BetRate.nodes.timers.BetRateMessageTimer;
 import projects.defaultProject.nodes.messages.StringMessage;
 import projects.defaultProject.nodes.timers.MessageTimer;
@@ -129,15 +130,37 @@ public class NodeBetRate extends Node {
 			
 		}
 		
+		// ele deve encaminhar um pacote com seus dados atualizados
+		// Essas flags ajudam para nao sobrecarregar a memoria com eventos 
+		// isto e, mandar mensagens com informacoes desatualizadas
 		if(!isSentMyHello()){
 			fhp = new BetRateMessageTimer(msg);
 			fhp.startRelative(1, this);
 			sentMyHello = true;
 		}
 		
+		// Dispara um timer para enviar um pacote de borda
+		// para calculo do sbet
+		// nodos do tipo border e relay devem enviar tal pacote
+		if(!isSentMyReply()){
+			frp = new BetRateMessageTimer(new BetRateReplyMessage());
+			frp.startAbsolute((double) waitingTime(), this);
+			sentMyReply = true;
+		}
+		
 		
 	}
 	
+	//atraso para enviar o pacote [referencia artigo do Eduardo]
+	private double waitingTime() {
+		double waitTime = 0.0;
+		//waitTime = 1 / (Math.exp(this.hops) * Math.pow(10, -20));
+		//waitTime = 1 / (this.hops * (Math.pow(5, -3.3)));
+		waitTime = Math.pow(5, 3.3) / this.hops;
+		//System.out.println(waitTime);
+		return waitTime+100; //o flood somente inicia apos o tempo 100
+	}
+
 	@Override
 	public void preStep() {
 		// TODO Auto-generated method stub
@@ -202,9 +225,15 @@ public class NodeBetRate extends Node {
 			m.setPathEtt(pathEtt);
 			m.setPaths(pathsToSink);
 			m.setSinkID(sinkID);
-			
 			broadcast(m);
 		}
+	
+		if(msg instanceof BetRateReplyMessage){
+			this.setColor(Color.GREEN);
+			BetRateReplyMessage m = (BetRateReplyMessage) msg;
+			broadcast(m);
+		}
+		
 		
 	}
 	

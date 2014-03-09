@@ -38,7 +38,7 @@
 		<canReceiveMultiplePacketsInParallel value="true" />
 
 		<!--The default type of edges to be used-->
-		<edgeType value="Ett:EdgeEtt" />
+		<edgeType value="BetEtt:EdgeBetEtt" />
 
 		<!--If set to true, the application exits as soon as the termination criteria is met. This flag only affects the GUI mode.-->
 		<exitOnTerminationInGUI value="false" />
@@ -131,10 +131,10 @@
 		<!--  Models                                                               -->
 		<!--***********************************************************************-->
 		<!--The message transmission model used when none is specified-->
-		<DefaultMessageTransmissionModel value="Ett:EttTransmissionModel" />
+		<DefaultMessageTransmissionModel value="BetEtt:BetEttTransmissionModel" />
 
 		<!--Default connectivity model used when none is specified-->
-		<DefaultConnectivityModel value="Ett:EttConnectivityHelper" />
+		<DefaultConnectivityModel value="BetEtt:BetEttConnectivityHelper" />
 
 		<!--Default distribution model used when none is specified-->
 		<DefaultDistributionModel value="Random" />
@@ -149,7 +149,7 @@
 		<DefaultReliabilityModel value="ReliableDelivery" />
 
 		<!--Default node implementation used when none is specified-->
-		<DefaultNodeImplementation value="Ett:NodeEtt" />
+		<DefaultNodeImplementation value="BetEtt:NodeBetEtt" />
 
 		<!--Show the models implemented by all projects in the drop down options. When set to false, only the models by the selected project and the default project are shown.-->
 		<showModelsOfAllProjects value="false" />
@@ -247,6 +247,6 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-						</Custom>
+							</Custom>
 </Document>
 

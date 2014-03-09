@@ -215,7 +215,8 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		//int fanOut = Integer.parseInt(Tools.showQueryDialog("Max fanout:"));
 		//buildTree(fanOut, numLeaves);
 		printGraphicsINGuI();
-		
+		Runtime.reevaluateConnections();
+		insertEtx();
 	}
 	
 	public void printGraphicsINGuI(){

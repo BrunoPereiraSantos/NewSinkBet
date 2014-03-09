@@ -43,8 +43,10 @@ public class BetEttHelloMessage extends Message {
 	
 	@Override
 	public String toString() {
-		return "RateHelloMessage [hops=" + hops + ", path=" + paths
-				+ ", sinkID=" + sinkID + ", pathEtt=" + pathEtt + "]";
+		return "BetEttHelloMessage [hops=" + hops + 
+				"\n path=" + paths+ 
+				"\n sinkID=" + sinkID + 
+				"\n pathEtt=" + pathEtt + "]";
 	}
 	
 
