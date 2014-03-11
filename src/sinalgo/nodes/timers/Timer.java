@@ -144,7 +144,7 @@ public abstract class Timer implements Comparable<Timer> {
 		}
 	}
 
-	public final void updateTimer(double updateTimer, Node n) {
+	public final void updateTimer(double updateTimer, Node n, double time) {
 
 		if (updateTimer <= 0) {
 			Main.fatalError("A relative time indicating when a timer should start must be strictly positive.");
@@ -152,12 +152,12 @@ public abstract class Timer implements Comparable<Timer> {
 		node = n;
 		//fireTime = Global.currentTime + updateTimer;
 		if (Global.isAsynchronousMode) {
-
+			
 			Iterator<Event> it = Runtime.eventQueue.iterator();
 			Event e;
 			while (it.hasNext()) {
 				e = it.next();
-				if (n.equals(e.getEventNode())) {
+				if (n.equals(e.getEventNode()) && (time == e.time)) {
 					Runtime.eventQueue.dropEvent(e);
 					Runtime.eventQueue.insert(TimerEvent.getNewTimerEvent(this,
 							updateTimer+e.time));
@@ -169,7 +169,7 @@ public abstract class Timer implements Comparable<Timer> {
 						e.time += updateTimer;
 					}*/
 				}
-			}
+			}			
 		} else {
 			fireTime = Global.currentTime + updateTimer;
 		}

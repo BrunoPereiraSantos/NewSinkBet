@@ -188,7 +188,7 @@ public class NodeBetEtx extends Node {
 			this.setColor(Color.MAGENTA);
 			setPathsToSink(getPathsToSink() + message.getPath());
 			//setPathsToSink(getPathsToSink() + 1);
-			fhp.updateTimer(2.0, this);
+			fhp.updateTimer(2.0, this, fhp.getFireTime());
 			//setSentMyHello(false);
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas

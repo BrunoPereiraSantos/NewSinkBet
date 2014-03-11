@@ -150,7 +150,7 @@ public class NodeHop extends Node {
 			message.setHops(getHops());
 			
 			//System.out.println(message);
-			fhp.updateTimer(1.0, this);
+			fhp.updateTimer(1.0, this, fhp.getFireTime());
 			
 			//adiciona os vizinhos mais proximos do sink que sao rotas
 			if(!neighbors.contains(message.getSenderID())){

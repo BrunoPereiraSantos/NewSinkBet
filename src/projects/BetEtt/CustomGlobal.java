@@ -187,7 +187,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 
 				if(n.ID == 8){
 					if(e.endNode.ID == 5)
-						e.setEtx(0.4);
+						e.setParam(0.4, 2., 3.);
 					if(e.endNode.ID == 7)
 						e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 9)

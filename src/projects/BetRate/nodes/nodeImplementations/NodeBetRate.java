@@ -126,7 +126,7 @@ public class NodeBetRate extends Node {
 		// existe mais de um caminho deste no ate o sink com a mesmo ett acumulado
 		if(msg.getPathEtt() + edgeToSender.getEtt() == pathEtt){
 			pathsToSink += msg.getPaths();
-			fhp.updateTimer(1, this);
+			fhp.updateTimer(1, this, fhp.getFireTime());
 			
 		}
 		

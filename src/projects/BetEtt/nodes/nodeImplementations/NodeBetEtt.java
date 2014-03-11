@@ -79,6 +79,7 @@ public class NodeBetEtt extends Node {
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
+				System.out.println("Saiu em: " + inbox.getSendingTime());
 				System.out.println("Chegou em: " + inbox.getArrivingTime());
 				System.out.println("-------------MSG END------------------");
 
@@ -91,6 +92,7 @@ public class NodeBetEtt extends Node {
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
+				System.out.println("Saiu em: " + inbox.getSendingTime());
 				System.out.println("Chegou em: " + inbox.getArrivingTime());
 				System.out.println("-------------MSG END------------------");
 
@@ -176,7 +178,8 @@ public class NodeBetEtt extends Node {
 		// acumulado
 		if (msg.getPathEtt() + edgeToSender.getEtt() == EttPath) {
 			pathsToSink += msg.getPaths();
-			fhp.updateTimer(1, this);
+			fhp.updateTimer(2, this, fhp.getFireTime());
+			System.out.println("Tempo de disparo: "+fhp.getFireTime());
 
 			// adiciona os vizinhos mais proximos do sink que sao rotas
 			if (!neighbors.contains(sender.ID)) {
@@ -184,6 +187,7 @@ public class NodeBetEtt extends Node {
 			}
 		}
 
+		
 		// ele deve encaminhar um pacote com seus dados atualizados
 		// Essas flags ajudam para nao sobrecarregar a memoria com eventos
 		// isto e, mandar mensagens com informacoes desatualiza
@@ -254,6 +258,8 @@ public class NodeBetEtt extends Node {
 			msg.setSendToNodes(neighbors);
 
 			// FwdPackReplyEtxBet fwdReply = new FwdPackReplyEtxBet(message);
+			//eu realmente quero que ele somente encaminhe o pacote
+			//com as informacoes acima preenchidas
 			MessageTimer fwdReply = new MessageTimer(msg);
 			fwdReply.startRelative(1, this);
 
