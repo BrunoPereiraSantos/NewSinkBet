@@ -265,13 +265,16 @@ public class NodeBetEtt extends Node {
 
 		}
 
-		// Uma mensagem foi recebida pelos ancestrais logo devo analisar se e o
-		// meu nextHop
+		
 		Node n = Tools.getNodeByID(msg.getSenderID());
 		System.out.println("ID="+n.ID);
 		System.out.println("ID="+this.outgoingConnections.contains(this, n));
 		System.out.println("IncommingEdge="+incomingEdge.getEtt());
 		System.out.println("edgeToSender="+edgeToSender.getEtt());
+		
+		// Uma mensagem foi recebida pelos ancestrais logo devo analisar se e o
+		// meu nextHop
+		// virifica se a msg veio de um dos seus vizinhos diretos
 		if ((msg.getEttPath() + edgeToSender.getEtt() <= EttPath) &&
 			(this.outgoingConnections.contains(this, n))
 			){
@@ -288,6 +291,7 @@ public class NodeBetEtt extends Node {
 
 	}
 
+	//cacula o Sink Betweenness para um no
 	private void processBet(BetEttReplyMessage msg) {
 		// faz a adicao do par <chave, valor>
 		// chave = num de caminhos, valor = numero de nodos

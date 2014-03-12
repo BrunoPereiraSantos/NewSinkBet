@@ -34,7 +34,7 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package projects.BetEtx;
+package projects.OldBetEtx;
 
 
 import java.util.Iterator;
@@ -42,8 +42,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import projects.BetEtx.nodes.edges.EdgeBetEtx;
-import projects.BetEtx.nodes.nodeImplementations.NodeBetEtx;
+import projects.OldBetEtx.nodes.edges.EdgeOldBetEtx;
+import projects.OldBetEtx.nodes.nodeImplementations.NodeOldBetEtx;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
@@ -104,7 +104,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	
 	public void insertEtx(){
 		Iterator<Node> it = Runtime.nodes.iterator();
-		NodeBetEtx n;
+		NodeOldBetEtx n;
 		/*Random generator = new Random(1);
 		while(it.hasNext()){
 			n = it.next();
@@ -122,81 +122,81 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		}*/
 		
 		while(it.hasNext()){
-			n = (NodeBetEtx) it.next();
+			n = (NodeOldBetEtx) it.next();
 			//System.out.println(n);
 			Iterator<Edge> it2 = n.outgoingConnections.iterator();
-			EdgeBetEtx e;
+			EdgeOldBetEtx e;
 			while(it2.hasNext()){
-				e = (EdgeBetEtx) it2.next();
+				e = (EdgeOldBetEtx) it2.next();
 				if(n.ID == 1){
 					if(e.endNode.ID == 2)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 				}
 				
 				if(n.ID == 2){
 					if(e.endNode.ID == 1)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 					if(e.endNode.ID == 3)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 					if(e.endNode.ID == 4)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 				}
 
 				if(n.ID == 3){
 					if(e.endNode.ID == 2)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 					if(e.endNode.ID == 5)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 					if(e.endNode.ID == 6)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 				}
 
 				if(n.ID == 4){
 					if(e.endNode.ID == 2)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 					if(e.endNode.ID == 5)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 				}
 
 				if(n.ID == 5){
 					if(e.endNode.ID == 3)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 					if(e.endNode.ID == 4)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 					if(e.endNode.ID == 7)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 					if(e.endNode.ID == 8)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 				}
 
 				if(n.ID == 6){
 					if(e.endNode.ID == 3)
-						e.setParam(0.90, 1., 5.45);
+						e.setEtx(9);
 					if(e.endNode.ID == 7)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 				}
 
 				if(n.ID == 7){
 					if(e.endNode.ID == 5)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 					if(e.endNode.ID == 6)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 					if(e.endNode.ID == 8)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 				}
 
 				if(n.ID == 8){
 					if(e.endNode.ID == 5)
-						e.setParam(0.40, 2., 3.);
+						e.setEtx(4);
 					if(e.endNode.ID == 7)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 					if(e.endNode.ID == 9)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(2);
 				}
 
 				if(n.ID == 9){
 					if(e.endNode.ID == 8)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(1);
 				}
 				
 				//e.setEtx(1+generator.nextInt(9));
@@ -215,56 +215,55 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		//int fanOut = Integer.parseInt(Tools.showQueryDialog("Max fanout:"));
 		//buildTree(fanOut, numLeaves);
 		printGraphicsINGuI();
-		Runtime.reevaluateConnections();
-		insertEtx();
+		
 	}
 	
 	public void printGraphicsINGuI(){
-		Vector<NodeBetEtx> myNodes = new Vector<NodeBetEtx>();
+		Vector<NodeOldBetEtx> myNodes = new Vector<NodeOldBetEtx>();
 		
-		NodeBetEtx n = new NodeBetEtx();
+		NodeOldBetEtx n = new NodeOldBetEtx();
 		n.setPosition(300, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(350, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(400, 450, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(400, 550, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(450, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(450, 400, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(500, 450, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(500, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeBetEtx();
+		n = new NodeOldBetEtx();
 		n.setPosition(550, 550, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);

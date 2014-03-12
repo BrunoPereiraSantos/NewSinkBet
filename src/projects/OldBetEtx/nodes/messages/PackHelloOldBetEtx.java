@@ -1,8 +1,8 @@
-package projects.BetEtx.nodes.messages;
+package projects.OldBetEtx.nodes.messages;
 
 import sinalgo.nodes.messages.Message;
 
-public class PackHelloBetEtx extends Message {
+public class PackHelloOldBetEtx extends Message {
 
 	private int hops;	//numero de hops do nodo que o enviou o pacote
 	private int path;	//numeros de caminho do nodo que o enviou o pacote
@@ -15,7 +15,7 @@ public class PackHelloBetEtx extends Message {
 	/**
 	 * 
 	 */
-	public PackHelloBetEtx() {
+	public PackHelloOldBetEtx() {
 		super();
 	}
 
@@ -26,7 +26,7 @@ public class PackHelloBetEtx extends Message {
 	 * @param sinkID
 	 * @param eTX
 	 */
-	public PackHelloBetEtx(int hops, int path, int senderID, int sinkID, double eTX) {
+	public PackHelloOldBetEtx(int hops, int path, int senderID, int sinkID, double eTX) {
 		super();
 		this.hops = hops;
 		this.path = path;
@@ -39,7 +39,7 @@ public class PackHelloBetEtx extends Message {
 	@Override
 	public Message clone() {
 		// TODO Auto-generated method stub
-		return new PackHelloBetEtx(this.hops, this.path, this.senderID, this.sinkID, this.ETX);
+		return new PackHelloOldBetEtx(this.hops, this.path, this.senderID, this.sinkID, this.ETX);
 	}
 
 	public int getHops() {
