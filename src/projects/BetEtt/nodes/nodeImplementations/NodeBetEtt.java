@@ -39,7 +39,7 @@ public class NodeBetEtt extends Node {
 	private int pathsToSink;
 
 	// rate acumulado do caminho
-	private double EttPath = Integer.MAX_VALUE;
+	private double EttPath = Double.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
@@ -148,8 +148,8 @@ public class NodeBetEtt extends Node {
 		// nodo acaba de ser descoberto ou acabou de encontrar um caminho mais
 		// curto
 		if ((msg.getPathEtt() + edgeToSender.getEtt() < EttPath)
-				|| EttPath == Integer.MAX_VALUE) {
-
+				/*|| EttPath == Integer.MAX_VALUE*/) {
+			System.out.println("Entrei no foi descoberto"+this.ID);
 			sinkID = msg.getSinkID();
 
 			hops = msg.getHops() + 1;
@@ -171,14 +171,16 @@ public class NodeBetEtt extends Node {
 				neighbors.add(sender.ID);
 			}
 
-			sentMyHello = false;
+			//sentMyHello = false;
 		}
 
 		// existe mais de um caminho deste no ate o sink com a mesmo ett
 		// acumulado
 		if (msg.getPathEtt() + edgeToSender.getEtt() == EttPath) {
+			System.out.println("Entrei no + caminhos"+this.ID);
+			this.setColor(Color.MAGENTA);
 			pathsToSink += msg.getPaths();
-			fhp.updateTimer(2, this, fhp.getFireTime());
+			fhp.updateTimer(1, this, fhp.getFireTime());
 			System.out.println("Tempo de disparo: "+fhp.getFireTime());
 
 			// adiciona os vizinhos mais proximos do sink que sao rotas
@@ -192,8 +194,9 @@ public class NodeBetEtt extends Node {
 		// Essas flags ajudam para nao sobrecarregar a memoria com eventos
 		// isto e, mandar mensagens com informacoes desatualiza
 		if (!isSentMyHello()) {
+			System.out.println("Entrei no foi send hello"+this.ID);
 			fhp = new BetEttMessageTimer(msg);
-			fhp.startRelative(1, this);
+			fhp.startRelative(hops, this);
 			sentMyHello = true;
 		}
 
@@ -201,6 +204,7 @@ public class NodeBetEtt extends Node {
 		// para calculo do sbet
 		// nodos do tipo border e relay devem enviar tal pacote
 		if (!isSentMyReply()) {
+			System.out.println("Entrei no send reply"+this.ID);
 			frp = new BetEttMessageTimer(new BetEttReplyMessage());
 			frp.startAbsolute((double) waitingTime(), this);
 			sentMyReply = true;

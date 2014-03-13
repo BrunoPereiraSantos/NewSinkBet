@@ -19,6 +19,7 @@ import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
+import sinalgo.runtime.Global;
 import sinalgo.tools.Tools;
 
 public class NodeBetEtx extends Node {
@@ -38,7 +39,7 @@ public class NodeBetEtx extends Node {
 	private int pathsToSink;
 
 	// rate acumulado do caminho
-	private double EtxPath = Integer.MAX_VALUE;
+	private float EtxPath = Float.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
@@ -47,10 +48,10 @@ public class NodeBetEtx extends Node {
 	private boolean sentMyReply = false;
 
 	// valor do Sink Betweenness
-	private double sBet;
+	private float sBet;
 
 	// Valor do maior sBet entre os vizinhos diretos
-	private double neighborMaxSBet;
+	private float neighborMaxSBet;
 
 	// array com os filhos (this.etx < sons.etx)
 	private ArrayList<Integer> sons = new ArrayList<Integer>();
@@ -130,7 +131,7 @@ public class NodeBetEtx extends Node {
 	 */
 	private void handleHello(Node sender, Node receiver,
 			EdgeBetEtx incomingEdge, BetEtxHelloMessage msg) {
-
+		
 		// no sink nao manipula pacotes hello
 		if (this.ID == msg.getSinkID()) {
 			msg = null;
@@ -138,23 +139,28 @@ public class NodeBetEtx extends Node {
 		}
 
 		EdgeBetEtx edgeToSender = (EdgeBetEtx) incomingEdge.oppositeEdge;
+		
+		System.out.println("***************Informações***************");
+		Float a = new Float(msg.getPathEtx() + edgeToSender.getEtx());
+		System.out.println("a = "+a.toString());
+		System.out.println("msg.getPathEtx() = "+String.format("%f", msg.getPathEtx()));
+		System.out.println("edgeToSender.getEtx() = "+ String.format("%f", edgeToSender.getEtx()));
+		System.out.println("msg.getPathEtx() + edgeToSender.getEtx() = "+ (float)(msg.getPathEtx() + edgeToSender.getEtx()));
+		System.out.println("EtxPath = "+EtxPath);
+		System.out.println("Compare = "+Float.compare((float) (msg.getPathEtx() + edgeToSender.getEtx()), EtxPath));
+		System.out.println("***************FIM DAS Informações***************");
+		
 
 		// o nodo e vizinho direto do sink (armazena o nextHop como id do sink
 		if (msg.getSinkID() == sender.ID) {
 			nextHop = sender.ID;
 		}
 
-		
-		System.out.println("msg ETX "+msg.getPathEtx());
-		System.out.println("msg edgeToSender.getEtx() "+edgeToSender.getEtx());
-		System.out.println("soma  "+(msg.getPathEtx() + edgeToSender.getEtx()));
-		System.out.println("EtxPath "+EtxPath);
-		System.out.println("Equals: "+Double.compare(msg.getPathEtx() + edgeToSender.getEtx(), EtxPath));
 		// nodo acaba de ser descoberto ou acabou de encontrar um caminho mais
 		// curto
-		if ((msg.getPathEtx() + edgeToSender.getEtx()) < EtxPath || (EtxPath == Double.MAX_VALUE)) {
-
-			System.out.println("Acabei de ser descoberto ou encontrei um caminho mais curto "+this.ID);
+		if ((msg.getPathEtx() + edgeToSender.getEtx() < EtxPath)
+				|| EtxPath == Float.MAX_VALUE) {
+			System.out.println("Entrei no foi descoberto"+this.ID);
 			sinkID = msg.getSinkID();
 
 			hops = msg.getHops() + 1;
@@ -163,7 +169,6 @@ public class NodeBetEtx extends Node {
 			pathsToSink = msg.getPaths();
 
 			nextHop = sender.ID;
-
 			EtxPath = msg.getPathEtx() + edgeToSender.getEtx();
 			msg.setPathEtx(EtxPath);
 
@@ -176,36 +181,33 @@ public class NodeBetEtx extends Node {
 				neighbors.add(sender.ID);
 			}
 
-			sentMyHello = false;
+			//sentMyHello = false;
 		}
 
 		// existe mais de um caminho deste no ate o sink com a mesmo etx
 		// acumulado
 		if (msg.getPathEtx() + edgeToSender.getEtx() == EtxPath) {
-			
-			System.out.println("Node "+this.ID+" achou mais caminhos....");
+			System.out.println("ENTREEEIIIIIIIIII");
+			System.out.println("Entrei no + caminhos"+this.ID);
+			this.setColor(Color.MAGENTA);
 			pathsToSink += msg.getPaths();
-			if(!fhp.updateTimer(2, this, fhp.getFireTime())){
-				sentMyHello = false; //caso nao tenha eventos para enviar devo enviar minha atualização
-			}else{
-				System.out.println("Tempo de disparo: "+fhp.getFireTime());
-			}
-			
+			fhp.updateTimer(1, this, fhp.getFireTime());
+			System.out.println("Tempo de disparo: "+fhp.getFireTime());
+
 			// adiciona os vizinhos mais proximos do sink que sao rotas
 			if (!neighbors.contains(sender.ID)) {
 				neighbors.add(sender.ID);
 			}
 		}
 
-			
+		
 		// ele deve encaminhar um pacote com seus dados atualizados
 		// Essas flags ajudam para nao sobrecarregar a memoria com eventos
 		// isto e, mandar mensagens com informacoes desatualiza
 		if (!isSentMyHello()) {
-			System.out.println("Node "+this.ID+" vai reenviar seu hellow....");
-			
-			fhp = new BetEtxMessageTimer(msg);
-			fhp.startRelative(1, this);
+			System.out.println("Entrei no foi send hello"+this.ID);
+			fhp = new BetEtxMessageTimer(new BetEtxHelloMessage());
+			fhp.startRelative(hops, this);
 			sentMyHello = true;
 		}
 
@@ -213,19 +215,21 @@ public class NodeBetEtx extends Node {
 		// para calculo do sbet
 		// nodos do tipo border e relay devem enviar tal pacote
 		if (!isSentMyReply()) {
+			System.out.println("Entrei no send reply"+this.ID);
 			frp = new BetEtxMessageTimer(new BetEtxReplyMessage());
-			frp.startAbsolute((double) waitingTime(), this);
+			frp.startAbsolute((float) waitingTime(), this);
 			sentMyReply = true;
 		}
-
+		
+		msg = null;
 	}
 
 	// atraso para enviar o pacote [referencia artigo do Eduardo]
-	private double waitingTime() {
-		double waitTime = 0.0;
+	private float waitingTime() {
+		float waitTime = 0.0f;
 		// waitTime = 1 / (Math.exp(this.hops) * Math.pow(10, -20));
 		// waitTime = 1 / (this.hops * (Math.pow(5, -3.3)));
-		waitTime = Math.pow(5, 3.3) / this.hops;
+		waitTime = (float) (Math.pow(5, 3.3) / this.hops);
 		// System.out.println(waitTime);
 		return waitTime + 100; // o flood somente inicia apos o tempo 100
 	}
@@ -237,7 +241,7 @@ public class NodeBetEtx extends Node {
 	 */
 	private void handleReply(Node sender, Node receiver,
 			EdgeBetEtx incomingEdge, BetEtxReplyMessage msg) {
-
+		
 		// o sink nao deve manipular pacotes do tipo Relay
 		if (this.ID == msg.getSinkID()) {
 			return;
@@ -314,12 +318,12 @@ public class NodeBetEtx extends Node {
 			sonsPathMap.put(msg.getPath(), 1);
 		}
 
-		double tmp = 0.0;
+		float tmp = 0.0f;
 
 		for (Entry<Integer, Integer> e : sonsPathMap.entrySet())
 			// faz o calculo do Sbet
 			tmp = tmp
-					+ (e.getValue() * ((double) this.pathsToSink / e.getKey()));
+					+ (e.getValue() * ((float) this.pathsToSink / e.getKey()));
 
 		sBet = tmp;
 	}
@@ -335,11 +339,11 @@ public class NodeBetEtx extends Node {
 		// TODO Auto-generated method stub
 		if (this.ID == 1) {
 			this.setColor(Color.BLUE);
-
-			BetEtxHelloMessage hellomsg = new BetEtxHelloMessage(0, 1, this.ID,
-					0);
-			MessageTimer mt = new MessageTimer(hellomsg);
-			mt.startRelative(1, this);
+			this.EtxPath = 0.0f;
+			
+			BetEtxHelloMessage hellomsg = new BetEtxHelloMessage(0, 1, this.ID, this.EtxPath);
+			BetEtxMessageTimer mt = new BetEtxMessageTimer(hellomsg);
+			mt.startRelative(Global.currentTime + 1, this);
 		}
 	}
 
@@ -364,7 +368,7 @@ public class NodeBetEtx extends Node {
 	@NodePopupMethod(menuText = "Start")
 	public void start() {
 
-		BetEtxHelloMessage hellomsg = new BetEtxHelloMessage(0, 1, this.ID, 0);
+		BetEtxHelloMessage hellomsg = new BetEtxHelloMessage(0, 1, this.ID, 0.0f);
 		MessageTimer mt = new MessageTimer(hellomsg);
 		mt.startRelative(1, this);
 
@@ -381,12 +385,12 @@ public class NodeBetEtx extends Node {
 		// super.drawAsRoute(g, pt, highlight, 30);
 	}
 
-	public void sendUnicastRateMsg(Message msg, Node receiver) {
+	public void sendUnicastBetEtxMsg(Message msg, Node receiver) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void broadcastRateMsg(Message msg) {
+	public void broadcastBetEtxMsg(Message msg) {
 		if (msg instanceof BetEtxHelloMessage) {
 			BetEtxHelloMessage m = (BetEtxHelloMessage) msg;
 			m.setHops(hops);
@@ -419,7 +423,7 @@ public class NodeBetEtx extends Node {
 	public String toString() {
 		return "NodeBetEtx [role=" + role + "\n sinkID=" + sinkID + "\n hops="
 				+ hops + "\n nextHop=" + nextHop + "\n pathsToSink="
-				+ pathsToSink + "\n EtxPath=" + String.format("%.2f", EtxPath)
+				+ pathsToSink + "\n EtxPath=" + EtxPath
 				+ "\n sentMyHello=" + sentMyHello + "\n sentMyReply="
 				+ sentMyReply + "\n sBet=" + sBet + "\n neighborMaxSBet="
 				+ neighborMaxSBet + "\n sons=" + sons + "\n neighbors="

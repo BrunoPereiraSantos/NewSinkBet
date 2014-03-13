@@ -35,9 +35,9 @@ public class BetEtxMessageTimer extends Timer {
 	@Override
 	public void fire() {
 		if(receiver != null) { // there's a receiver => unicast the message
-			((NodeBetEtx) this.node ).sendUnicastRateMsg(this.msg, this.receiver);
+			((NodeBetEtx) this.node ).sendUnicastBetEtxMsg(this.msg, this.receiver);
 		} else { // there's no reciever => broadcast the message
-			((NodeBetEtx) this.node).broadcastRateMsg(this.msg);
+			((NodeBetEtx) this.node).broadcastBetEtxMsg(this.msg);
 		}
 	}
 

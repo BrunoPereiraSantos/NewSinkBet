@@ -3,6 +3,7 @@ package projects.Ett.nodes.nodeImplementations;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import projects.BetEtx.nodes.messages.BetEtxHelloMessage;
 import projects.Ett.nodes.edges.EdgeEtt;
 import projects.Ett.nodes.messages.EttHelloMessage;
 import projects.Ett.nodes.nodeImplementations.NodeRoleRate;
@@ -14,6 +15,7 @@ import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
+import sinalgo.runtime.Global;
 import sinalgo.tools.Tools;
 
 public class NodeEtt extends Node {
@@ -148,7 +150,11 @@ public class NodeEtt extends Node {
 		public void init() {
 			// TODO Auto-generated method stub
 			if (this.ID == 1) {
-				this.setColor(Color.GREEN);
+				this.setColor(Color.BLUE);
+				this.pathEtt = 0;
+				EttHelloMessage msg = new EttHelloMessage(0, 1, this.ID, this.pathEtt);
+				EttMessageTimer hellomsg = new EttMessageTimer(msg);
+				hellomsg.startRelative(Global.currentTime + 1, this);
 			}
 		}
 

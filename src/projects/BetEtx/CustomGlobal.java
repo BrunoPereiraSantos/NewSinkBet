@@ -130,73 +130,73 @@ public class CustomGlobal extends AbstractCustomGlobal{
 				e = (EdgeBetEtx) it2.next();
 				if(n.ID == 1){
 					if(e.endNode.ID == 2)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 				}
 				
 				if(n.ID == 2){
 					if(e.endNode.ID == 1)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 3)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 4)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 3){
 					if(e.endNode.ID == 2)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 5)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 6)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 4){
 					if(e.endNode.ID == 2)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 5)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 5){
 					if(e.endNode.ID == 3)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 4)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 7)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 8)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 6){
 					if(e.endNode.ID == 3)
-						e.setParam(0.90, 1., 5.45);
+						e.setEtx(.9f);
 					if(e.endNode.ID == 7)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 7){
 					if(e.endNode.ID == 5)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 6)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 8)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 				}
 
 				if(n.ID == 8){
 					if(e.endNode.ID == 5)
-						e.setParam(0.40, 2., 3.);
+						e.setEtx(.4f);
 					if(e.endNode.ID == 7)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 9)
-						e.setParam(0.20, 2., 3.);
+						e.setEtx(.2f);
 				}
 
 				if(n.ID == 9){
 					if(e.endNode.ID == 8)
-						e.setParam(0.10, 11., 1.);
+						e.setEtx(.1f);
 				}
 				
 				//e.setEtx(1+generator.nextInt(9));
