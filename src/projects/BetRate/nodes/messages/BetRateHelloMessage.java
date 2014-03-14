@@ -7,21 +7,25 @@ public class BetRateHelloMessage extends Message {
 	private int hops; //numero de hops do nodo que o enviou o pacote
 	private int paths; //numeros de caminho do nodo que o enviou o pacote
 	private int sinkID; // ID do sink
-	private double pathEtt; // ID do sink
+	private float mtmPath; // mtmPath do caminho percorrido pela msg
 	
 	
+	
+
 	/**
 	 * @param hops
-	 * @param path
+	 * @param paths
 	 * @param sinkID
+	 * @param mtmPath
 	 */
-	public BetRateHelloMessage(int hops, int paths, int sinkID, double pathEtt) {
+	public BetRateHelloMessage(int hops, int paths, int sinkID, float mtmPath) {
 		super();
 		this.hops = hops;
 		this.paths = paths;
 		this.sinkID = sinkID;
-		this.pathEtt = pathEtt;
+		this.mtmPath = mtmPath;
 	}
+
 
 	/**
 	 * 
@@ -34,27 +38,27 @@ public class BetRateHelloMessage extends Message {
 	@Override
 	public Message clone() {
 		// TODO Auto-generated method stub
-		return new BetRateHelloMessage(this.hops, this.paths, this.sinkID, this.pathEtt);
+		return new BetRateHelloMessage(hops, paths, sinkID, mtmPath);
 	}
 
-
-	
-
-	
 	@Override
 	public String toString() {
-		return "RateHelloMessage [hops=" + hops + ", path=" + paths
-				+ ", sinkID=" + sinkID + ", pathEtt=" + pathEtt + "]";
+		return "BetEtxHelloMessage [hops=" + hops + 
+				"\n path=" + paths+ 
+				"\n sinkID=" + sinkID + 
+				"\n mtmPath=" + mtmPath + "]";
 	}
+
 	
-
-	public double getPathEtt() {
-		return pathEtt;
+	public float getMtmPath() {
+		return mtmPath;
 	}
 
-	public void setPathEtt(double pathEtt) {
-		this.pathEtt = pathEtt;
+
+	public void setMtmPath(float mtmPath) {
+		this.mtmPath = mtmPath;
 	}
+
 
 	public int getHops() {
 		return hops;
@@ -64,33 +68,20 @@ public class BetRateHelloMessage extends Message {
 		this.hops = hops;
 	}
 
-
-
-
 	public int getPaths() {
 		return paths;
 	}
-
-
-
 
 	public void setPaths(int paths) {
 		this.paths = paths;
 	}
 
-
-
-
 	public int getSinkID() {
 		return sinkID;
 	}
-
-
-
-
+	
 	public void setSinkID(int sinkID) {
 		this.sinkID = sinkID;
 	}
 
-	
 }

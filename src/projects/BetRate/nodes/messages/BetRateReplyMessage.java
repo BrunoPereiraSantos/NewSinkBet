@@ -14,8 +14,8 @@ public class BetRateReplyMessage extends Message {
 	private int sinkID; // ID do sink
 	private int sendTo; // next hop no nodo que enviou o pacote
 	private ArrayList<Integer> sendToNodes; //nodos que devem receber
-	private double ETX; //ETX do nodo que enviou o pacote
-	private double sBet; //metrica sBet do nodo que enviou o pacote
+	private float mtmPath; //EtxPath do nodo que enviou o pacote
+	private float sBet; //metrica sBet do nodo que enviou o pacote
 	private int fwdID; //ID do no que encaminhou a mensagem por ultimo
 	
 
@@ -26,13 +26,13 @@ public class BetRateReplyMessage extends Message {
 	 * @param sinkID
 	 * @param sendTo
 	 * @param sendToNodes
-	 * @param eTX
+	 * @param mtmPath
 	 * @param sBet
 	 * @param fwdID
 	 */
 	public BetRateReplyMessage(int hops, int path, int senderID, int sinkID,
-			int sendTo, ArrayList<Integer> sendToNodes, double eTX,
-			double sBet, int fwdID) {
+			int sendTo, ArrayList<Integer> sendToNodes, float mtmPath,
+			float sBet, int fwdID) {
 		super();
 		this.hops = hops;
 		this.path = path;
@@ -40,7 +40,7 @@ public class BetRateReplyMessage extends Message {
 		this.sinkID = sinkID;
 		this.sendTo = sendTo;
 		this.sendToNodes = sendToNodes;
-		ETX = eTX;
+		this.mtmPath = mtmPath;
 		this.sBet = sBet;
 		this.fwdID = fwdID;
 	}
@@ -53,15 +53,20 @@ public class BetRateReplyMessage extends Message {
 	@Override
 	public Message clone() {
 		// TODO Auto-generated method stub
-		return new BetRateReplyMessage(hops, path, senderID, sinkID, sendTo, sendToNodes, ETX, sBet, fwdID);
+		return new BetRateReplyMessage(hops, path, senderID, sinkID, sendTo, sendToNodes, mtmPath, sBet, fwdID);
 	}
 
 	@Override
 	public String toString() {
-		return "BetRateReplyMessage [hops=" + hops + ", path=" + path
-				+ ", senderID=" + senderID + ", sinkID=" + sinkID + ", sendTo="
-				+ sendTo + ", sendToNodes=" + sendToNodes + ", ETX=" + ETX
-				+ ", sBet=" + sBet + ", fwdID=" + fwdID + "]";
+		return "BetRateReplyMessage [hops=" + hops 
+				+ "\n path=" + path
+				+ "\n senderID=" + senderID 
+				+ "\n sinkID=" + sinkID 
+				+ "\n sendTo="+ sendTo 
+				+ "\n sendToNodes=" + sendToNodes 
+				+ "\n mtmPath=" + mtmPath
+				+ "\n sBet=" + sBet 
+				+ "\n fwdID=" + fwdID + "]";
 	}
 
 	public int getHops() {
@@ -112,19 +117,21 @@ public class BetRateReplyMessage extends Message {
 		this.sendToNodes = sendToNodes;
 	}
 
-	public double getETX() {
-		return ETX;
+	public float getMtmPath() {
+		return mtmPath;
 	}
 
-	public void setETX(double eTX) {
-		ETX = eTX;
+
+	public void setMtmPath(float mtmPath) {
+		this.mtmPath = mtmPath;
 	}
 
-	public double getsBet() {
+
+	public float getsBet() {
 		return sBet;
 	}
 
-	public void setsBet(double sBet) {
+	public void setsBet(float sBet) {
 		this.sBet = sBet;
 	}
 

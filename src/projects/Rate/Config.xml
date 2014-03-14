@@ -8,10 +8,10 @@
 		<dimensions value="2" />
 
 		<!--Length of the deployment field along the x-axis.-->
-		<dimX value="600" />
+		<dimX value="1000" />
 
 		<!--Length of the deployment field along the y-axis.-->
-		<dimY value="600" />
+		<dimY value="1000" />
 
 		<!--Length of the deployment field along the z-axis.-->
 		<dimZ value="500" />
@@ -248,6 +248,6 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-															</Custom>
+																</Custom>
 </Document>
 

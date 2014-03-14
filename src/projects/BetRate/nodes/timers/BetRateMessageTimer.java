@@ -1,7 +1,7 @@
 package projects.BetRate.nodes.timers;
 
-import sinalgo.nodes.Node;
 import projects.BetRate.nodes.nodeImplementations.NodeBetRate;
+import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.timers.Timer;
 
@@ -35,10 +35,11 @@ public class BetRateMessageTimer extends Timer {
 	@Override
 	public void fire() {
 		if(receiver != null) { // there's a receiver => unicast the message
-			((NodeBetRate) this.node ).sendUnicastRateMsg(this.msg, this.receiver);
+			((NodeBetRate) this.node ).sendUnicastBetRateMsg(this.msg, this.receiver);
 		} else { // there's no reciever => broadcast the message
-			((NodeBetRate) this.node).broadcastRateMsg(this.msg);
+			((NodeBetRate) this.node).broadcastBetRateMsg(this.msg);
 		}
 	}
+
 
 }

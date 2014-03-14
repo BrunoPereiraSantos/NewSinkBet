@@ -8,10 +8,10 @@
 		<dimensions value="2" />
 
 		<!--Length of the deployment field along the x-axis.-->
-		<dimX value="600" />
+		<dimX value="1000" />
 
 		<!--Length of the deployment field along the y-axis.-->
-		<dimY value="600" />
+		<dimY value="1000" />
 
 		<!--Length of the deployment field along the z-axis.-->
 		<dimZ value="500" />
@@ -59,7 +59,7 @@
 		<javaCmd value="java" />
 
 		<!--Maximum memory the Java VM is allowed to use (in MB)-->
-		<javaVMmaxMem value="2550" />
+		<javaVMmaxMem value="2500" />
 
 		<!--***********************************************************************-->
 		<!--  Random number generators                                             -->
@@ -98,7 +98,7 @@
 		<extendedControl value="true" />
 
 		<!--If true, the graph edges are drawn as directed arrows,  otherwise simple lines.-->
-		<drawArrows value="false" />
+		<drawArrows value="true" />
 
 		<!--Fraction of the old and new zoom values for a zoom step.-->
 		<zoomStep value="1.2" />
@@ -131,7 +131,7 @@
 		<!--  Models                                                               -->
 		<!--***********************************************************************-->
 		<!--The message transmission model used when none is specified-->
-		<DefaultMessageTransmissionModel value="BetRate:BetRateMsgTransModel" />
+		<DefaultMessageTransmissionModel value="BetRate:BetRateTransmissionModel" />
 
 		<!--Default connectivity model used when none is specified-->
 		<DefaultConnectivityModel value="BetRate:BetRateConnectivityHelper" />
@@ -149,7 +149,7 @@
 		<DefaultReliabilityModel value="ReliableDelivery" />
 
 		<!--Default node implementation used when none is specified-->
-		<DefaultNodeImplementation value="BetRate:NodeRoleBetRate" />
+		<DefaultNodeImplementation value="BetRate:NodeBetRate" />
 
 		<!--Show the models implemented by all projects in the drop down options. When set to false, only the models by the selected project and the default project are shown.-->
 		<showModelsOfAllProjects value="false" />
@@ -227,13 +227,12 @@
 	<Custom>
 <MessageTransmission ConstantTime="1"/>
 	
-<Node defaultSize="100" />
+<Node defaultSize="10" />
 
-<!-- <GeometricNodeCollection rMax="796"/> -->
 <GeometricNodeCollection rMax="100"/>
 
-<!-- <UDG rMax="796"/> -->
 <UDG rMax="100"/>
+
 <SINR alpha="2" beta="0.7" noise="0"/>
 
 <RandomWayPoint>
@@ -248,6 +247,6 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-														</Custom>
+												</Custom>
 </Document>
 

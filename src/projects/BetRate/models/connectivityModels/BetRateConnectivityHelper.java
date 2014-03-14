@@ -9,8 +9,7 @@ import sinalgo.runtime.Global;
 import sinalgo.runtime.Main;
 
 public class BetRateConnectivityHelper extends ConnectivityModelHelper {
-
-	private double squareRadius;
+private double squareRadius;
 	
 	@Override
 	protected boolean isConnected(Node from, Node to) {

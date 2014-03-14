@@ -33,7 +33,7 @@ public class EdgeBetEtx extends BidirectionalEdge {
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
-			setParam(0.75f, 0.99f, 1.0f, 1.0f);
+			setParam(0.75f, 0.99f, 1.0f, 5.45f);
 			//setParam(0, 0, 0);
 			return;
 		}

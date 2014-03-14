@@ -7,20 +7,21 @@ public class RateHelloMessage extends Message {
 	private int hops; //numero de hops do nodo que o enviou o pacote
 	private int paths; //numeros de caminho do nodo que o enviou o pacote
 	private int sinkID; // ID do sink
-	private double pathEtt; // ID do sink
+	private double mtmPath; // ID do sink
 	
 	
 	/**
 	 * @param hops
 	 * @param path
 	 * @param sinkID
+	 * @param mtmPath
 	 */
-	public RateHelloMessage(int hops, int paths, int sinkID, double pathEtt) {
+	public RateHelloMessage(int hops, int paths, int sinkID, double mtmPath) {
 		super();
 		this.hops = hops;
 		this.paths = paths;
 		this.sinkID = sinkID;
-		this.pathEtt = pathEtt;
+		this.mtmPath = mtmPath;
 	}
 
 	/**
@@ -34,26 +35,22 @@ public class RateHelloMessage extends Message {
 	@Override
 	public Message clone() {
 		// TODO Auto-generated method stub
-		return new RateHelloMessage(this.hops, this.paths, this.sinkID, this.pathEtt);
+		return new RateHelloMessage(this.hops, this.paths, this.sinkID, this.mtmPath);
 	}
 
-
-	
-
-	
 	@Override
 	public String toString() {
 		return "RateHelloMessage [hops=" + hops + ", path=" + paths
-				+ ", sinkID=" + sinkID + ", pathEtt=" + pathEtt + "]";
+				+ ", sinkID=" + sinkID + ", mtmPath=" + mtmPath + "]";
 	}
 	
-
-	public double getPathEtt() {
-		return pathEtt;
+	
+	public double getMtmPath() {
+		return mtmPath;
 	}
 
-	public void setPathEtt(double pathEtt) {
-		this.pathEtt = pathEtt;
+	public void setMtmPath(double mtmPath) {
+		this.mtmPath = mtmPath;
 	}
 
 	public int getHops() {
@@ -63,9 +60,6 @@ public class RateHelloMessage extends Message {
 	public void setHops(int hops) {
 		this.hops = hops;
 	}
-
-
-
 
 	public int getPaths() {
 		return paths;

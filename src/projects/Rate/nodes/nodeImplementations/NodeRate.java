@@ -3,6 +3,7 @@ package projects.Rate.nodes.nodeImplementations;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import projects.BetEtt.nodes.messages.BetEttHelloMessage;
 import projects.Rate.nodes.edges.EdgeRate;
 import projects.Rate.nodes.messages.RateHelloMessage;
 import projects.Rate.nodes.timers.RateMessageTimer;
@@ -33,7 +34,7 @@ public class NodeRate extends Node {
 	private int pathsToSink;	
 	
 	//rate acumulado do caminho
-	private double pathEtt = Integer.MAX_VALUE;
+	private double mtmPath = Double.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
@@ -104,8 +105,8 @@ public class NodeRate extends Node {
 		}
 		
 		// nodo acaba de ser descoberto ou acabou de encontrar um caminho mais curto
-		if((msg.getPathEtt() + edgeToSender.getEtt() < pathEtt) 
-				|| pathEtt == Integer.MAX_VALUE){
+		if((msg.getMtmPath() + edgeToSender.getMtm() < mtmPath) 
+				|| mtmPath == Double.MAX_VALUE){
 			
 			sinkID = msg.getSinkID();
 			
@@ -116,14 +117,14 @@ public class NodeRate extends Node {
 			
 			nextHop = sender.ID;
 			
-			pathEtt = msg.getPathEtt() + edgeToSender.getEtt();
-			msg.setPathEtt(pathEtt);
+			mtmPath = msg.getMtmPath() + edgeToSender.getMtm();
+			msg.setMtmPath(mtmPath);
 			
 			sentMyHello = false;
 		}
 		
 		// existe mais de um caminho deste no ate o sink com a mesmo ett acumulado
-		if(msg.getPathEtt() + edgeToSender.getEtt() == pathEtt){
+		if(msg.getMtmPath() + edgeToSender.getMtm() == mtmPath){
 			pathsToSink += msg.getPaths();
 			fhp.updateTimer(1, this, fhp.getFireTime());
 			
@@ -148,7 +149,11 @@ public class NodeRate extends Node {
 	public void init() {
 		// TODO Auto-generated method stub
 		if (this.ID == 1) {
-			this.setColor(Color.GREEN);
+			this.setColor(Color.BLUE);
+
+			RateHelloMessage hellomsg = new RateHelloMessage(0, 1, this.ID, 0.0);
+			MessageTimer mt = new MessageTimer(hellomsg);
+			mt.startRelative(1, this);
 		}
 	}
 
@@ -173,7 +178,7 @@ public class NodeRate extends Node {
 	@NodePopupMethod(menuText = "Start")
 	public void start() {
 		
-		RateHelloMessage hellomsg = new RateHelloMessage(0, 1, this.ID, 0);
+		RateHelloMessage hellomsg = new RateHelloMessage(0, 1, this.ID, 0.0);
 		MessageTimer mt = new MessageTimer(hellomsg);
 		mt.startRelative(1, this);
 		
@@ -199,7 +204,7 @@ public class NodeRate extends Node {
 		if(msg instanceof RateHelloMessage){
 			RateHelloMessage m = (RateHelloMessage) msg;
 			m.setHops(hops);
-			m.setPathEtt(pathEtt);
+			m.setMtmPath(mtmPath);
 			m.setPaths(pathsToSink);
 			m.setSinkID(sinkID);
 			
@@ -216,7 +221,7 @@ public class NodeRate extends Node {
 				"\nhops="+ hops + 
 				"\npathsToSink="+ pathsToSink + 
 				"\nnextHop=" + nextHop +
-				"\npathEtt="+ String.format("%.2f", pathEtt) + 
+				"\nmtmPath="+ String.format("%.2f", mtmPath) + 
 				"\nsentMyHello=" + sentMyHello+ 
 				"\nsentMyReply=" + sentMyReply + "]";
 	}

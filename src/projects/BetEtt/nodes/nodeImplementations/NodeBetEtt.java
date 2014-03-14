@@ -12,7 +12,6 @@ import projects.BetEtt.nodes.messages.BetEttHelloMessage;
 import projects.BetEtt.nodes.messages.BetEttReplyMessage;
 import projects.BetEtt.nodes.nodeImplementations.NodeRoleBetEtt;
 import projects.BetEtt.nodes.timers.BetEttMessageTimer;
-import projects.BetRate.nodes.timers.BetRateMessageTimer;
 import projects.defaultProject.nodes.timers.MessageTimer;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.gui.transformation.PositionTransformation;

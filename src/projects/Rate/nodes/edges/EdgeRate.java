@@ -30,7 +30,7 @@ public class EdgeRate extends BidirectionalEdge {
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
-			setParam(0.75, 0.98, 1., 1.);
+			setParam(0.75, 0.99, 1., 5.45);
 			return;
 		}
 	}

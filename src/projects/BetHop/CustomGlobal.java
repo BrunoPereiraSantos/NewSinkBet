@@ -42,8 +42,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import projects.BetHop.nodes.edges.EdgeHop;
-import projects.BetHop.nodes.nodeImplementations.NodeHop;
+import projects.BetHop.nodes.edges.EdgeBetHop;
+import projects.BetHop.nodes.nodeImplementations.NodeBetHop;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
@@ -91,7 +91,6 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		JOptionPane.showMessageDialog(null, "You typed '" + answer + "'", "Example Echo", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	
 	/**
 	 * Dummy button to create a tree.  
 	 */
@@ -105,7 +104,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	
 	public void insertEtx(){
 		Iterator<Node> it = Runtime.nodes.iterator();
-		NodeHop n;
+		NodeBetHop n;
 		/*Random generator = new Random(1);
 		while(it.hasNext()){
 			n = it.next();
@@ -123,81 +122,81 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		}*/
 		
 		while(it.hasNext()){
-			n = (NodeHop) it.next();
+			n = (NodeBetHop) it.next();
 			//System.out.println(n);
 			Iterator<Edge> it2 = n.outgoingConnections.iterator();
-			EdgeHop e;
+			EdgeBetHop e;
 			while(it2.hasNext()){
-				e = (EdgeHop) it2.next();
+				e = (EdgeBetHop) it2.next();
 				if(n.ID == 1){
 					if(e.endNode.ID == 2)
-						e.setEtx(2);
+						e.setEtx(.2f);
 				}
 				
 				if(n.ID == 2){
 					if(e.endNode.ID == 1)
-						e.setEtx(1);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 3)
-						e.setEtx(1);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 4)
-						e.setEtx(1);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 3){
 					if(e.endNode.ID == 2)
-						e.setEtx(2);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 5)
-						e.setEtx(1);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 6)
-						e.setEtx(1);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 4){
 					if(e.endNode.ID == 2)
-						e.setEtx(2);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 5)
-						e.setEtx(1);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 5){
 					if(e.endNode.ID == 3)
-						e.setEtx(2);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 4)
-						e.setEtx(2);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 7)
-						e.setEtx(1);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 8)
-						e.setEtx(1);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 6){
 					if(e.endNode.ID == 3)
-						e.setEtx(9);
+						e.setEtx(.9f);
 					if(e.endNode.ID == 7)
-						e.setEtx(1);
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 7){
 					if(e.endNode.ID == 5)
-						e.setEtx(2);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 6)
-						e.setEtx(1);
+						e.setEtx(.1f);
 					if(e.endNode.ID == 8)
-						e.setEtx(2);
+						e.setEtx(.2f);
 				}
 
 				if(n.ID == 8){
 					if(e.endNode.ID == 5)
-						e.setEtx(4);
+						e.setEtx(.4f);
 					if(e.endNode.ID == 7)
-						e.setEtx(2);
+						e.setEtx(.2f);
 					if(e.endNode.ID == 9)
-						e.setEtx(2);
+						e.setEtx(.2f);
 				}
 
 				if(n.ID == 9){
 					if(e.endNode.ID == 8)
-						e.setEtx(1);
+						e.setEtx(.1f);
 				}
 				
 				//e.setEtx(1+generator.nextInt(9));
@@ -216,59 +215,59 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		//int fanOut = Integer.parseInt(Tools.showQueryDialog("Max fanout:"));
 		//buildTree(fanOut, numLeaves);
 		printGraphicsINGuI();
-		
+		Runtime.reevaluateConnections();
+		insertEtx();
 	}
 	
 	public void printGraphicsINGuI(){
-		Vector<NodeHop> myNodes = new Vector<NodeHop>();
+		Vector<NodeBetHop> myNodes = new Vector<NodeBetHop>();
 		
-		NodeHop n = new NodeHop();
+		NodeBetHop n = new NodeBetHop();
 		n.setPosition(300, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(350, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(400, 450, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(400, 550, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(450, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(450, 400, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(500, 450, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(500, 500, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		
-		n = new NodeHop();
+		n = new NodeBetHop();
 		n.setPosition(550, 550, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
-		
 		// Repaint the GUI as we have added some nodes
 		Tools.repaintGUI();
 		
