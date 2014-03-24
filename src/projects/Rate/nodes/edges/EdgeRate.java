@@ -18,19 +18,23 @@ public class EdgeRate extends BidirectionalEdge {
 		double dist = startNode.getPosition().distanceTo(endNode.getPosition());
 		//System.out.println("Distancia na edge: "+dist);
 		if(dist < 399){
-			setParam(0.001, 0.24, 11., 1.);
+			//setParam(0.001, 0.24, 11., 1.);
+			setParam(0.001, 0.24, 11., 5.);
 			return;
 		}
 		if(dist >= 399 && dist < 531){
-			setParam(0.25, 0.49, 5.5, 1.44);
+			//setParam(0.25, 0.49, 5.5, 1.44);
+			setParam(0.25, 0.49, 5.5, 7);
 			return;
 		}
 		if(dist >= 531 && dist < 669){
-			setParam(0.50, 0.74, 2., 3.);
+			//setParam(0.50, 0.74, 2., 3.);
+			setParam(0.50, 0.74, 2., 14);
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
-			setParam(0.75, 0.99, 1., 5.45);
+			//setParam(0.75, 0.99, 1., 5.45);
+			setParam(0.75, 0.99, 1., 25);
 			return;
 		}
 	}

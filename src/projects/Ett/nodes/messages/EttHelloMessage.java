@@ -7,7 +7,7 @@ public class EttHelloMessage extends Message {
 	private int hops; //numero de hops do nodo que o enviou o pacote
 	private int paths; //numeros de caminho do nodo que o enviou o pacote
 	private int sinkID; // ID do sink
-	private double pathEtt; // ID do sink
+	private float pathEtt; // ID do sink
 	
 	
 	/**
@@ -15,7 +15,7 @@ public class EttHelloMessage extends Message {
 	 * @param path
 	 * @param sinkID
 	 */
-	public EttHelloMessage(int hops, int paths, int sinkID, double pathEtt) {
+	public EttHelloMessage(int hops, int paths, int sinkID, float pathEtt) {
 		super();
 		this.hops = hops;
 		this.paths = paths;
@@ -48,11 +48,11 @@ public class EttHelloMessage extends Message {
 	}
 	
 
-	public double getPathEtt() {
+	public float getPathEtt() {
 		return pathEtt;
 	}
 
-	public void setPathEtt(double pathEtt) {
+	public void setPathEtt(float pathEtt) {
 		this.pathEtt = pathEtt;
 	}
 

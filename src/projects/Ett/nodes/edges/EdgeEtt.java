@@ -5,10 +5,10 @@ import sinalgo.tools.statistics.UniformDistribution;
 
 public class EdgeEtt extends BidirectionalEdge {
 
-	private double etx;
-	private double rate;
-	private double mtm;
-	private double ett;
+	private float etx;
+	private float rate;
+	private float mtm;
+	private float ett;
 	
 	@Override
 	public void initializeEdge() {
@@ -18,32 +18,32 @@ public class EdgeEtt extends BidirectionalEdge {
 		double dist = startNode.getPosition().distanceTo(endNode.getPosition());
 		//System.out.println("Distancia na edge: "+dist);
 		if(dist < 399){
-			setParam(0.001, 0.24, 11., 1.);
+			setParam(0.001f, 0.24f, 11.f, 1.f);
 			return;
 		}
 		if(dist >= 399 && dist < 531){
-			setParam(0.25, 0.49, 5.5, 1.44);
+			setParam(0.25f, 0.49f, 5.5f, 1.44f);
 			return;
 		}
 		if(dist >= 531 && dist < 669){
-			setParam(0.50, 0.74, 2., 3.);
+			setParam(0.50f, 0.74f, 2.f, 3.f);
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
-			setParam(0.75, 0.98, 1., 5.45);
+			setParam(0.75f, 0.98f, 1.f, 5.45f);
 			return;
 		}
 	}
 
-	public void setParam(double min, double max, double rate, double mtm){
+	public void setParam(float min, float max, float rate, float mtm){
 		UniformDistribution v = new UniformDistribution(min, max);
-		this.etx = v.nextSample();
+		this.etx = (float) v.nextSample();
 		this.rate = rate;
 		this.mtm = mtm;
 		this.ett = etx * mtm;
 	}
 	
-	public void setParam(double etx, double rate, double mtm){
+	public void setParam(float etx, float rate, float mtm){
 		this.etx = etx;
 		this.rate = rate;
 		this.mtm = mtm;
@@ -64,35 +64,35 @@ public class EdgeEtt extends BidirectionalEdge {
 				"\ntoString()=" + super.toString() + "]";
 	}
 
-	public double getEtx() {
+	public float getEtx() {
 		return etx;
 	}
 
-	public void setEtx(double etx) {
+	public void setEtx(float etx) {
 		this.etx = etx;
 	}
 
-	public double getRate() {
+	public float getRate() {
 		return rate;
 	}
 
-	public void setRate(double rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 
-	public double getMtm() {
+	public float getMtm() {
 		return mtm;
 	}
 
-	public void setMtm(double mtm) {
+	public void setMtm(float mtm) {
 		this.mtm = mtm;
 	}
 
-	public double getEtt() {
+	public float getEtt() {
 		return ett;
 	}
 
-	public void setEtt(double ett) {
+	public void setEtt(float ett) {
 		this.ett = ett;
 	}
 }

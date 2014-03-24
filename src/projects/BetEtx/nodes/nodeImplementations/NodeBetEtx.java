@@ -342,7 +342,7 @@ public class NodeBetEtx extends Node {
 			this.EtxPath = 0.0f;
 			
 			BetEtxHelloMessage hellomsg = new BetEtxHelloMessage(0, 1, this.ID, this.EtxPath);
-			BetEtxMessageTimer mt = new BetEtxMessageTimer(hellomsg);
+			MessageTimer mt = new MessageTimer(hellomsg);
 			mt.startRelative(Global.currentTime + 1, this);
 		}
 	}

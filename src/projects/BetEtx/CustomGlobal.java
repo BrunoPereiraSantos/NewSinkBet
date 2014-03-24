@@ -156,6 +156,8 @@ public class CustomGlobal extends AbstractCustomGlobal{
 						e.setEtx(.2f);
 					if(e.endNode.ID == 5)
 						e.setEtx(.1f);
+					if(e.endNode.ID == 10)
+						e.setEtx(.1f);
 				}
 
 				if(n.ID == 5){
@@ -196,6 +198,11 @@ public class CustomGlobal extends AbstractCustomGlobal{
 
 				if(n.ID == 9){
 					if(e.endNode.ID == 8)
+						e.setEtx(.1f);
+				}
+				
+				if(n.ID == 10){
+					if(e.endNode.ID == 4)
 						e.setEtx(.1f);
 				}
 				
@@ -266,6 +273,11 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		
 		n = new NodeBetEtx();
 		n.setPosition(550, 550, 0);
+		n.finishInitializationWithDefaultModels(true);
+		myNodes.add(n);
+		
+		n = new NodeBetEtx();
+		n.setPosition(400, 600, 0);
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 		// Repaint the GUI as we have added some nodes

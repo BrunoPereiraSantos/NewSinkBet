@@ -130,73 +130,94 @@ public class CustomGlobal extends AbstractCustomGlobal{
 				e = (EdgeRate) it2.next();
 				if(n.ID == 1){
 					if(e.endNode.ID == 2)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 				}
 				
 				if(n.ID == 2){
 					if(e.endNode.ID == 1)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 					if(e.endNode.ID == 3)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 					if(e.endNode.ID == 4)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 				}
 
 				if(n.ID == 3){
 					if(e.endNode.ID == 2)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 5)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 					if(e.endNode.ID == 6)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 				}
 
 				if(n.ID == 4){
 					if(e.endNode.ID == 2)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 5)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 				}
 
 				if(n.ID == 5){
 					if(e.endNode.ID == 3)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 4)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 7)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 					if(e.endNode.ID == 8)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 				}
 
 				if(n.ID == 6){
 					if(e.endNode.ID == 3)
-						e.setParam(0.9, 1., 5.45);
+						e.setParam(0.9, 1., 25.);
+						//e.setParam(0.9, 1., 5.45);
 					if(e.endNode.ID == 7)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 				}
 
 				if(n.ID == 7){
 					if(e.endNode.ID == 5)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 6)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 					if(e.endNode.ID == 8)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 				}
 
 				if(n.ID == 8){
 					if(e.endNode.ID == 5)
-						e.setEtx(0.4);
+						e.setParam(0.4, 2., 14.);
+						//e.setEtx(0.4);
 					if(e.endNode.ID == 7)
-						e.setParam(0.2, 2., 3.);
+						e.setParam(0.2, 2., 14.);
+						//e.setParam(0.2, 2., 3.);
 					if(e.endNode.ID == 9)
 						e.setParam(0.2, 2., 3.);
 				}
 
 				if(n.ID == 9){
 					if(e.endNode.ID == 8)
-						e.setParam(0.1, 11., 1.);
+						e.setParam(0.1, 11., 5.);
+						//e.setParam(0.1, 11., 1.);
 				}
 				
 				//e.setEtx(1+generator.nextInt(9));

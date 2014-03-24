@@ -14,8 +14,8 @@ public class BetEttReplyMessage extends Message {
 	private int sinkID; // ID do sink
 	private int sendTo; // next hop no nodo que enviou o pacote
 	private ArrayList<Integer> sendToNodes; //nodos que devem receber
-	private double EttPath; //EttPath do nodo que enviou o pacote
-	private double sBet; //metrica sBet do nodo que enviou o pacote
+	private float EttPath; //EttPath do nodo que enviou o pacote
+	private float sBet; //metrica sBet do nodo que enviou o pacote
 	private int fwdID; //ID do no que encaminhou a mensagem por ultimo
 	
 
@@ -31,8 +31,8 @@ public class BetEttReplyMessage extends Message {
 	 * @param fwdID
 	 */
 	public BetEttReplyMessage(int hops, int path, int senderID, int sinkID,
-			int sendTo, ArrayList<Integer> sendToNodes, double EttPath,
-			double sBet, int fwdID) {
+			int sendTo, ArrayList<Integer> sendToNodes, float EttPath,
+			float sBet, int fwdID) {
 		super();
 		this.hops = hops;
 		this.path = path;
@@ -117,21 +117,21 @@ public class BetEttReplyMessage extends Message {
 		this.sendToNodes = sendToNodes;
 	}
 
-	public double getEttPath() {
+	public float getEttPath() {
 		return this.EttPath;
 	}
 
 
-	public void setEttPath(double EttPath) {
+	public void setEttPath(float EttPath) {
 		this.EttPath = EttPath;
 	}
 
 
-	public double getsBet() {
+	public float getsBet() {
 		return sBet;
 	}
 
-	public void setsBet(double sBet) {
+	public void setsBet(float sBet) {
 		this.sBet = sBet;
 	}
 

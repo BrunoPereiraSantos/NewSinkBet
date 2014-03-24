@@ -33,7 +33,7 @@ public class NodeHop extends Node {
 	private int pathsToSink;	
 	
 	//rate acumulado do caminho
-	private double mtmPath = Double.MAX_VALUE;
+	private float mtmPath = Float.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
@@ -141,7 +141,7 @@ public class NodeHop extends Node {
 		if (this.ID == 1) {
 			this.setColor(Color.BLUE);
 
-			HopHelloMessage hellomsg = new HopHelloMessage(0, 1, this.ID, 0.0);
+			HopHelloMessage hellomsg = new HopHelloMessage(0, 1, this.ID, 0.0f);
 			MessageTimer mt = new MessageTimer(hellomsg);
 			mt.startRelative(1, this);
 		}
@@ -168,7 +168,7 @@ public class NodeHop extends Node {
 	@NodePopupMethod(menuText = "Start")
 	public void start() {
 		
-		HopHelloMessage hellomsg = new HopHelloMessage(0, 1, this.ID, 0.0);
+		HopHelloMessage hellomsg = new HopHelloMessage(0, 1, this.ID, 0.0f);
 		MessageTimer mt = new MessageTimer(hellomsg);
 		mt.startRelative(1, this);
 		

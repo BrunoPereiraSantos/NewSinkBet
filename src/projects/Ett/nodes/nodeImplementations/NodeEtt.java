@@ -35,7 +35,7 @@ public class NodeEtt extends Node {
 		private int pathsToSink;	
 		
 		//rate acumulado do caminho
-		private double pathEtt = Integer.MAX_VALUE;
+		private float pathEtt = Float.MAX_VALUE;
 
 		// Flag para indicar se o nodo ja enviou seu pkt hello
 		private boolean sentMyHello = false;

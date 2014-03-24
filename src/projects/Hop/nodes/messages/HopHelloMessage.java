@@ -7,7 +7,7 @@ public class HopHelloMessage extends Message {
 	private int hops; //numero de hops do nodo que o enviou o pacote
 	private int paths; //numeros de caminho do nodo que o enviou o pacote
 	private int sinkID; // ID do sink
-	private double mtmPath; // ID do sink
+	private float mtmPath; // ID do sink
 	
 	
 	/**
@@ -16,7 +16,7 @@ public class HopHelloMessage extends Message {
 	 * @param sinkID
 	 * @param mtmPath
 	 */
-	public HopHelloMessage(int hops, int paths, int sinkID, double mtmPath) {
+	public HopHelloMessage(int hops, int paths, int sinkID, float mtmPath) {
 		super();
 		this.hops = hops;
 		this.paths = paths;
@@ -45,11 +45,11 @@ public class HopHelloMessage extends Message {
 	}
 	
 	
-	public double getMtmPath() {
+	public float getMtmPath() {
 		return mtmPath;
 	}
 
-	public void setMtmPath(double mtmPath) {
+	public void setMtmPath(float mtmPath) {
 		this.mtmPath = mtmPath;
 	}
 

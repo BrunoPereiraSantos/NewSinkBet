@@ -38,7 +38,7 @@ public class NodeBetEtt extends Node {
 	private int pathsToSink;
 
 	// rate acumulado do caminho
-	private double EttPath = Double.MAX_VALUE;
+	private float EttPath = Float.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
@@ -47,7 +47,7 @@ public class NodeBetEtt extends Node {
 	private boolean sentMyReply = false;
 
 	// valor do Sink Betweenness
-	private double sBet;
+	private float sBet;
 
 	// Valor do maior sBet entre os vizinhos diretos
 	private double neighborMaxSBet;
@@ -305,12 +305,12 @@ public class NodeBetEtt extends Node {
 			sonsPathMap.put(msg.getPath(), 1);
 		}
 
-		double tmp = 0.0;
+		float tmp = 0.0f;
 
 		for (Entry<Integer, Integer> e : sonsPathMap.entrySet())
 			// faz o calculo do Sbet
 			tmp = tmp
-					+ (e.getValue() * ((double) this.pathsToSink / e.getKey()));
+					+ (e.getValue() * ((float) this.pathsToSink / e.getKey()));
 
 		sBet = tmp;
 	}

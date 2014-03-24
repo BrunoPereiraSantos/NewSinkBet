@@ -10,7 +10,7 @@ import sinalgo.tools.statistics.UniformDistribution;
 public class BetHopReliabilityModel extends ReliabilityModel {
 
 	UniformDistribution ud = new UniformDistribution(.1, 100.0);
-	private double etxLink;
+	private float etxLink;
 	
 	
 	@Override
