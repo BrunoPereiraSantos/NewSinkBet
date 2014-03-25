@@ -130,73 +130,74 @@ public class CustomGlobal extends AbstractCustomGlobal{
 				e = (EdgeEtx) it2.next();
 				if(n.ID == 1){
 					if(e.endNode.ID == 2)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 				}
 				
 				if(n.ID == 2){
 					if(e.endNode.ID == 1)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 					if(e.endNode.ID == 3)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 					if(e.endNode.ID == 4)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 				}
 
 				if(n.ID == 3){
 					if(e.endNode.ID == 2)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 					if(e.endNode.ID == 5)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 					if(e.endNode.ID == 6)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 				}
 
 				if(n.ID == 4){
 					if(e.endNode.ID == 2)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 					if(e.endNode.ID == 5)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 				}
 
 				if(n.ID == 5){
 					if(e.endNode.ID == 3)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 					if(e.endNode.ID == 4)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 					if(e.endNode.ID == 7)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 					if(e.endNode.ID == 8)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 				}
 
 				if(n.ID == 6){
 					if(e.endNode.ID == 3)
-						e.setEtx(.9f);
+						e.setParam(0.9f, 1.f);
 					if(e.endNode.ID == 7)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 				}
 
 				if(n.ID == 7){
 					if(e.endNode.ID == 5)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 					if(e.endNode.ID == 6)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 					if(e.endNode.ID == 8)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 				}
 
 				if(n.ID == 8){
 					if(e.endNode.ID == 5)
-						e.setEtx(.4f);
+						e.setParam(0.4f,  2.f);
+						//e.setEtx(0.4);
 					if(e.endNode.ID == 7)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 					if(e.endNode.ID == 9)
-						e.setEtx(.2f);
+						e.setParam(0.2f, 2.f);
 				}
 
 				if(n.ID == 9){
 					if(e.endNode.ID == 8)
-						e.setEtx(.1f);
+						e.setParam(0.1f, 11.f);
 				}
 				
 				//e.setEtx(1+generator.nextInt(9));

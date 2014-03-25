@@ -26,24 +26,14 @@ public class NodeHop extends Node {
 	// numero de hops ate o sink
 	private int hops = Integer.MAX_VALUE;
 
-	// id do prox no usando a metrica numero de hops
+	// id do prox nodo
 	private int nextHop;
-	
-	//numero de caminhos para o sink
-	private int pathsToSink;	
-	
-	//rate acumulado do caminho
-	private float mtmPath = Float.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
-
-	// Flag para indicar se o nodo ja enviou seu pkt border
-	private boolean sentMyReply = false;
 	
 	//Disparadores de flood
 	HopMessageTimer fhp;
-	HopMessageTimer frp;
 
 	@Override
 	public void handleMessages(Inbox inbox) {
@@ -111,11 +101,7 @@ public class NodeHop extends Node {
 			hops = msg.getHops() + 1;
 			msg.setHops(hops);
 			
-			pathsToSink = msg.getPaths();
-			
 			nextHop = sender.ID;
-			
-			msg.setMtmPath(mtmPath);
 			
 			sentMyHello = false;
 		}
@@ -141,7 +127,7 @@ public class NodeHop extends Node {
 		if (this.ID == 1) {
 			this.setColor(Color.BLUE);
 
-			HopHelloMessage hellomsg = new HopHelloMessage(0, 1, this.ID, 0.0f);
+			HopHelloMessage hellomsg = new HopHelloMessage(0, this.ID);
 			MessageTimer mt = new MessageTimer(hellomsg);
 			mt.startRelative(1, this);
 		}
@@ -168,7 +154,7 @@ public class NodeHop extends Node {
 	@NodePopupMethod(menuText = "Start")
 	public void start() {
 		
-		HopHelloMessage hellomsg = new HopHelloMessage(0, 1, this.ID, 0.0f);
+		HopHelloMessage hellomsg = new HopHelloMessage(0, this.ID);
 		MessageTimer mt = new MessageTimer(hellomsg);
 		mt.startRelative(1, this);
 		
@@ -194,8 +180,6 @@ public class NodeHop extends Node {
 		if(msg instanceof HopHelloMessage){
 			HopHelloMessage m = (HopHelloMessage) msg;
 			m.setHops(hops);
-			m.setMtmPath(mtmPath);
-			m.setPaths(pathsToSink);
 			m.setSinkID(sinkID);
 			
 			broadcast(m);
@@ -209,18 +193,13 @@ public class NodeHop extends Node {
 		return "NodeRate [role=" + role + 
 				"\nsinkID=" + sinkID + 
 				"\nhops="+ hops + 
-				"\npathsToSink="+ pathsToSink + 
 				"\nnextHop=" + nextHop +
-				"\nsentMyHello=" + sentMyHello+ 
-				"\nsentMyReply=" + sentMyReply + "]";
+				"\nsentMyHello=" + sentMyHello+ "]";
 	}
 
 	public boolean isSentMyHello() {
 		return sentMyHello;
 	}
 	
-	public boolean isSentMyReply() {
-		return sentMyReply;
-	}
 	
 }

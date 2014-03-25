@@ -30,21 +30,14 @@ public class NodeRate extends Node {
 	// id do prox no usando a metrica numero de hops
 	private int nextHop;
 	
-	//numero de caminhos para o sink
-	private int pathsToSink;	
-	
 	//rate acumulado do caminho
-	private double mtmPath = Double.MAX_VALUE;
+	private float mtmPath = Float.MAX_VALUE;
 
 	// Flag para indicar se o nodo ja enviou seu pkt hello
 	private boolean sentMyHello = false;
-
-	// Flag para indicar se o nodo ja enviou seu pkt border
-	private boolean sentMyReply = false;
 	
 	//Disparadores de flood
 	RateMessageTimer fhp;
-	RateMessageTimer frp;
 
 	@Override
 	public void handleMessages(Inbox inbox) {
@@ -113,21 +106,12 @@ public class NodeRate extends Node {
 			hops = msg.getHops() + 1;
 			msg.setHops(hops);
 			
-			pathsToSink = msg.getPaths();
-			
 			nextHop = sender.ID;
 			
 			mtmPath = msg.getMtmPath() + edgeToSender.getMtm();
 			msg.setMtmPath(mtmPath);
 			
 			sentMyHello = false;
-		}
-		
-		// existe mais de um caminho deste no ate o sink com a mesmo ett acumulado
-		if(msg.getMtmPath() + edgeToSender.getMtm() == mtmPath){
-			pathsToSink += msg.getPaths();
-			fhp.updateTimer(1, this, fhp.getFireTime());
-			
 		}
 		
 		if(!isSentMyHello()){
@@ -151,7 +135,7 @@ public class NodeRate extends Node {
 		if (this.ID == 1) {
 			this.setColor(Color.BLUE);
 
-			RateHelloMessage hellomsg = new RateHelloMessage(0, 1, this.ID, 0.0);
+			RateHelloMessage hellomsg = new RateHelloMessage(0, this.ID, 0.0f);
 			MessageTimer mt = new MessageTimer(hellomsg);
 			mt.startRelative(1, this);
 		}
@@ -178,7 +162,7 @@ public class NodeRate extends Node {
 	@NodePopupMethod(menuText = "Start")
 	public void start() {
 		
-		RateHelloMessage hellomsg = new RateHelloMessage(0, 1, this.ID, 0.0);
+		RateHelloMessage hellomsg = new RateHelloMessage(0, this.ID, 0.0f);
 		MessageTimer mt = new MessageTimer(hellomsg);
 		mt.startRelative(1, this);
 		
@@ -205,7 +189,6 @@ public class NodeRate extends Node {
 			RateHelloMessage m = (RateHelloMessage) msg;
 			m.setHops(hops);
 			m.setMtmPath(mtmPath);
-			m.setPaths(pathsToSink);
 			m.setSinkID(sinkID);
 			
 			broadcast(m);
@@ -219,19 +202,13 @@ public class NodeRate extends Node {
 		return "NodeRate [role=" + role + 
 				"\nsinkID=" + sinkID + 
 				"\nhops="+ hops + 
-				"\npathsToSink="+ pathsToSink + 
 				"\nnextHop=" + nextHop +
 				"\nmtmPath="+ String.format("%.2f", mtmPath) + 
-				"\nsentMyHello=" + sentMyHello+ 
-				"\nsentMyReply=" + sentMyReply + "]";
+				"\nsentMyHello=" + sentMyHello+ "]";
 	}
 
 	public boolean isSentMyHello() {
 		return sentMyHello;
-	}
-	
-	public boolean isSentMyReply() {
-		return sentMyReply;
 	}
 	
 }

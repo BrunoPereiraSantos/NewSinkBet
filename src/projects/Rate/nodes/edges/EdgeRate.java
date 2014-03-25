@@ -5,10 +5,10 @@ import sinalgo.tools.statistics.UniformDistribution;
 
 public class EdgeRate extends BidirectionalEdge {
 
-	private double etx;
-	private double rate;
-	private double mtm;
-	private double ett;
+	private float etx;
+	private float rate;
+	private float mtm;
+	private float ett;
 	
 	@Override
 	public void initializeEdge() {
@@ -18,41 +18,81 @@ public class EdgeRate extends BidirectionalEdge {
 		double dist = startNode.getPosition().distanceTo(endNode.getPosition());
 		//System.out.println("Distancia na edge: "+dist);
 		if(dist < 399){
-			//setParam(0.001, 0.24, 11., 1.);
-			setParam(0.001, 0.24, 11., 5.);
+			setParam(0.001f, 0.24f, 11.f);
+			//setParam(0.001f, 0.24f, 11.f, 1.f);
+			//setParam(0.001f, 0.24f, 11.f, 5.f);
 			return;
 		}
 		if(dist >= 399 && dist < 531){
-			//setParam(0.25, 0.49, 5.5, 1.44);
-			setParam(0.25, 0.49, 5.5, 7);
+			setParam(0.25f, 0.49f, 5.5f);
+			//setParam(0.25f, 0.49f, 5.5f, 1.44f);
+			//setParam(0.25f, 0.49f, 5.5f, 7f);
 			return;
 		}
 		if(dist >= 531 && dist < 669){
-			//setParam(0.50, 0.74, 2., 3.);
-			setParam(0.50, 0.74, 2., 14);
+			setParam(0.50f, 0.74f, 2.f);
+			//setParam(0.50f, 0.74f, 2.f, 3.f);
+			//setParam(0.50f, 0.74f, 2.f, 14f);
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
-			//setParam(0.75, 0.99, 1., 5.45);
-			setParam(0.75, 0.99, 1., 25);
+			setParam(0.75f, 0.99f, 1.f);
+			//setParam(0.75f, 0.99f, 1.f, 5.45f);
+			//setParam(0.75f, 0.99f, 1.f, 25f);
 			return;
 		}
 	}
 
-	public void setParam(double min, double max, double rate, double mtm){
+	
+	public void setParam(float min, float max, float rate){
 		UniformDistribution v = new UniformDistribution(min, max);
-		this.etx = v.nextSample();
+		this.etx = (float) v.nextSample();
 		this.rate = rate;
-		this.mtm = mtm;
+		this.mtm = mtmWeights(rate);
 		this.ett = etx * mtm;
 	}
 	
-	public void setParam(double etx, double rate, double mtm){
-		this.etx = etx;
+	public void setParam(float min, float max, float rate, float mtm){
+		UniformDistribution v = new UniformDistribution(min, max);
+		this.etx = (float) v.nextSample();
 		this.rate = rate;
-		this.mtm = mtm;
+		this.mtm = mtmWeights(rate);
 		this.ett = etx * mtm;
 	}
+	
+	public void setParam(float etx, float rate){
+		this.etx = etx;
+		this.rate = rate;
+		this.mtm = mtmWeights(rate);
+		this.ett = etx * mtm;
+	}
+	
+	/**
+	 * Define o mtm pesos, segundo o artigo:
+	 * High Throughput Route Selection in Multi-Rate Ad Hoc Wireless Networks
+ 	 * 
+	 */
+	private float mtmWeights(float rate){
+		/* Link rate 	|	MTM Weights		|
+		 * ----------------------------------
+		 * 11			|	1				|
+		 * 5.5			|	1.44			|
+		 * 2			|	3				|
+		 * 1			|	5.45			|
+		 * */
+		
+		if(rate == 11f)
+			return 1f;
+		if(rate == 5.5f)
+			return 1.44f;
+		if(rate == 2f)
+			return 3f;
+		if(rate == 1f)
+			return 5.54f;
+		
+		return 5.45f;
+	}
+
 	
 	@Override
 	public String toString() {
@@ -68,35 +108,35 @@ public class EdgeRate extends BidirectionalEdge {
 				"\ntoString()=" + super.toString() + "]";
 	}
 
-	public double getEtx() {
+	public float getEtx() {
 		return etx;
 	}
 
-	public void setEtx(double etx) {
+	public void setEtx(float etx) {
 		this.etx = etx;
 	}
 
-	public double getRate() {
+	public float getRate() {
 		return rate;
 	}
 
-	public void setRate(double rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 
-	public double getMtm() {
+	public float getMtm() {
 		return mtm;
 	}
 
-	public void setMtm(double mtm) {
+	public void setMtm(float mtm) {
 		this.mtm = mtm;
 	}
 
-	public double getEtt() {
+	public float getEtt() {
 		return ett;
 	}
 
-	public void setEtt(double ett) {
+	public void setEtt(float ett) {
 		this.ett = ett;
 	}
 	
