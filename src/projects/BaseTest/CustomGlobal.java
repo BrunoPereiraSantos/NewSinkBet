@@ -40,6 +40,7 @@ package projects.BaseTest;
 import javax.swing.JOptionPane;
 
 import projects.BaseTest.nodes.nodeImplementations.NodeBT;
+import projects.defaultProject.models.distributionModels.PositionFile;
 import sinalgo.nodes.Node;
 import sinalgo.runtime.AbstractCustomGlobal;
 import sinalgo.runtime.Runtime;
@@ -100,6 +101,9 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	public void preRun() {
 		// TODO Auto-generated method stub
 		super.preRun();
+		System.out.println("#################");
+		TestClass tc = new TestClass();
+		tc.installEvents();
 	}
 
 	@Override
@@ -108,7 +112,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		super.onExit();
 	}
 
-
+	
 	
 	
 	

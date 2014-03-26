@@ -42,11 +42,13 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import projects.BaseTest.TestClass;
 import projects.Hop.nodes.edges.EdgeHop;
 import projects.Hop.nodes.nodeImplementations.NodeHop;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
+import sinalgo.runtime.Global;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
 
@@ -273,4 +275,31 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		Tools.repaintGUI();
 		
 	}
+	
+	
+	
+	TestClass tc = new TestClass();
+	@Override
+	public void preRun() {
+		// TODO Auto-generated method stub
+		super.preRun();
+		//insertEtx();
+	}
+
+	
+	boolean exec1x = true;
+	@Override
+	public void handleEmptyEventQueue() {
+		
+		// TODO Auto-generated method stub
+		super.handleEmptyEventQueue();
+		if(exec1x){
+			tc.installEvents();
+			exec1x = false;
+		}
+	}
+	
+	
+	
+	
 }

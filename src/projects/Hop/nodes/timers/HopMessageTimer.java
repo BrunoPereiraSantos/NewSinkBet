@@ -2,6 +2,7 @@ package projects.Hop.nodes.timers;
 
 import sinalgo.nodes.Node;
 import projects.Hop.nodes.nodeImplementations.NodeHop;
+import projects.defaultProject.nodes.messages.EventMessage;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.timers.Timer;
 
@@ -36,7 +37,9 @@ public class HopMessageTimer extends Timer {
 	public void fire() {
 		if(receiver != null) { // there's a receiver => unicast the message
 			((NodeHop) this.node ).sendUnicastRateMsg(this.msg, this.receiver);
-		} else { // there's no reciever => broadcast the message
+		} else  if(this.msg instanceof EventMessage){ // there's no reciever => broadcast the message
+			((NodeHop) this.node).broadcastEvent_IEV(this.msg);;
+		}else{
 			((NodeHop) this.node).broadcastRateMsg(this.msg);
 		}
 	}

@@ -4,8 +4,10 @@ $numRounds = 100; # number of rounds to perform per simulation
 $numNodes = 9;
 #for($numNodes=200; $numNodes<=200; $numNodes+=100) {
 system("java -cp binaries/bin sinalgo.Run " .
-"-project Etx " .             # choose the project
-"-gen $numNodes Etx:NodeEtx PositionFile '('./position.pos')' " . # generate nodes
+"-project Hop " .             # choose the project
+"-gen $numNodes ".
+"Hop:NodeHop ".
+"PositionFile '('./position.pos')' " . # generate nodes
 #"-overwrite " .                   # Overwrite configuration file parameters
 #"mobility=false ".
 #"interference=true ".

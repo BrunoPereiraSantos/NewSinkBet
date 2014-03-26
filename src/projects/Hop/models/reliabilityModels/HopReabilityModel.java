@@ -9,7 +9,7 @@ import sinalgo.nodes.messages.Packet;
 import sinalgo.tools.statistics.UniformDistribution;
 
 public class HopReabilityModel extends ReliabilityModel {
-	UniformDistribution ud = new UniformDistribution(.1, 100.0);
+	UniformDistribution ud = new UniformDistribution(.001, 0.99);
 	private float etxLink;
 	
 	
@@ -26,7 +26,8 @@ public class HopReabilityModel extends ReliabilityModel {
 		}
 		
 		double r = ud.nextSample();
-		System.out.println("r = "+String.format("%.2f", r)+", extLink = "+String.format("%.2f", etxLink));
+		System.out.println("De node="+p.origin.ID+" Para Node="+p.destination.ID);
+		System.out.println("r = "+String.format("%.2f", r)+", extLink = "+String.format("%.2f", etxLink) + " aceita? "+( r >= etxLink));
 		return r >= etxLink;
 	}
 

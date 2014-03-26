@@ -2,21 +2,26 @@ package projects.Hop.nodes.nodeImplementations;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Iterator;
 
+import projects.Hop.models.reliabilityModels.HopReabilityModel;
 import projects.Hop.nodes.edges.EdgeHop;
 import projects.Hop.nodes.messages.HopHelloMessage;
 import projects.Hop.nodes.timers.HopMessageTimer;
+import projects.defaultProject.nodes.messages.EventMessage;
 import projects.defaultProject.nodes.messages.StringMessage;
+import projects.defaultProject.nodes.nodeImplementations.InterfaceEventTest;
 import projects.defaultProject.nodes.timers.MessageTimer;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.gui.transformation.PositionTransformation;
 import sinalgo.nodes.Node;
+import sinalgo.nodes.edges.Edge;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
 import sinalgo.tools.Tools;
 
-public class NodeHop extends Node {
+public class NodeHop extends Node implements InterfaceEventTest {
 	// Qual o papel do nodo
 	private NodeRoleHop role;
 
@@ -44,25 +49,63 @@ public class NodeHop extends Node {
 			
 			if(m instanceof HopHelloMessage){
 				HopHelloMessage msg = (HopHelloMessage) m;
-				System.out.println("-------------MSG arrive------------------");
+				System.out.println("-------------MSG HopHelloMessage------------------");
 				System.out.println("Conteúdo: "+msg.toString());
-				System.out.println("De: "+inbox.getSender());
-				System.out.println("Para: "+inbox.getReceiver());
+				System.out.println("De: "+inbox.getSender().ID);
+				System.out.println("Para: "+inbox.getReceiver().ID);
 				System.out.println("Chegou em: "+inbox.getArrivingTime());
 				System.out.println("-------------MSG END------------------");
 				 
 				
 				handleHello(inbox.getSender(), inbox.getReceiver(), (EdgeHop) inbox.getIncomingEdge(), msg);
 			} 
+			if(m instanceof EventMessage){
+				EventMessage msg = (EventMessage) m;
+				System.out.println("-------------MSG EventMessage------------------");
+				System.out.println("De: "+inbox.getSender().ID);
+				System.out.println("Para: "+inbox.getReceiver().ID);
+				System.out.println("Chegou em: "+inbox.getArrivingTime());
+				System.out.println("-------------MSG END------------------");
+				
+				handleEvent(inbox.getSender(), inbox.getReceiver(), msg);
+			}
 			
 		}
 
 	}
 
+	@Override
+	public void handleEvent(Node sender, Node Receiver, EventMessage msg) {
+		if(this.ID == 1){
+			return;
+		}
+		
+		if(msg.getNextHop() == this.ID){
+			this.setColor(Color.ORANGE);
+			msg.setNextHop(nextHop);
+			HopMessageTimer mt = new HopMessageTimer(msg);
+			mt.startRelative(1, this);
+			
+		}
+		
+	}
+	
 	public void handleNAckMessages(NackBox nackBox) {
 		while (nackBox.hasNext()) {
 			Message msg = nackBox.next();
-			StringMessage m = (StringMessage) msg;
+			
+			System.out.println("-------------MSG EventMessage------------------");
+			System.out.println("De: "+nackBox.getSender().ID);
+			System.out.println("Para: "+nackBox.getReceiver().ID);
+			System.out.println("Chegou em: "+nackBox.getArrivingTime());
+			System.out.println("-------------MSG END------------------");
+			if(msg instanceof EventMessage){
+				EventMessage m = (EventMessage) msg;
+				this.setColor(Color.RED);
+				m.setNextHop(nextHop);
+				HopMessageTimer t = new HopMessageTimer(m);
+				t.startRelative(1, this);
+			}
 			/*
 			 * System.out.println("-------------NACK arrive------------------");
 			 * System.out.println("Conteúdo: "+m.text);
@@ -148,7 +191,8 @@ public class NodeHop extends Node {
 	@Override
 	public void checkRequirements() throws WrongConfigurationException {
 		// TODO Auto-generated method stub
-
+		this.reliabilityModel = new HopReabilityModel();
+		System.out.println(this.getReliabilityModel());
 	}
 
 	@NodePopupMethod(menuText = "Start")
@@ -200,6 +244,32 @@ public class NodeHop extends Node {
 	public boolean isSentMyHello() {
 		return sentMyHello;
 	}
+
+	@Override
+	public void sentEvent_IEV(double timeStartEvents) {
+		// TODO Auto-generated method stub
+		EventMessage em = new EventMessage(0, nextHop);
+		HopMessageTimer t = new HopMessageTimer(em);
+		t.startRelative(timeStartEvents, this);
+	}
+
+	@Override
+	public void broadcastEvent_IEV(Message m) {
+		// TODO Auto-generated method stub
+		this.setColor(Color.GRAY);
+		Iterator<Edge> it = this.outgoingConnections.iterator();
+		EdgeHop e;
+		while(it.hasNext()){
+			e = (EdgeHop) it.next();
+			this.send(m, e.endNode);
+		}
+		
+	}
+
+
+	
+	
+	
 	
 	
 }

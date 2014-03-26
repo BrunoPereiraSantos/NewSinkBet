@@ -248,6 +248,9 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-																		</Custom>
+
+<NodeEvents percent="20"/>
+																		
+</Custom>
 </Document>
 

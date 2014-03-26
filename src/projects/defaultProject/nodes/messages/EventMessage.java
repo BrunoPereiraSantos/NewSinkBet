@@ -68,4 +68,22 @@ public class EventMessage extends Message {
 	public Message clone(){
 		return new EventMessage(this.value, this.nextHop);
 	}
+
+	public int getNextHop() {
+		return nextHop;
+	}
+
+	public void setNextHop(int nextHop) {
+		this.nextHop = nextHop;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+	
+	
 }

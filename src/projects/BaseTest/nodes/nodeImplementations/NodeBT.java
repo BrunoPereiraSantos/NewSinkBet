@@ -13,7 +13,7 @@ import sinalgo.nodes.messages.Message;
 import sinalgo.runtime.Runtime;
 import sinalgo.runtime.events.Event;
 
-public class NodeBT extends Node {
+public class NodeBT extends Node implements TestsInterface {
 	
 	Temporizador t = new Temporizador(new MBT("Ola sou o "+this.ID));
 	
@@ -75,5 +75,10 @@ public class NodeBT extends Node {
 	public void checkRequirements() throws WrongConfigurationException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void sendEvent() {
+		this.setColor(Color.GREEN);
 	}
 }
