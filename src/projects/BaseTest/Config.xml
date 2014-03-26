@@ -137,7 +137,7 @@
 		<DefaultConnectivityModel value="BaseTest:MyConnectivityHelper" />
 
 		<!--Default distribution model used when none is specified-->
-		<DefaultDistributionModel value="Random" />
+		<DefaultDistributionModel value="PositionFile" />
 
 		<!--Default interference model used when none is specified-->
 		<DefaultInterferenceModel value="NoInterference" />

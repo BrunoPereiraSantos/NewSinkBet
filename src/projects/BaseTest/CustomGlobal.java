@@ -39,8 +39,11 @@ package projects.BaseTest;
 
 import javax.swing.JOptionPane;
 
+import projects.BaseTest.nodes.nodeImplementations.NodeBT;
+import sinalgo.nodes.Node;
 import sinalgo.runtime.AbstractCustomGlobal;
 import sinalgo.runtime.Runtime;
+import sinalgo.tools.Tools;
 
 /**
  * This class holds customized global state and methods for the framework. 
@@ -97,7 +100,6 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	public void preRun() {
 		// TODO Auto-generated method stub
 		super.preRun();
-		Runtime.reevaluateConnections();
 	}
 
 	@Override
@@ -105,6 +107,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		// TODO Auto-generated method stub
 		super.onExit();
 	}
+
 
 	
 	
