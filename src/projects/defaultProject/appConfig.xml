@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sinalgo>
-	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="Hop" windowPosX="-4" windowPosY="0" isMaximized="true" selectedTab="2" />
-	<GUI windowWidth="1080" windowHeight="1030" windowPosX="803" windowPosY="9" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
-	<RandomSeed seedFromPreviousRun="-4031733146247895252" />
-	<App lastSelectedFileDirectory="" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="-project Hop -gen 9 Hop:NodeHop PositionFile (./position.pos) " />
+	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="Hop" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="2" />
+	<GUI windowWidth="985" windowHeight="1045" windowPosX="17" windowPosY="35" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
+	<RandomSeed seedFromPreviousRun="-4373493448836953345" />
+	<App lastSelectedFileDirectory="" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="" />
 	<GenNodesDlg numNodes="1000" />
 </sinalgo>
 

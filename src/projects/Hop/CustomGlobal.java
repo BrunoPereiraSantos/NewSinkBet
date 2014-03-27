@@ -286,6 +286,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		
 		insertEtx();
 		//tc.installEvents();
+		//tc.runTree();
 	}
 
 	
