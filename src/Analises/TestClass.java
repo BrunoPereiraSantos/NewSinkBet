@@ -1,18 +1,14 @@
-package projects.BaseTest;
+package Analises;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
-
-import projects.BaseTest.nodes.nodeImplementations.TestsInterface;
-import projects.defaultProject.nodes.nodeImplementations.InterfaceEventTest;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.nodes.Node;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
-import sinalgo.tools.statistics.UniformDistribution;
 
 
 public class TestClass {
@@ -60,8 +56,8 @@ public class TestClass {
 		while(it.hasNext()){
 			selectNodeEvent( (InterfaceEventTest) Tools.getNodeByID(it.next()));
 		}*/
-		
 		selectNodeEvent( (InterfaceEventTest) Tools.getNodeByID(6));
+		selectNodeEvent( (InterfaceEventTest) Tools.getNodeByID(7));
 		changeReabilityModel();
 	}
 	
@@ -71,10 +67,10 @@ public class TestClass {
 	
 	private void changeReabilityModel(){
 		Iterator<Node> it = Tools.getNodeList().iterator();
-		Node n;
+		InterfaceEventTest n;
 		while(it.hasNext()){
-			n = it.next();
-			n.checkRequirements();
+			n = (InterfaceEventTest) it.next();
+			n.changeRequirements();
 		}
 	}
 }

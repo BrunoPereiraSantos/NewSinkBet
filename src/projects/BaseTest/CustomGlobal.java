@@ -39,6 +39,7 @@ package projects.BaseTest;
 
 import javax.swing.JOptionPane;
 
+import Analises.TestClass;
 import projects.BaseTest.nodes.nodeImplementations.NodeBT;
 import projects.defaultProject.models.distributionModels.PositionFile;
 import sinalgo.nodes.Node;

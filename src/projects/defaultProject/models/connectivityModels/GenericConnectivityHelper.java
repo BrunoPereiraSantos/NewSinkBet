@@ -1,4 +1,4 @@
-package projects.Hop.models.connectivityModels;
+package projects.defaultProject.models.connectivityModels;
 
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
@@ -8,7 +8,7 @@ import sinalgo.nodes.Position;
 import sinalgo.runtime.Global;
 import sinalgo.runtime.Main;
 
-public class HopConnectivityHelper extends ConnectivityModelHelper {
+public class GenericConnectivityHelper extends ConnectivityModelHelper {
 
 	private double squareRadius;
 	
@@ -45,7 +45,7 @@ public class HopConnectivityHelper extends ConnectivityModelHelper {
 		squareRadius = rMax * rMax;
 	}
 	
-	public HopConnectivityHelper(double rMax) {
+	public GenericConnectivityHelper(double rMax) {
 		squareRadius = rMax * rMax;
 	}
 	
@@ -55,7 +55,7 @@ public class HopConnectivityHelper extends ConnectivityModelHelper {
 	 * The first time this constructor is called, it initializes the static parameters of this class. 
 	 * @throws CorruptConfigurationEntryException If one of the initialization steps fails.
 	 */
-	public HopConnectivityHelper() throws CorruptConfigurationEntryException {
+	public GenericConnectivityHelper() throws CorruptConfigurationEntryException {
 		if(! initialized) {
 			double geomNodeRMax = Configuration.getDoubleParameter("GeometricNodeCollection/rMax");
 			try {
