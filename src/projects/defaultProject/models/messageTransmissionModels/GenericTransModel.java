@@ -1,10 +1,10 @@
-package projects.Hop.models.messageTransmissionModels;
+package projects.defaultProject.models.messageTransmissionModels;
 
 import sinalgo.models.MessageTransmissionModel;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Message;
 
-public class HopMsgTransModel extends MessageTransmissionModel {
+public class GenericTransModel extends MessageTransmissionModel {
 
 	@Override
 	public double timeToReach(Node startNode, Node endNode, Message msg) {

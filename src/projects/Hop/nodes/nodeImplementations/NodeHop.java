@@ -4,14 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 
-import projects.Hop.models.reliabilityModels.HopReabilityModel;
-import projects.Hop.nodes.edges.EdgeHop;
+import Analises.InterfaceEventTest;
+import Analises.StatisticsNodes;
 import projects.Hop.nodes.messages.HopHelloMessage;
 import projects.Hop.nodes.timers.HopMessageTimer;
+
+import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
+import projects.defaultProject.models.reliabilityModels.ReliableDelivery;
+import projects.defaultProject.nodes.edges.GenericWeightedEdge;
 import projects.defaultProject.nodes.messages.EventMessage;
-import projects.defaultProject.nodes.messages.StringMessage;
-import projects.defaultProject.nodes.nodeImplementations.InterfaceEventTest;
 import projects.defaultProject.nodes.timers.MessageTimer;
+
+
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.gui.transformation.PositionTransformation;
 import sinalgo.nodes.Node;
@@ -39,11 +43,16 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	
 	//Disparadores de flood
 	HopMessageTimer fhp;
+	
+	//Coleta as estatisticas do nodo 
+	StatisticsNodes statistics = new StatisticsNodes();
 
 	@Override
 	public void handleMessages(Inbox inbox) {
 		// TODO Auto-generated method stub
 		while (inbox.hasNext()) {
+			statistics.countHeardMessages();
+			
 			Message m = inbox.next();
 			 
 			
@@ -57,7 +66,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 				System.out.println("-------------MSG END------------------");
 				 
 				
-				handleHello(inbox.getSender(), inbox.getReceiver(), (EdgeHop) inbox.getIncomingEdge(), msg);
+				handleHello(inbox.getSender(), inbox.getReceiver(), (GenericWeightedEdge) inbox.getIncomingEdge(), msg);
 			} 
 			if(m instanceof EventMessage){
 				EventMessage msg = (EventMessage) m;
@@ -67,7 +76,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 				System.out.println("Chegou em: "+inbox.getArrivingTime());
 				System.out.println("-------------MSG END------------------");
 				
-				handleEvent(inbox.getSender(), inbox.getReceiver(), msg);
+				handleEvent(inbox, msg);
 			}
 			
 		}
@@ -75,8 +84,9 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	}
 
 	@Override
-	public void handleEvent(Node sender, Node Receiver, EventMessage msg) {
-		if(this.ID == 1){
+	public void handleEvent(Inbox inbox, EventMessage msg) {
+		if((msg.getNextHop() == 1) && (this.ID == 1)){
+			statistics.countEvReceived(inbox.getArrivingTime());
 			return;
 		}
 		
@@ -94,42 +104,35 @@ public class NodeHop extends Node implements InterfaceEventTest {
 		while (nackBox.hasNext()) {
 			Message msg = nackBox.next();
 			
-			System.out.println("-------------MSG EventMessage------------------");
+			System.out.println("-------------NAckMessages------------------");
 			System.out.println("De: "+nackBox.getSender().ID);
 			System.out.println("Para: "+nackBox.getReceiver().ID);
 			System.out.println("Chegou em: "+nackBox.getArrivingTime());
-			System.out.println("-------------MSG END------------------");
+			System.out.println("-------------NAckMessages END------------------");
+			
 			if(msg instanceof EventMessage){
 				EventMessage m = (EventMessage) msg;
-				this.setColor(Color.RED);
-				m.setNextHop(nextHop);
-				HopMessageTimer t = new HopMessageTimer(m);
-				t.startRelative(1, this);
+				if(nackBox.getReceiver().ID == nextHop){
+					statistics.countRelayedMessages();
+					StatisticsNodes.countGlobalrelayedMessages();
+					
+					this.setColor(Color.RED);
+					m.setNextHop(nextHop);
+					HopMessageTimer t = new HopMessageTimer(m);
+					t.startRelative(1, this);
+				}
 			}
-			/*
-			 * System.out.println("-------------NACK arrive------------------");
-			 * System.out.println("Conteúdo: "+m.text);
-			 * System.out.println("De: "+nackBox.getSender());
-			 * System.out.println("Para: "+nackBox.getReceiver());
-			 * System.out.println("Chegou em: "+nackBox.getArrivingTime());
-			 * System.out.println("-------------NACK END------------------");
-			 * System.out.println("\n\nResending"); (new MessageTimer(m,
-			 * nackBox.getReceiver())).startRelative(1, this);
-			 */
-
 		}
 	}
 
 	
-	private void handleHello(Node sender, Node receiver, EdgeHop incomingEdge, HopHelloMessage msg) {
+	private void handleHello(Node sender, Node receiver, GenericWeightedEdge incomingEdge, HopHelloMessage msg) {
 		
 		// no sink nao manipula pacotes hello
 		if(this.ID == msg.getSinkID()){
 			msg = null;
 			return;
 		}
-		
-		EdgeHop edgeToSender = (EdgeHop) incomingEdge.oppositeEdge;
 		
 		// o nodo e vizinho direto do sink (armazena o nextHop como id do sink
 		if(msg.getSinkID() == sender.ID){
@@ -167,9 +170,11 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
+		
 		if (this.ID == 1) {
 			this.setColor(Color.BLUE);
-
+			
+			
 			HopHelloMessage hellomsg = new HopHelloMessage(0, this.ID);
 			MessageTimer mt = new MessageTimer(hellomsg);
 			mt.startRelative(1, this);
@@ -190,9 +195,9 @@ public class NodeHop extends Node implements InterfaceEventTest {
 
 	@Override
 	public void checkRequirements() throws WrongConfigurationException {
-		// TODO Auto-generated method stub
-		this.reliabilityModel = new HopReabilityModel();
-		System.out.println(this.getReliabilityModel());
+		if(!(reliabilityModel instanceof ReliableDelivery)){
+			this.reliabilityModel = new ReliableDelivery();
+		}
 	}
 
 	@NodePopupMethod(menuText = "Start")
@@ -210,8 +215,15 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	public void draw(Graphics g, PositionTransformation pt, boolean highlight) {
 
 		String str = Integer.toString(this.ID);
-
-		super.drawNodeAsSquareWithText(g, pt, highlight, str, 30, Color.YELLOW);
+		str += "|"+statistics.getEvReceived();
+		
+		if(this.ID == 1){
+			str += "|"+StatisticsNodes.getGlobalrelayedMessages();
+			str += "|"+StatisticsNodes.getGlobalDropMessages();
+			super.drawNodeAsSquareWithText(g, pt, highlight, str, 15, Color.YELLOW);
+		}else{
+			super.drawNodeAsSquareWithText(g, pt, highlight, str, 15, Color.YELLOW);
+		}
 		// super.drawAsRoute(g, pt, highlight, 30);
 	}
 
@@ -255,21 +267,28 @@ public class NodeHop extends Node implements InterfaceEventTest {
 
 	@Override
 	public void broadcastEvent_IEV(Message m) {
-		// TODO Auto-generated method stub
+		statistics.countBroadcastEv();
+		
 		this.setColor(Color.GRAY);
 		Iterator<Edge> it = this.outgoingConnections.iterator();
-		EdgeHop e;
+		GenericWeightedEdge e;
 		while(it.hasNext()){
-			e = (EdgeHop) it.next();
+			e = (GenericWeightedEdge) it.next();
 			this.send(m, e.endNode);
 		}
 		
 	}
 
+	@Override
+	public void changeRequirements() throws WrongConfigurationException {
+		// TODO Auto-generated method stub
+		this.reliabilityModel = new GenericReliabilityModel();
+		System.out.println(this.getReliabilityModel());
+	}
 
-	
-	
-	
-	
+	@Override
+	public StatisticsNodes getStatisticNode() {
+		return this.statistics;
+	}
 	
 }

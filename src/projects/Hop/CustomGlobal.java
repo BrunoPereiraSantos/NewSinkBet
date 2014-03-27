@@ -42,13 +42,13 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import projects.BaseTest.TestClass;
-import projects.Hop.nodes.edges.EdgeHop;
+import Analises.InterfaceEventTest;
+import Analises.TestClass;
 import projects.Hop.nodes.nodeImplementations.NodeHop;
+import projects.defaultProject.nodes.edges.GenericWeightedEdge;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
-import sinalgo.runtime.Global;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
 
@@ -127,9 +127,9 @@ public class CustomGlobal extends AbstractCustomGlobal{
 			n = (NodeHop) it.next();
 			//System.out.println(n);
 			Iterator<Edge> it2 = n.outgoingConnections.iterator();
-			EdgeHop e;
+			GenericWeightedEdge e;
 			while(it2.hasNext()){
-				e = (EdgeHop) it2.next();
+				e = (GenericWeightedEdge) it2.next();
 				if(n.ID == 1){
 					if(e.endNode.ID == 2)
 						e.setParam(0.2f, 2.f);
@@ -283,7 +283,9 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	public void preRun() {
 		// TODO Auto-generated method stub
 		super.preRun();
-		//insertEtx();
+		
+		insertEtx();
+		//tc.installEvents();
 	}
 
 	
@@ -296,8 +298,23 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		if(exec1x){
 			tc.installEvents();
 			exec1x = false;
+		}else{
+			printStatistics();
 		}
 	}
+
+	private void printStatistics() {
+		Iterator<Node> it = Tools.getNodeList().iterator();
+		Node n;
+		InterfaceEventTest in;
+		while(it.hasNext()){
+			n =  it.next();
+			in = (InterfaceEventTest) n;
+			System.out.println("Id="+n.ID+" "+in.getStatisticNode().toString());
+		}
+		
+	}
+	
 	
 	
 	

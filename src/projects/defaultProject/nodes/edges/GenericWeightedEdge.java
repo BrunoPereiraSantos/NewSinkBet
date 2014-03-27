@@ -1,9 +1,9 @@
-package projects.Hop.nodes.edges;
+package projects.defaultProject.nodes.edges;
 
 import sinalgo.nodes.edges.BidirectionalEdge;
 import sinalgo.tools.statistics.UniformDistribution;
 
-public class EdgeHop extends BidirectionalEdge {
+public class GenericWeightedEdge extends BidirectionalEdge {
 
 	private float etx;
 	private float rate;
