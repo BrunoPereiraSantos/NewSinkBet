@@ -1,0 +1,12 @@
++ Adicionado o projeto para exportar Topologias e Eventos
+- Test e eventos …
+- Refatorar e documentar tudo que foi adicionado
+- Verificar nomes em toString e comentários
+- Obs: padronizar esse uso de tipos básicos Float
+- Refatorar versões <verificar se dar para fazer melhor na escrita>
+	- BetEtt
+	- BetEtx
+	- BetHop
+	- hop
+	- etx
+	- ett

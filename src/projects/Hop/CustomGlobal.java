@@ -44,13 +44,16 @@ import javax.swing.JOptionPane;
 
 import Analises.InterfaceEventTest;
 import Analises.TestClass;
+import Analises.TrafficModel;
 import projects.Hop.nodes.nodeImplementations.NodeHop;
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+import sinalgo.configuration.Configuration;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
+import sinalgo.tools.statistics.PoissonDistribution;
 
 /**
  * This class holds customized global state and methods for the framework. 
@@ -284,7 +287,10 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		// TODO Auto-generated method stub
 		super.preRun();
 		
+		//printGraphicsINGuI();
+		//Runtime.reevaluateConnections();
 		insertEtx();
+		
 		//tc.installEvents();
 		//tc.runTree();
 	}
@@ -297,7 +303,8 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		// TODO Auto-generated method stub
 		super.handleEmptyEventQueue();
 		if(exec1x){
-			tc.installEvents();
+			TrafficModel.changeReabilityModel();
+			TrafficModel.readEvents("./Traffic/"+0+"_traffic_"+Tools.getNodeList().size()+".txt");
 			exec1x = false;
 		}else{
 			printStatistics();
@@ -315,9 +322,17 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		}
 		
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public void checkProjectRequirements() {
+		// TODO Auto-generated method stub
+		super.checkProjectRequirements();
+		
+	}
+
+	@Override
+	public void onExit() {
+		// TODO Auto-generated method stub
+		super.onExit();
+	}
 }

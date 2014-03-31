@@ -1,9 +1,9 @@
-Number of nodes: 10
+Number of nodes: 0
 
 ------------------------------------------------------
 General Config
 ------------------------------------------------------
-Command Line arguments: -project BaseTest 
+Command Line arguments: -project ExportTopology 
 Java VM arguments: -Xmx500m 
 Class path: binaries/bin:binaries/jdom.jar
 ------------------------------------------------------
@@ -15,15 +15,15 @@ Configuration settings
     dimY = 1000
     dimZ = 500
  Simulation
-    asynchronousMode = true
+    asynchronousMode = false
     mobility = false
     interference = false
     interferenceIsAdditive = false
-    canReceiveWhileSending = true
-    canReceiveMultiplePacketsInParallel = true
-    edgeType = projects.BaseTest.nodes.edges.MyEdge
-    exitOnTerminationInGUI = false
-    initializeConnectionsOnStartup = true
+    canReceiveWhileSending = false
+    canReceiveMultiplePacketsInParallel = false
+    edgeType = sinalgo.nodes.edges.Edge
+    exitOnTerminationInGUI = true
+    initializeConnectionsOnStartup = false
     refreshRate = 1
     generateNAckMessages = false
     handleEmptyEventQueue = true
@@ -32,7 +32,7 @@ Configuration settings
  Random number generators
     useSameSeedAsInPreviousRun = false
     useFixedSeed = false
-    fixedSeed = 4200812508334896719
+    fixedSeed = 6327491291752957391
  Logging
     logFileName = logfile.txt
     outputToConsole = true
@@ -52,13 +52,13 @@ Configuration settings
     useMap = false
     map = images/map.jpg
  Models
-    DefaultMessageTransmissionModel = BaseTest:MyMsgTransModel
-    DefaultConnectivityModel = BaseTest:MyConnectivityHelper
+    DefaultMessageTransmissionModel = ConstantTime
+    DefaultConnectivityModel = UDG
     DefaultDistributionModel = Random
     DefaultInterferenceModel = NoInterference
     DefaultMobilityModel = NoMobility
     DefaultReliabilityModel = ReliableDelivery
-    DefaultNodeImplementation = BaseTest:NodeBT
+    DefaultNodeImplementation = DummyNode
     showModelsOfAllProjects = false
  Node storage, position transformation
     guiPositionTransformation2D = sinalgo.gui.transformation.Transformation2D
@@ -86,7 +86,14 @@ Configuration settings
 ------------------------------------------------------
 Custom settings
 ------------------------------------------------------
- geometricnodecollection/rmax = 793
+ configtest/idtopology = 1
+ configtest/nodeevents/distribution = Uniform
+ configtest/nodeevents/lambda = 10
+ configtest/nodeevents/percent = 50
+ configtest/traffic/distribution = Uniform
+ configtest/traffic/duration = 60
+ configtest/traffic/lambda = 10
+ geometricnodecollection/rmax = 100
  messagetransmission/constanttime = 1
  node/defaultsize = 10
  qudg/connectionprobability = 0.6
@@ -109,23 +116,13 @@ Custom settings
  sinr/alpha = 2
  sinr/beta = 0.7
  sinr/noise = 0
- udg/rmax = 793
+ udg/rmax = 100
 ------------------------------------------------------
 Seed for Random Number Generators
 ------------------------------------------------------
- Randomly selected seed: 4200812508334896719
+ Randomly selected seed: 6327491291752957391
 ------------------------------------------------------
 End of settings
 ------------------------------------------------------
 
-#####----- start of node posiitons -----#####
-213.82707166414562, 842.8866750642409, 0.0
-249.68826506420206, 920.9234481124234, 0.0
-724.027322818258, 742.48570990985, 0.0
-704.7342001264188, 159.03693045998767, 0.0
-926.0781306096924, 784.213283428242, 0.0
-426.7933595326574, 802.397739206018, 0.0
-7.338412742457723, 344.4539177983803, 0.0
-386.896395277729, 641.2362750088312, 0.0
-852.6890495150927, 662.4904088356449, 0.0
-693.4036466489639, 385.0260795168043, 0.0
+#####----- start Traffic Nodes -----#####

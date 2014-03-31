@@ -2,12 +2,17 @@
 
 $numRounds = 100; # number of rounds to perform per simulation
 $numNodes = 9;
-#for($numNodes=200; $numNodes<=200; $numNodes+=100) {
+for($i=0; $i<1; $i+=1) {
 system("java -cp binaries/bin sinalgo.Run " .
-"-project Hop " .             # choose the project
+"-project ExportTopology " .             # choose the project
+"-batch ".
+"-rounds 1 ".
 "-gen $numNodes ".
-"Hop:NodeHop ".
-"PositionFile '('./Topology/0_topology_9.pos')' " . # generate nodes
+"DummyNode ".
+"Random ".
+"-overwrite " .                   # Overwrite configuration file parameters
+"ConfigTest/idTopology=$i ".
+#"PositionFile '('./position_9.pos')' " . # generate nodes
 #"-overwrite " .                   # Overwrite configuration file parameters
 #"mobility=false ".
 #"interference=true ".
@@ -23,4 +28,4 @@ system("java -cp binaries/bin sinalgo.Run " .
 #"-rounds $numRounds " .           # Number of rounds to start simulation
 #"-refreshRate 1".               # Don't draw GUI often
 "");
-#}
+}

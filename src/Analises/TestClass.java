@@ -158,7 +158,7 @@ public class TestClass {
 		}
 	}
 	
-	private void changeReabilityModel(){
+	public static void changeReabilityModel(){
 		Iterator<Node> it = Tools.getNodeList().iterator();
 		InterfaceEventTest n;
 		while(it.hasNext()){
@@ -166,5 +166,4 @@ public class TestClass {
 			n.changeRequirements();
 		}
 	}
-	
 }

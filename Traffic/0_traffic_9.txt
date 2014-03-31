@@ -3,8 +3,8 @@ Number of nodes: 9
 ------------------------------------------------------
 General Config
 ------------------------------------------------------
-Command Line arguments: -project BetEtt 
-Java VM arguments: -Xmx2500m 
+Command Line arguments: -project ExportTopology -batch -rounds 1 -gen 9 DummyNode Random -overwrite ConfigTest/idTopology=0 
+Java VM arguments: -Xmx500m 
 Class path: binaries/bin:binaries/jdom.jar
 ------------------------------------------------------
 Configuration settings
@@ -15,24 +15,24 @@ Configuration settings
     dimY = 1000
     dimZ = 500
  Simulation
-    asynchronousMode = true
+    asynchronousMode = false
     mobility = false
     interference = false
     interferenceIsAdditive = false
-    canReceiveWhileSending = true
-    canReceiveMultiplePacketsInParallel = true
-    edgeType = projects.BetEtt.nodes.edges.EdgeBetEtt
-    exitOnTerminationInGUI = false
-    initializeConnectionsOnStartup = true
+    canReceiveWhileSending = false
+    canReceiveMultiplePacketsInParallel = false
+    edgeType = sinalgo.nodes.edges.Edge
+    exitOnTerminationInGUI = true
+    initializeConnectionsOnStartup = false
     refreshRate = 1
-    generateNAckMessages = true
+    generateNAckMessages = false
     handleEmptyEventQueue = true
     javaCmd = java
-    javaVMmaxMem = 2500
+    javaVMmaxMem = 500
  Random number generators
     useSameSeedAsInPreviousRun = false
     useFixedSeed = false
-    fixedSeed = -2447251406950123390
+    fixedSeed = -8424058411600601428
  Logging
     logFileName = logfile.txt
     outputToConsole = true
@@ -41,7 +41,7 @@ Configuration settings
     eagerFlush = false
  GUI
     extendedControl = true
-    drawArrows = true
+    drawArrows = false
     zoomStep = 1.2
     wheelZoomStep = 1.05
     minZoomFactor = 0.05
@@ -52,13 +52,13 @@ Configuration settings
     useMap = false
     map = images/map.jpg
  Models
-    DefaultMessageTransmissionModel = BetEtt:BetEttTransmissionModel
-    DefaultConnectivityModel = BetEtt:BetEttConnectivityHelper
+    DefaultMessageTransmissionModel = ConstantTime
+    DefaultConnectivityModel = UDG
     DefaultDistributionModel = Random
     DefaultInterferenceModel = NoInterference
     DefaultMobilityModel = NoMobility
     DefaultReliabilityModel = ReliableDelivery
-    DefaultNodeImplementation = BetEtt:NodeBetEtt
+    DefaultNodeImplementation = DummyNode
     showModelsOfAllProjects = false
  Node storage, position transformation
     guiPositionTransformation2D = sinalgo.gui.transformation.Transformation2D
@@ -86,6 +86,13 @@ Configuration settings
 ------------------------------------------------------
 Custom settings
 ------------------------------------------------------
+ configtest/idtopology = 0
+ configtest/nodeevents/distribution = Uniform
+ configtest/nodeevents/lambda = 10
+ configtest/nodeevents/percent = 50
+ configtest/traffic/distribution = Uniform
+ configtest/traffic/duration = 60
+ configtest/traffic/lambda = 10
  geometricnodecollection/rmax = 100
  messagetransmission/constanttime = 1
  node/defaultsize = 10
@@ -113,18 +120,14 @@ Custom settings
 ------------------------------------------------------
 Seed for Random Number Generators
 ------------------------------------------------------
- Randomly selected seed: -2447251406950123390
+ Randomly selected seed: -8424058411600601428
 ------------------------------------------------------
 End of settings
 ------------------------------------------------------
 
-#####----- start of node posiitons -----#####
-300.0, 500.0, 0.0
-350.0, 500.0, 0.0
-400.0, 450.0, 0.0
-400.0, 550.0, 0.0
-450.0, 500.0, 0.0
-450.0, 400.0, 0.0
-500.0, 450.0, 0.0
-500.0, 500.0, 0.0
-550.0, 550.0, 0.0
+#####----- start Traffic Nodes -----#####
+3 13
+5 6
+6 11
+7 9
+8 14
