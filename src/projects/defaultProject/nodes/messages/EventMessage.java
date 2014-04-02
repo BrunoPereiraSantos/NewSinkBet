@@ -51,22 +51,38 @@ public class EventMessage extends Message {
 	public int nextHop = 0; 
 	
 	/**
+	 * The ID of the sender message.
+	 */
+	public int idSender = 0; 
+	
+	
+	/**
+	 * The time that fired mensage
+	 */
+	public double firedTime = 0; 
+	
+	
+	/**
 	 * The payload of the Message: an integer.
 	 */
 	public int value = 0; 
+	
 	
 	/**
 	 * The constructor for the IntMessage class.
 	 *
 	 * @param i The integer the payload has to be set to.
 	 */
-	public EventMessage(int i, int nextHop){
-		this.value = i;
+	public EventMessage(int idSender, int nextHop, double timeFired, int value){
+		this.value = value;
 		this.nextHop = nextHop;
+		this.idSender = idSender;
+		this.firedTime = timeFired;
 	}
 	
+	
 	public Message clone(){
-		return new EventMessage(this.value, this.nextHop);
+		return new EventMessage(this.idSender, this.nextHop, this.firedTime, this.value);
 	}
 
 	public int getNextHop() {
@@ -84,6 +100,28 @@ public class EventMessage extends Message {
 	public void setValue(int value) {
 		this.value = value;
 	}
-	
+
+	public int getIdSender() {
+		return idSender;
+	}
+
+	public void setIdSender(int idSender) {
+		this.idSender = idSender;
+	}
+
+	public double getFiredTime() {
+		return firedTime;
+	}
+
+	public void setFiredTime(double firedTime) {
+		this.firedTime = firedTime;
+	}
+
+	@Override
+	public String toString() {
+		return "EventMessage [nextHop=" + nextHop + ", idSender=" + idSender
+				+ ", firedTime=" + firedTime + ", value=" + value + "]";
+	}
+
 	
 }

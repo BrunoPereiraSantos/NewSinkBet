@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sinalgo>
-	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="Hop" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="2" />
-	<GUI windowWidth="985" windowHeight="1045" windowPosX="536" windowPosY="65" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
-	<RandomSeed seedFromPreviousRun="-4220588226260191678" />
+	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="Hop" windowPosX="-4" windowPosY="0" isMaximized="true" selectedTab="2" />
+	<GUI windowWidth="985" windowHeight="1045" windowPosX="536" windowPosY="10" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
+	<RandomSeed seedFromPreviousRun="-6442204271690947917" />
 	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="-project Hop -gen 9 Hop:NodeHop PositionFile (./Topology/0_topology_9.pos) " />
 	<GenNodesDlg numNodes="9" />
 </sinalgo>

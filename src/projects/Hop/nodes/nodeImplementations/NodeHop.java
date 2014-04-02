@@ -8,14 +8,11 @@ import Analises.InterfaceEventTest;
 import Analises.StatisticsNodes;
 import projects.Hop.nodes.messages.HopHelloMessage;
 import projects.Hop.nodes.timers.HopMessageTimer;
-
 import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
 import projects.defaultProject.models.reliabilityModels.ReliableDelivery;
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
 import projects.defaultProject.nodes.messages.EventMessage;
 import projects.defaultProject.nodes.timers.MessageTimer;
-
-
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.gui.transformation.PositionTransformation;
 import sinalgo.nodes.Node;
@@ -23,6 +20,7 @@ import sinalgo.nodes.edges.Edge;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
+import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
 
 public class NodeHop extends Node implements InterfaceEventTest {
@@ -45,7 +43,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	HopMessageTimer fhp;
 	
 	//Coleta as estatisticas do nodo 
-	StatisticsNodes statistics = new StatisticsNodes();
+	StatisticsNodes statistics = new StatisticsNodes(this.ID);
 
 	@Override
 	public void handleMessages(Inbox inbox) {
@@ -71,6 +69,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 			if(m instanceof EventMessage){
 				EventMessage msg = (EventMessage) m;
 				System.out.println("-------------MSG EventMessage------------------");
+				System.out.println("Conteúdo: "+msg.toString());
 				System.out.println("De: "+inbox.getSender().ID);
 				System.out.println("Para: "+inbox.getReceiver().ID);
 				System.out.println("Chegou em: "+inbox.getArrivingTime());
@@ -87,6 +86,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	public void handleEvent(Inbox inbox, EventMessage msg) {
 		if((msg.getNextHop() == 1) && (this.ID == 1)){
 			statistics.countEvReceived(inbox.getArrivingTime());
+			statistics.IncomingEvents(msg.idSender, Tools.getGlobalTime() - msg.firedTime);
 			return;
 		}
 		
@@ -260,14 +260,15 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	@Override
 	public void sentEvent_IEV(double timeStartEvents) {
 		// TODO Auto-generated method stub
-		EventMessage em = new EventMessage(0, nextHop);
+		EventMessage em = new EventMessage(this.ID, nextHop, Tools.getGlobalTime()+timeStartEvents, 0);
 		HopMessageTimer t = new HopMessageTimer(em);
 		t.startRelative(timeStartEvents, this);
 	}
 
 	@Override
 	public void broadcastEvent_IEV(Message m) {
-		statistics.countBroadcastEv();
+		GenericWeightedEdge edgeToTarget;
+		EventMessage em = (EventMessage) m;
 		
 		this.setColor(Color.GRAY);
 		Iterator<Edge> it = this.outgoingConnections.iterator();
@@ -275,8 +276,14 @@ public class NodeHop extends Node implements InterfaceEventTest {
 		while(it.hasNext()){
 			e = (GenericWeightedEdge) it.next();
 			this.send(m, e.endNode);
+			
+			if(em.nextHop == e.endNode.ID){
+				edgeToTarget = e;
+			}
 		}
 		
+		
+		statistics.countBroadcastEv();
 	}
 
 	@Override

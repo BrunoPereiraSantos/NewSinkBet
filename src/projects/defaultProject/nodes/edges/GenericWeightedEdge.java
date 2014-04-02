@@ -85,6 +85,23 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 		return 5.45f;
 	}
 	
+	/**
+	 * retorna o rate em bits/s
+	 */
+	public float getRateBits(){
+		if(rate == 11f)
+			return 11000000f;
+		if(rate == 5.5f)
+			return 5500000f;
+		if(rate == 2f)
+			return 2000000f;
+		if(rate == 1f)
+			return 1000000f;
+		
+		return 1000000f;
+	}
+	
+	
 	@Override
 	public String toString() {
 		
