@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 $numRounds = 100; # number of rounds to perform per simulation
-$numNodes = 9;
+$numNodes = 300;
 for($i=0; $i<1; $i+=1) {
 system("java -cp binaries/bin sinalgo.Run " .
 "-project ExportTopology " .             # choose the project

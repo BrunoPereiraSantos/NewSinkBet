@@ -49,12 +49,14 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	public void handleMessages(Inbox inbox) {
 		// TODO Auto-generated method stub
 		while (inbox.hasNext()) {
-			statistics.countHeardMessages();
 			
 			Message m = inbox.next();
-			 
 			
 			if(m instanceof HopHelloMessage){
+				
+				statistics.countHeardMessagesTree();
+				
+				
 				HopHelloMessage msg = (HopHelloMessage) m;
 				System.out.println("-------------MSG HopHelloMessage------------------");
 				System.out.println("Conteúdo: "+msg.toString());
@@ -67,6 +69,10 @@ public class NodeHop extends Node implements InterfaceEventTest {
 				handleHello(inbox.getSender(), inbox.getReceiver(), (GenericWeightedEdge) inbox.getIncomingEdge(), msg);
 			} 
 			if(m instanceof EventMessage){
+				
+				statistics.countHeardMessagesEv((GenericWeightedEdge) inbox.getIncomingEdge());
+				
+				
 				EventMessage msg = (EventMessage) m;
 				System.out.println("-------------MSG EventMessage------------------");
 				System.out.println("Conteúdo: "+msg.toString());
@@ -239,6 +245,8 @@ public class NodeHop extends Node implements InterfaceEventTest {
 			m.setSinkID(sinkID);
 			
 			broadcast(m);
+			
+			statistics.countBroadcastTree();
 		}
 		
 	}
@@ -267,7 +275,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 
 	@Override
 	public void broadcastEvent_IEV(Message m) {
-		GenericWeightedEdge edgeToTarget;
+		GenericWeightedEdge edgeToTarget = null;
 		EventMessage em = (EventMessage) m;
 		
 		this.setColor(Color.GRAY);
@@ -283,7 +291,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 		}
 		
 		
-		statistics.countBroadcastEv();
+		statistics.countBroadcastEv(edgeToTarget);
 	}
 
 	@Override

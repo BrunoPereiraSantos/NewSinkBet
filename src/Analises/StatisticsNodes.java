@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 
 public class StatisticsNodes {
@@ -18,8 +20,12 @@ public class StatisticsNodes {
 	private int evReceived; // quantidades de eventos recebidos (sink)
 	private int relayedMessages; // quantidade de mensagens retransmitidas
 									// (nodo)
-	private int heardMessages;// quantidade de mensagens escutadas (nodo)
-	private int broadcastEv;// quantidade de broadcast events (node)
+	private int heardMessagesEv;// quantidade de mensagens escutadas na fase de eventos (nodo)
+	private int broadcastEv;// quantidade de broadcast na fase de eventos (node)
+	
+	private int heardMessagesTree;// quantidade de mensagens escutadas na fase de contrucao da arvore (nodo)
+	private int broadcastTree;// quantidade de broadcast na fase de contrucao da arvore (node)
+	
 	static int GlobalrelayedMessages; // quantidade de mensagens retransmitidas
 										// (Global)
 	static int GlobalDropMessages;// quantidade de mensagens perdidas (Global)
@@ -32,7 +38,7 @@ public class StatisticsNodes {
 		this.timeFistEv = 0.0;
 		this.evReceived = 0;
 		this.relayedMessages = 0;
-		this.heardMessages = 0;
+		this.heardMessagesEv = 0;
 		this.broadcastEv = 0;
 		GlobalrelayedMessages = 0;
 		GlobalDropMessages = 0;
@@ -65,8 +71,14 @@ public class StatisticsNodes {
 		this.incomingEvents = incomingEvents;
 	}
 
-	public void countBroadcastEv() {
+	public void countBroadcastTree() {
+		this.broadcastTree++;
+		energy.spendTx_tree();
+	}
+	
+	public void countBroadcastEv(GenericWeightedEdge e) {
 		this.broadcastEv++;
+		energy.spendTx_Ev(e);
 	}
 
 	public int getBroadcastEv() {
@@ -77,16 +89,22 @@ public class StatisticsNodes {
 		this.broadcastEv = broadcastEv;
 	}
 
-	public void countHeardMessages() {
-		this.heardMessages++;
+	public void countHeardMessagesTree() {
+		this.heardMessagesTree++;
+		energy.spendRx_tree();
+	}
+	
+	public void countHeardMessagesEv(GenericWeightedEdge e) {
+		this.heardMessagesEv++;
+		energy.spendRx_Ev(e);
 	}
 
-	public int getHeardMessages() {
-		return heardMessages;
+	public int getHeardMessagesEv() {
+		return heardMessagesEv;
 	}
 
-	public void setHeardMessages(int heardMessages) {
-		this.heardMessages = heardMessages;
+	public void setHeardMessagesEv(int heardMessagesEv) {
+		this.heardMessagesEv = heardMessagesEv;
 	}
 
 	public static void countGlobalDropMessages() {
@@ -157,13 +175,35 @@ public class StatisticsNodes {
 	public void setEnergy(EnergyModel energy) {
 		this.energy = energy;
 	}
+	
+	public int getHeardMessagesTree() {
+		return heardMessagesTree;
+	}
+
+	public void setHeardMessagesTree(int heardMessagesTree) {
+		this.heardMessagesTree = heardMessagesTree;
+	}
+
+	public int getBroadcastTree() {
+		return broadcastTree;
+	}
+
+	public void setBroadcastTree(int broadcastTree) {
+		this.broadcastTree = broadcastTree;
+	}
 
 	@Override
 	public String toString() {
-		return "StatisticsNodes [timeFistEv=" + timeFistEv + ", timeLastEv="
-				+ timeLastEv + ", evReceived=" + evReceived
-				+ ", relayedMessages=" + relayedMessages + ", heardMessages="
-				+ heardMessages + ", broadcastEv=" + broadcastEv 
+		return "StatisticsNodes [timeFistEv=" +  String.format("%.3f", timeFistEv) 
+				+ ", timeLastEv="+String.format("%.3f",+ timeLastEv)
+				+ ", evRcv=" + evReceived + ", relayedM=" + relayedMessages 
+				+ ", heardEv="+ heardMessagesEv
+				+ ", heardTree=" + heardMessagesTree
+				+ ", bEv=" + broadcastEv 
+				+ ", bTree=" + broadcastTree
+				+ ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
+				+ ", eTree=" + String.format("%.7f", energy.getEnergySpendTree())
+				+ ", eGlobal=" + String.format("%.7f", EnergyModel.globalEnergySpend)
 				+ "]";
 	}
 
