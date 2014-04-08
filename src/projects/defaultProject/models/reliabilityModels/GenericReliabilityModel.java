@@ -2,7 +2,7 @@ package projects.defaultProject.models.reliabilityModels;
 
 import java.util.Iterator;
 
-import Analises.StatisticsNodes;
+import Analises.StatisticsNode;
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
 import sinalgo.models.ReliabilityModel;
 import sinalgo.nodes.edges.Edge;
@@ -27,12 +27,12 @@ public class GenericReliabilityModel extends ReliabilityModel {
 		}
 		
 		double r = ud.nextSample();
-		System.out.println("De node="+p.origin.ID+" Para Node="+p.destination.ID);
-		System.out.println("r = "+String.format("%.2f", r)+", extLink = "+String.format("%.2f", etxLink) + " aceita? "+( r >= etxLink));
+		//System.out.println("De node="+p.origin.ID+" Para Node="+p.destination.ID);
+		//System.out.println("r = "+String.format("%.2f", r)+", extLink = "+String.format("%.2f", etxLink) + " aceita? "+( r >= etxLink));
 		if(r >= etxLink)
 			return true;
 		
-		StatisticsNodes.countGlobalDropMessages();
+		StatisticsNode.countGlobalDropMessages();
 		return false;
 	}
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sinalgo>
-	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="Hop" windowPosX="-4" windowPosY="0" isMaximized="true" selectedTab="2" />
-	<GUI windowWidth="984" windowHeight="1045" windowPosX="536" windowPosY="10" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
-	<RandomSeed seedFromPreviousRun="-5311361266558105272" />
-	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="-project Hop -gen 9 Hop:NodeHop PositionFile (./Topology/0_topology_9.pos) " />
-	<GenNodesDlg numNodes="9" />
+	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="BetEtx" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="2" />
+	<GUI windowWidth="589" windowHeight="410" windowPosX="664" windowPosY="63" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
+	<RandomSeed seedFromPreviousRun="-476808532166482779" />
+	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="-project Hop -gen 9 Hop:NodeHop PositionFile (./Topology/0_topology_9.pos) -overwrite ConfigTest/ID=0 " />
+	<GenNodesDlg numNodes="500" />
 </sinalgo>
 

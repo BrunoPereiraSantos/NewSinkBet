@@ -11,5 +11,6 @@ public interface InterfaceEventTest {
 	void sentEvent_IEV(double timeStartEvents);
 	void broadcastEvent_IEV(Message m);
 	void handleEvent(Inbox inbox, EventMessage msg);
-	StatisticsNodes getStatisticNode();
+	StatisticsNode getStatisticNode();
+	int getHops();
 }

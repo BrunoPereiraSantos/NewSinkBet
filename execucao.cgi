@@ -8,7 +8,8 @@ system("java -cp binaries/bin sinalgo.Run " .
 "-gen $numNodes ".
 "Hop:NodeHop ".
 "PositionFile '('./Topology/0_topology_9.pos')' " . # generate nodes
-#"-overwrite " .                   # Overwrite configuration file parameters
+"-overwrite " .                   # Overwrite configuration file parameters
+"ConfigTest/ID=0 ".
 #"mobility=false ".
 #"interference=true ".
 #"dimX=1000 dimY=1000 dimZ=0 ".

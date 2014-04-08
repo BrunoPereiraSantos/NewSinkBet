@@ -19,7 +19,7 @@ public class GenericConnectivityHelper extends ConnectivityModelHelper {
 		
 		double distance = p1.squareDistanceTo(p2);
 		
-		System.out.println("distancia: "+Math.sqrt(distance));
+		//System.out.println("distancia: "+Math.sqrt(distance));
 		return (distance < squareRadius);
 	}
 

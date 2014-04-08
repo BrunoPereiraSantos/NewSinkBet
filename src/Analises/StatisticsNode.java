@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
 
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 
-public class StatisticsNodes {
+public class StatisticsNode {
 
 	private boolean isFistEv = true; // variavel para indicar se foi o primeiro
 										// evento a chegar (nodo)
@@ -18,8 +19,11 @@ public class StatisticsNodes {
 	private double timeLastEv; // tempo que o primeiro evento chegou (sink |
 								// nodo)
 	private int evReceived; // quantidades de eventos recebidos (sink)
+	
 	private int relayedMessages; // quantidade de mensagens retransmitidas
 									// (nodo)
+	
+	
 	private int heardMessagesEv;// quantidade de mensagens escutadas na fase de eventos (nodo)
 	private int broadcastEv;// quantidade de broadcast na fase de eventos (node)
 	
@@ -34,7 +38,7 @@ public class StatisticsNodes {
 	
 	private Map<Integer, ArrayList<Double>> incomingEvents; //Key=id do nodo que envou a msg. Value = lista de tempo gasto por cada mensagem
 
-	public StatisticsNodes(int id) {
+	public StatisticsNode(int id) {
 		this.timeFistEv = 0.0;
 		this.evReceived = 0;
 		this.relayedMessages = 0;
@@ -132,6 +136,7 @@ public class StatisticsNodes {
 	}
 
 	public void countRelayedMessages() {
+		countGlobalrelayedMessages();
 		this.relayedMessages++;
 	}
 
@@ -191,12 +196,28 @@ public class StatisticsNodes {
 	public void setBroadcastTree(int broadcastTree) {
 		this.broadcastTree = broadcastTree;
 	}
+	
+	public double average(ArrayList<Double> list){
+		if(list == null || list.isEmpty()) return 0.0;
+		
+		Double sum = 0.0;
+		int n = list.size();
+		
+		for(int i = 0; i < n; i++) sum += list.get(i);
+		
+		return sum / n;
+	}
 
 	@Override
 	public String toString() {
-		return "StatisticsNodes [timeFistEv=" +  String.format("%.3f", timeFistEv) 
+		String str = "";
+		
+		/*return "StatisticsNodes [timeFistEv=" +  String.format("%.3f", timeFistEv) 
 				+ ", timeLastEv="+String.format("%.3f",+ timeLastEv)
-				+ ", evRcv=" + evReceived + ", relayedM=" + relayedMessages 
+				+ ", evRcv=" + evReceived 
+				+ ", GdropM=" + GlobalDropMessages
+				+ ", GrelayedM=" + GlobalrelayedMessages 
+				+ ", relayedM=" + relayedMessages 
 				+ ", heardEv="+ heardMessagesEv
 				+ ", heardTree=" + heardMessagesTree
 				+ ", bEv=" + broadcastEv 
@@ -204,7 +225,27 @@ public class StatisticsNodes {
 				+ ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
 				+ ", eTree=" + String.format("%.7f", energy.getEnergySpendTree())
 				+ ", eGlobal=" + String.format("%.7f", EnergyModel.globalEnergySpend)
-				+ "]";
+				+ "]";*/
+		//str += timeFistEv
+		str += timeFistEv
+			+ "	" + timeLastEv
+			+ "	" + evReceived 
+			//+ "	" + GlobalDropMessages
+			+ "	" + GlobalrelayedMessages 
+			//+ "	" + relayedMessages 
+			//+ ", heardEv="+ heardMessagesEv
+			//+ ", heardTree=" + heardMessagesTree
+			//+ ", bEv=" + broadcastEv 
+			//+ ", bTree=" + broadcastTree
+			//+ ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
+			//+ ", eTree=" + String.format("%.7f", energy.getEnergySpendTree())
+			+ "	" + EnergyModel.globalEnergySpend;
+		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents.entrySet()) {
+			str += " node: " + entry.getKey() + " Average : "
+				+ average(entry.getValue());
+		}
+		
+		return 	str;
 	}
 
 }

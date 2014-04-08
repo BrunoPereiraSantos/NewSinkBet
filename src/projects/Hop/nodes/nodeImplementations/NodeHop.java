@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.util.Iterator;
 
 import Analises.InterfaceEventTest;
-import Analises.StatisticsNodes;
+import Analises.StatisticsNode;
 import projects.Hop.nodes.messages.HopHelloMessage;
 import projects.Hop.nodes.timers.HopMessageTimer;
 import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
@@ -43,7 +43,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	HopMessageTimer fhp;
 	
 	//Coleta as estatisticas do nodo 
-	StatisticsNodes statistics = new StatisticsNodes(this.ID);
+	StatisticsNode statistics = new StatisticsNode(this.ID);
 
 	@Override
 	public void handleMessages(Inbox inbox) {
@@ -100,7 +100,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 			this.setColor(Color.ORANGE);
 			msg.setNextHop(nextHop);
 			HopMessageTimer mt = new HopMessageTimer(msg);
-			mt.startRelative(1, this);
+			mt.startRelative(0.01, this);
 			
 		}
 		
@@ -120,7 +120,6 @@ public class NodeHop extends Node implements InterfaceEventTest {
 				EventMessage m = (EventMessage) msg;
 				if(nackBox.getReceiver().ID == nextHop){
 					statistics.countRelayedMessages();
-					StatisticsNodes.countGlobalrelayedMessages();
 					
 					this.setColor(Color.RED);
 					m.setNextHop(nextHop);
@@ -224,8 +223,8 @@ public class NodeHop extends Node implements InterfaceEventTest {
 		str += "|"+statistics.getEvReceived();
 		
 		if(this.ID == 1){
-			str += "|"+StatisticsNodes.getGlobalrelayedMessages();
-			str += "|"+StatisticsNodes.getGlobalDropMessages();
+			str += "|"+StatisticsNode.getGlobalrelayedMessages();
+			str += "|"+StatisticsNode.getGlobalDropMessages();
 			super.drawNodeAsSquareWithText(g, pt, highlight, str, 15, Color.YELLOW);
 		}else{
 			super.drawNodeAsSquareWithText(g, pt, highlight, str, 15, Color.YELLOW);
@@ -302,8 +301,13 @@ public class NodeHop extends Node implements InterfaceEventTest {
 	}
 
 	@Override
-	public StatisticsNodes getStatisticNode() {
+	public StatisticsNode getStatisticNode() {
 		return this.statistics;
+	}
+
+	@Override
+	public int getHops() {
+		return hops;
 	}
 	
 }

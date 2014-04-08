@@ -250,6 +250,7 @@
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
 
 <ConfigTest>
+	<ID value="1"/>
 	<NodeEvents percent="50" distribution="Uniform" lambda="10" />
 	<Traffic distribution="Uniform" lambda="10" duration="60" />
 </ConfigTest>
