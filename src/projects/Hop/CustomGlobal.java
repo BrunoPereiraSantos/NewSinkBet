@@ -319,8 +319,8 @@ public class CustomGlobal extends AbstractCustomGlobal {
 		if (exec1xTraffic) {
 			
 			TrafficModel.changeReabilityModel();
-			TrafficModel.readEvents("./Traffic/" + id_execution + "_traffic_"
-					+ Tools.getNodeList().size() + ".txt");
+			//TrafficModel.readEvents("./Traffic/" + id_execution + "_traffic_"+ Tools.getNodeList().size() + ".txt");
+			TrafficModel.setTrafficToRangeHops(2, 3);
 			exec1xTraffic = false;
 		}else if (exec1xLog){
 			printStatistics();

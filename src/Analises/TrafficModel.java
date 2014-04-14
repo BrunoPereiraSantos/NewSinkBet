@@ -174,6 +174,20 @@ public class TrafficModel {
 		
 	}
 	
+	public static void setTrafficToRangeHops(int minHop, int maxHop) {
+		if (minHop < 1 || maxHop < 1 || maxHop < minHop)
+			return;
+
+		Iterator<Node> it = Tools.getNodeList().iterator();
+		InterfaceEventTest n;
+		while (it.hasNext()) {
+			n = (InterfaceEventTest) it.next();
+			if (minHop <= n.getHops() && maxHop >= n.getHops()) {
+				setTrafficToNode(n, 60, 1000);
+			}
+		}
+	}
+	
 	private static void setTrafficToNode(InterfaceEventTest n, double duration,
 			int shots) {
 

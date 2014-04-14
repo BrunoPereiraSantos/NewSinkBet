@@ -2,11 +2,14 @@ package Analises;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+import sinalgo.nodes.Node;
+import sinalgo.tools.Tools;
 
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
 
@@ -197,7 +200,12 @@ public class StatisticsNode {
 		this.broadcastTree = broadcastTree;
 	}
 	
-	public double average(ArrayList<Double> list){
+	/**
+	 * Faz a media para uma lista de valores
+	 * @param list
+	 * @return
+	 */
+	public double averageSimple(ArrayList<Double> list){
 		if(list == null || list.isEmpty()) return 0.0;
 		
 		Double sum = 0.0;
@@ -207,9 +215,42 @@ public class StatisticsNode {
 		
 		return sum / n;
 	}
+	
+	public double sum(ArrayList<Double> list){
+		double sum = 0.0;
+		
+		for(Double it: list) sum += it.doubleValue();
+			
+		return sum;
+	}
+	
+	/**
+	 * Faz a media para nos que estao em um range de saltos do sink
+	 * 
+	 */
+	public double averageNodeHop(int minHop, int maxHop) {
+		InterfaceEventTest n;
+		ArrayList<Double> list = new ArrayList<Double>();
 
+		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents
+				.entrySet()) {
+			n = (InterfaceEventTest) Tools.getNodeByID(entry.getKey());
+
+			if (minHop <= n.getHops() && maxHop >= n.getHops())
+				list.add(averageSimple(entry.getValue()));
+		}
+
+		return averageSimple(list);
+	}
+
+	public double averageNodeHop(int Hop) {
+		return averageNodeHop(Hop,Hop);
+	}
+	
+	
 	@Override
 	public String toString() {
+		ArrayList<Double> list = new ArrayList<Double>();
 		String str = "";
 		
 		/*return "StatisticsNodes [timeFistEv=" +  String.format("%.3f", timeFistEv) 
@@ -242,8 +283,12 @@ public class StatisticsNode {
 			+ "	" + EnergyModel.globalEnergySpend;
 		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents.entrySet()) {
 			str += " node: " + entry.getKey() + " Average : "
-				+ average(entry.getValue());
+				+ averageSimple(entry.getValue());
+			list.add(averageSimple(entry.getValue()));
 		}
+		str += "	" + averageSimple(list);
+		str += "	" + averageNodeHop(2);
+		str += "	" + averageNodeHop(3); 
 		
 		return 	str;
 	}
