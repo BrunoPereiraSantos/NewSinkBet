@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+import sinalgo.Run;
 import sinalgo.nodes.Node;
+import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
 
 import com.sun.corba.se.spi.monitoring.StatisticsAccumulator;
@@ -271,6 +273,7 @@ public class StatisticsNode {
 		str += timeFistEv
 			+ "	" + timeLastEv
 			+ "	" + evReceived 
+			+ "	" + Tools.getGlobalTime() 
 			//+ "	" + GlobalDropMessages
 			+ "	" + GlobalrelayedMessages 
 			//+ "	" + relayedMessages 
@@ -281,16 +284,46 @@ public class StatisticsNode {
 			//+ ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
 			//+ ", eTree=" + String.format("%.7f", energy.getEnergySpendTree())
 			+ "	" + EnergyModel.globalEnergySpend;
+		
 		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents.entrySet()) {
-			str += " node: " + entry.getKey() + " Average : "
-				+ averageSimple(entry.getValue());
+			//str += " node: " + entry.getKey() + " Average : "
+			//	+ averageSimple(entry.getValue());
 			list.add(averageSimple(entry.getValue()));
 		}
+		
 		str += "	" + averageSimple(list);
-		str += "	" + averageNodeHop(2);
-		str += "	" + averageNodeHop(3); 
+		//str += "	" + averageNodeHop(2);
+		//str += "	" + averageNodeHop(3); 
 		
 		return 	str;
+	}
+	
+	public String printStatisticsPerNode(){
+		String str = "";
+		Iterator<Node> it = Tools.getNodeList().iterator();
+		InterfaceEventTest n;
+		Node node;
+		double totalEnergySpend;
+		while(it.hasNext()){
+			n = (InterfaceEventTest) it.next();
+			node = (Node) n;
+			totalEnergySpend = n.getStatisticNode().energy.getEnergySpendTree() + n.getStatisticNode().energy.getEnergySpendEv();
+			
+			str += node.ID
+				+ "	" + String.format("%.9f", n.getStatisticNode().energy.getEnergySpendTree())
+				+ "	" +	String.format("%.9f", n.getStatisticNode().energy.getEnergySpendEv())
+				+ "	" + String.format("%.9f", totalEnergySpend)
+				+ "	" + n.getStatisticNode().broadcastTree
+				+ "	" + n.getStatisticNode().broadcastEv
+				+ "	" + (n.getStatisticNode().broadcastTree + n.getStatisticNode().broadcastEv) 
+				+ "	" + n.getStatisticNode().heardMessagesTree
+				+ "	" + n.getStatisticNode().heardMessagesEv
+				+ "	" + (n.getStatisticNode().heardMessagesTree + n.getStatisticNode().heardMessagesEv)
+				+ "	" + n.getStatisticNode().relayedMessages 
+				+ "\n";
+		}
+		
+		return str;
 	}
 
 }

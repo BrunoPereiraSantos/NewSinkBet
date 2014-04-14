@@ -42,13 +42,19 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import Analises.InterfaceEventTest;
+import Analises.TrafficModel;
 import projects.Etx.nodes.edges.EdgeEtx;
 import projects.Etx.nodes.nodeImplementations.NodeEtx;
+import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+import sinalgo.configuration.Configuration;
+import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
+import sinalgo.tools.logging.Logging;
 
 /**
  * This class holds customized global state and methods for the framework. 
@@ -72,6 +78,91 @@ import sinalgo.tools.Tools;
  * added to the GUI. 
  */
 public class CustomGlobal extends AbstractCustomGlobal{
+	
+	private int id_execution = 0;
+	private Logging logExecution;
+	private Logging logEnergy;
+	
+	boolean exec1xTraffic = true;
+	boolean exec1xLog = true;
+
+	@Override
+	public void handleEmptyEventQueue() {
+
+		// TODO Auto-generated method stub
+		super.handleEmptyEventQueue();
+		if (exec1xTraffic) {
+			
+			TrafficModel.changeReabilityModel();
+			
+			TrafficModel.readEvents("./Traffic/" + id_execution + "_traffic_"+ Tools.getNodeList().size() + ".txt");
+			//TrafficModel.setTrafficToRangeHops(2, 3);
+			exec1xTraffic = false;
+		}else if (exec1xLog){
+			printStatistics();
+			exec1xLog = false;
+		}
+	}
+
+	private void printStatistics() {
+		
+		logExecution = Logging.getLogger(Tools.getProjectName()+"_logExecution_"
+				+ Tools.getNodeList().size() + ".txt", true);
+		logEnergy = Logging.getLogger(Tools.getProjectName()+"_logEnergy_"
+				+ Tools.getNodeList().size() + ".txt", true);
+		String separator = "##############----- start new simulation -----##############";
+		
+		
+		InterfaceEventTest in = (InterfaceEventTest) Tools.getNodeByID(1);
+		
+		System.out.println(in.getStatisticNode().toString());
+		logExecution.logln(in.getStatisticNode().toString());
+		logExecution.logln(separator);
+		
+		System.out.println(in.getStatisticNode().printStatisticsPerNode());
+		logEnergy.logln(in.getStatisticNode().printStatisticsPerNode());
+		logEnergy.logln(separator);
+		/*Iterator<Node> it = Tools.getNodeList().iterator();
+		Node n;
+		InterfaceEventTest in;
+		while (it.hasNext()) {
+			n = it.next();
+			in = (InterfaceEventTest) n;
+			System.out.println("Id=" + n.ID + " "
+					+ in.getStatisticNode().toString());
+			
+
+			executionLog.logln("Id=" + n.ID + " "
+					+ in.getStatisticNode().toString());
+		}*/
+
+	}
+	
+	@Override
+	public void preRun() {
+		// TODO Auto-generated method stub
+		super.preRun();
+		// printGraphicsINGuI();
+		// Runtime.reevaluateConnections();
+		insertEtx();
+
+		// tc.installEvents();
+		// tc.runTree();
+	}
+	
+	@Override
+	public void checkProjectRequirements() {
+		// TODO Auto-generated method stub
+		super.checkProjectRequirements();
+
+		try {
+			id_execution = Configuration.getIntegerParameter("ConfigTest/ID");
+		} catch (CorruptConfigurationEntryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/* (non-Javadoc)
 	 * @see runtime.AbstractCustomGlobal#hasTerminated()
@@ -105,103 +196,100 @@ public class CustomGlobal extends AbstractCustomGlobal{
 	public void insertEtx(){
 		Iterator<Node> it = Runtime.nodes.iterator();
 		NodeEtx n;
-		/*Random generator = new Random(1);
-		while(it.hasNext()){
-			n = it.next();
-			//System.out.println(n);
-			Iterator<Edge> it2 = n.outgoingConnections.iterator();
-			EdgeWeightEtxBet e;
-			while(it2.hasNext()){
-				e = (EdgeWeightEtxBet) it2.next();
-				//e.setEtx(UniformDistribution.nextUniform(0, 1));
-				//e.setEtx(generator.nextDouble());
-				e.setEtx(1+generator.nextInt(9));
-				System.out.println("ID "+n.ID+" ~["+e.getEtx()+"]> "+e.endNode.ID);
+		/*
+		 * Random generator = new Random(1); while(it.hasNext()){ n = it.next();
+		 * //System.out.println(n); Iterator<Edge> it2 =
+		 * n.outgoingConnections.iterator(); EdgeWeightEtxBet e;
+		 * while(it2.hasNext()){ e = (EdgeWeightEtxBet) it2.next();
+		 * //e.setEtx(UniformDistribution.nextUniform(0, 1));
+		 * //e.setEtx(generator.nextDouble()); e.setEtx(1+generator.nextInt(9));
+		 * System.out.println("ID "+n.ID+" ~["+e.getEtx()+"]> "+e.endNode.ID);
+		 * 
+		 * } }
+		 */
 
-			}
-		}*/
-		
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			n = (NodeEtx) it.next();
-			//System.out.println(n);
+			// System.out.println(n);
 			Iterator<Edge> it2 = n.outgoingConnections.iterator();
-			EdgeEtx e;
-			while(it2.hasNext()){
-				e = (EdgeEtx) it2.next();
-				if(n.ID == 1){
-					if(e.endNode.ID == 2)
+			GenericWeightedEdge e;
+			while (it2.hasNext()) {
+				e = (GenericWeightedEdge) it2.next();
+				if (n.ID == 1) {
+					if (e.endNode.ID == 2)
 						e.setParam(0.2f, 2.f);
 				}
-				
-				if(n.ID == 2){
-					if(e.endNode.ID == 1)
+
+				if (n.ID == 2) {
+					if (e.endNode.ID == 1)
 						e.setParam(0.1f, 11.f);
-					if(e.endNode.ID == 3)
+					if (e.endNode.ID == 3)
 						e.setParam(0.1f, 11.f);
-					if(e.endNode.ID == 4)
+					if (e.endNode.ID == 4)
 						e.setParam(0.1f, 11.f);
 				}
 
-				if(n.ID == 3){
-					if(e.endNode.ID == 2)
+				if (n.ID == 3) {
+					if (e.endNode.ID == 2)
 						e.setParam(0.2f, 2.f);
-					if(e.endNode.ID == 5)
+					if (e.endNode.ID == 5)
 						e.setParam(0.1f, 11.f);
-					if(e.endNode.ID == 6)
+					if (e.endNode.ID == 6)
 						e.setParam(0.1f, 11.f);
 				}
 
-				if(n.ID == 4){
-					if(e.endNode.ID == 2)
+				if (n.ID == 4) {
+					if (e.endNode.ID == 2)
 						e.setParam(0.2f, 2.f);
-					if(e.endNode.ID == 5)
+					if (e.endNode.ID == 5)
 						e.setParam(0.1f, 11.f);
 				}
 
-				if(n.ID == 5){
-					if(e.endNode.ID == 3)
+				if (n.ID == 5) {
+					if (e.endNode.ID == 3)
 						e.setParam(0.2f, 2.f);
-					if(e.endNode.ID == 4)
+					if (e.endNode.ID == 4)
 						e.setParam(0.2f, 2.f);
-					if(e.endNode.ID == 7)
+					if (e.endNode.ID == 7)
 						e.setParam(0.1f, 11.f);
-					if(e.endNode.ID == 8)
+					if (e.endNode.ID == 8)
 						e.setParam(0.1f, 11.f);
 				}
 
-				if(n.ID == 6){
-					if(e.endNode.ID == 3)
+				if (n.ID == 6) {
+					if (e.endNode.ID == 3)
 						e.setParam(0.9f, 1.f);
-					if(e.endNode.ID == 7)
+					if (e.endNode.ID == 7)
 						e.setParam(0.1f, 11.f);
 				}
 
-				if(n.ID == 7){
-					if(e.endNode.ID == 5)
+				if (n.ID == 7) {
+					if (e.endNode.ID == 5)
 						e.setParam(0.2f, 2.f);
-					if(e.endNode.ID == 6)
+					if (e.endNode.ID == 6)
 						e.setParam(0.1f, 11.f);
-					if(e.endNode.ID == 8)
+					if (e.endNode.ID == 8)
 						e.setParam(0.2f, 2.f);
 				}
 
-				if(n.ID == 8){
-					if(e.endNode.ID == 5)
-						e.setParam(0.4f,  2.f);
-						//e.setEtx(0.4);
-					if(e.endNode.ID == 7)
+				if (n.ID == 8) {
+					if (e.endNode.ID == 5)
+						e.setParam(0.4f, 2.f);
+					// e.setEtx(0.4);
+					if (e.endNode.ID == 7)
 						e.setParam(0.2f, 2.f);
-					if(e.endNode.ID == 9)
+					if (e.endNode.ID == 9)
 						e.setParam(0.2f, 2.f);
 				}
 
-				if(n.ID == 9){
-					if(e.endNode.ID == 8)
+				if (n.ID == 9) {
+					if (e.endNode.ID == 8)
 						e.setParam(0.1f, 11.f);
 				}
-				
-				//e.setEtx(1+generator.nextInt(9));
-				System.out.println("ID "+ e.getID()+"      " +n.ID+" ~["+e.getEtx()+"]> "+e.endNode.ID);
+
+				// e.setEtx(1+generator.nextInt(9));
+				System.out.println("ID " + e.getID() + "      " + n.ID + " ~["
+						+ e.getEtx() + "]> " + e.endNode.ID);
 
 			}
 		}

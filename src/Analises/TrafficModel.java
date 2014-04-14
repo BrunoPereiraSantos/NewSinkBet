@@ -177,18 +177,25 @@ public class TrafficModel {
 	public static void setTrafficToRangeHops(int minHop, int maxHop) {
 		if (minHop < 1 || maxHop < 1 || maxHop < minHop)
 			return;
-
+		
 		Iterator<Node> it = Tools.getNodeList().iterator();
 		InterfaceEventTest n;
+		Node node;
 		while (it.hasNext()) {
 			n = (InterfaceEventTest) it.next();
+			node = (Node) n;
+			
 			if (minHop <= n.getHops() && maxHop >= n.getHops()) {
-				setTrafficToNode(n, 60, 1000);
+				setTrafficToNode(n, 60, 10);
 			}
 		}
 	}
 	
-	private static void setTrafficToNode(InterfaceEventTest n, double duration,
+	public static void setTrafficToRangeHops(int hop){
+		setTrafficToRangeHops(hop, hop);
+	}
+	
+	public static void setTrafficToNode(InterfaceEventTest n, double duration,
 			int shots) {
 
 		double interval = duration / shots;
@@ -203,7 +210,7 @@ public class TrafficModel {
 		//System.out.println("########## time=" + time);
 
 		while (shots > 0) {
-			n.sentEvent_IEV(time);
+			n.sentEventRelative(time);
 			time += interval;
 			shots -= 1;
 		}

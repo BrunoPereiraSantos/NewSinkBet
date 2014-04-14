@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 $numRounds = 100; # number of rounds to perform per simulation
-$numNodes = 300;
+$numNodes = 100;
 for($i=0; $i<1; $i+=1) {
 system("java -cp binaries/bin sinalgo.Run " .
 "-project ExportTopology " .             # choose the project
@@ -16,7 +16,7 @@ system("java -cp binaries/bin sinalgo.Run " .
 #"-overwrite " .                   # Overwrite configuration file parameters
 #"mobility=false ".
 #"interference=true ".
-#"dimX=1000 dimY=1000 dimZ=0 ".
+"dimX=2400 dimY=2400 dimZ=0 ".
 #"GeometricNodeCollection/rMax=100 ".
 #"UDG/rMax=100 ".
 #"Node/defaultSize=10 ".

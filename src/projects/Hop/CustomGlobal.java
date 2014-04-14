@@ -78,8 +78,76 @@ import sinalgo.tools.statistics.PoissonDistribution;
 public class CustomGlobal extends AbstractCustomGlobal {
 
 	private int id_execution = 0;
-	private Logging executionLog;
+	private Logging logExecution;
+	private Logging logEnergy;
+	
+	boolean exec1xTraffic = true;
+	boolean exec1xLog = true;
 
+	@Override
+	public void handleEmptyEventQueue() {
+
+		// TODO Auto-generated method stub
+		super.handleEmptyEventQueue();
+		if (exec1xTraffic) {
+			
+			TrafficModel.changeReabilityModel();
+			
+			TrafficModel.readEvents("./Traffic/" + id_execution + "_traffic_"+ Tools.getNodeList().size() + ".txt");
+			//TrafficModel.setTrafficToRangeHops(2, 2);
+			exec1xTraffic = false;
+		}else if (exec1xLog){
+			printStatistics();
+			exec1xLog = false;
+		}
+	}
+
+	private void printStatistics() {
+		
+		logExecution = Logging.getLogger(Tools.getProjectName()+"_logExecution_"
+				+ Tools.getNodeList().size() + ".txt", true);
+		logEnergy = Logging.getLogger(Tools.getProjectName()+"_logEnergy_"
+				+ Tools.getNodeList().size() + ".txt", true);
+		String separator = "##############----- start new simulation -----##############";
+		
+		
+		InterfaceEventTest in = (InterfaceEventTest) Tools.getNodeByID(1);
+		
+		System.out.println(in.getStatisticNode().toString());
+		logExecution.logln(in.getStatisticNode().toString());
+		logExecution.logln(separator);
+		
+		System.out.println(in.getStatisticNode().printStatisticsPerNode());
+		logEnergy.logln(in.getStatisticNode().printStatisticsPerNode());
+		logEnergy.logln(separator);
+		/*Iterator<Node> it = Tools.getNodeList().iterator();
+		Node n;
+		InterfaceEventTest in;
+		while (it.hasNext()) {
+			n = it.next();
+			in = (InterfaceEventTest) n;
+			System.out.println("Id=" + n.ID + " "
+					+ in.getStatisticNode().toString());
+			
+
+			executionLog.logln("Id=" + n.ID + " "
+					+ in.getStatisticNode().toString());
+		}*/
+
+	}
+	
+	@Override
+	public void preRun() {
+		// TODO Auto-generated method stub
+		super.preRun();
+		// printGraphicsINGuI();
+		// Runtime.reevaluateConnections();
+		insertEtx();
+
+		// tc.installEvents();
+		// tc.runTree();
+	}
+	
 	@Override
 	public void checkProjectRequirements() {
 		// TODO Auto-generated method stub
@@ -296,62 +364,7 @@ public class CustomGlobal extends AbstractCustomGlobal {
 
 	}
 
-	@Override
-	public void preRun() {
-		// TODO Auto-generated method stub
-		super.preRun();
-		// printGraphicsINGuI();
-		// Runtime.reevaluateConnections();
-		insertEtx();
-
-		// tc.installEvents();
-		// tc.runTree();
-	}
-
-	boolean exec1xTraffic = true;
-	boolean exec1xLog = true;
-
-	@Override
-	public void handleEmptyEventQueue() {
-
-		// TODO Auto-generated method stub
-		super.handleEmptyEventQueue();
-		if (exec1xTraffic) {
-			
-			TrafficModel.changeReabilityModel();
-			//TrafficModel.readEvents("./Traffic/" + id_execution + "_traffic_"+ Tools.getNodeList().size() + ".txt");
-			TrafficModel.setTrafficToRangeHops(2, 3);
-			exec1xTraffic = false;
-		}else if (exec1xLog){
-			printStatistics();
-			exec1xLog = false;
-		}
-	}
-
-	private void printStatistics() {
-		executionLog = Logging.getLogger("executionLog_"
-				+ Tools.getNodeList().size() + ".txt", true);
-		
-		InterfaceEventTest in = (InterfaceEventTest) Tools.getNodeByID(1);
-		
-		System.out.println(in.getStatisticNode().toString());
-		executionLog.logln(in.getStatisticNode().toString());
-		
-		/*Iterator<Node> it = Tools.getNodeList().iterator();
-		Node n;
-		InterfaceEventTest in;
-		while (it.hasNext()) {
-			n = it.next();
-			in = (InterfaceEventTest) n;
-			System.out.println("Id=" + n.ID + " "
-					+ in.getStatisticNode().toString());
-			
-
-			executionLog.logln("Id=" + n.ID + " "
-					+ in.getStatisticNode().toString());
-		}*/
-
-	}
+	
 
 	@Override
 	public void onExit() {

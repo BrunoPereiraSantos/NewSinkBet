@@ -38,7 +38,7 @@
 		<canReceiveMultiplePacketsInParallel value="true" />
 
 		<!--The default type of edges to be used-->
-		<edgeType value="Etx:EdgeEtx" />
+		<edgeType value="GenericWeightedEdge" />
 
 		<!--If set to true, the application exits as soon as the termination criteria is met. This flag only affects the GUI mode.-->
 		<exitOnTerminationInGUI value="false" />
@@ -131,10 +131,10 @@
 		<!--  Models                                                               -->
 		<!--***********************************************************************-->
 		<!--The message transmission model used when none is specified-->
-		<DefaultMessageTransmissionModel value="Etx:EtxTransmissionModel" />
+		<DefaultMessageTransmissionModel value="GenericTransModel" />
 
 		<!--Default connectivity model used when none is specified-->
-		<DefaultConnectivityModel value="Etx:EtxConnectivityHelper" />
+		<DefaultConnectivityModel value="GenericConnectivityHelper" />
 
 		<!--Default distribution model used when none is specified-->
 		<DefaultDistributionModel value="Random" />
@@ -247,6 +247,13 @@
 </RandomDirection>
 
 <QUDG rMin="30" rMax="50" ProbabilityType="constant" connectionProbability="0.6"/>
-												</Custom>
+
+<ConfigTest>
+	<ID value="1"/>
+	<NodeEvents percent="50" distribution="Uniform" lambda="10" />
+	<Traffic distribution="Uniform" lambda="10" duration="60" />
+</ConfigTest>
+				
+</Custom>
 </Document>
 

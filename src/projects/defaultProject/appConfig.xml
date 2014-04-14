@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sinalgo>
-	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="BetEtx" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="2" />
-	<GUI windowWidth="589" windowHeight="410" windowPosX="664" windowPosY="63" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
-	<RandomSeed seedFromPreviousRun="1065034610583521033" />
-	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="-project Hop -gen 9 Hop:NodeHop PositionFile (./Topology/0_topology_9.pos) -overwrite ConfigTest/ID=0 " />
+	<ProjectSelector windowWidth="790" windowHeight="594" lastChosenProject="Etx" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="3" />
+	<GUI windowWidth="579" windowHeight="405" windowPosX="693" windowPosY="140" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="false" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
+	<RandomSeed seedFromPreviousRun="598841848168838207" />
+	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="false" updateCheckTimeStamp="0" runCmdLineArgs="-project Etx -gen 100 Etx:NodeEtx PositionFile (./Topology/0_topology_100.pos) -overwrite ConfigTest/ID=0 dimX=2400 dimY=2400 dimZ=0 GeometricNodeCollection/rMax=796 UDG/rMax=796 Node/defaultSize=15 AutoStart=true -refreshRate 1000 " />
 	<GenNodesDlg numNodes="500" />
 </sinalgo>
 

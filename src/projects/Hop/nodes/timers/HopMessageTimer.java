@@ -36,11 +36,11 @@ public class HopMessageTimer extends Timer {
 	@Override
 	public void fire() {
 		if(receiver != null) { // there's a receiver => unicast the message
-			((NodeHop) this.node ).sendUnicastRateMsg(this.msg, this.receiver);
+			((NodeHop) this.node ).sendUnicastMsg(this.msg, this.receiver);
 		} else  if(this.msg instanceof EventMessage){ // there's no reciever => broadcast the message
-			((NodeHop) this.node).broadcastEvent_IEV(this.msg);;
+			((NodeHop) this.node).broadcastWithNack(this.msg);;
 		}else{
-			((NodeHop) this.node).broadcastRateMsg(this.msg);
+			((NodeHop) this.node).broadcastMsg(this.msg);
 		}
 	}
 

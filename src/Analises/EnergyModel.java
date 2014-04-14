@@ -126,6 +126,11 @@ public class EnergyModel {
 	public void setEnergySpendTree(float energySpendTree) {
 		this.energySpendTree = energySpendTree;
 	}
+
+	@Override
+	public String toString() {
+		return "	" +  String.format("%.9f", energySpendTree) + "	" + String.format("%.9f", energySpendEv);
+	}
 	
 	
 	

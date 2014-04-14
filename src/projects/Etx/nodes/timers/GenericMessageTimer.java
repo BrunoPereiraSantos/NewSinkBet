@@ -1,11 +1,13 @@
 package projects.Etx.nodes.timers;
 
 import projects.Etx.nodes.nodeImplementations.NodeEtx;
+import projects.Hop.nodes.nodeImplementations.NodeHop;
+import projects.defaultProject.nodes.messages.EventMessage;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.timers.Timer;
 
-public class EtxMessageTimer extends Timer {
+public class GenericMessageTimer extends Timer {
 	private Node receiver; // the receiver of the message, null if the message should be broadcast
 	private Message msg; // the message to be sent
 	
@@ -17,7 +19,7 @@ public class EtxMessageTimer extends Timer {
 	 * @param msg The message to be sent when this timer fires.
 	 * @param receiver The receiver of the message.
 	 */
-	public EtxMessageTimer(Message msg, Node receiver) {
+	public GenericMessageTimer(Message msg, Node receiver) {
 		this.msg = msg;
 		this.receiver = receiver;
 	}
@@ -27,7 +29,7 @@ public class EtxMessageTimer extends Timer {
 	 *
 	 * @param msg The message to be sent when this timer fires.
 	 */
-	public EtxMessageTimer(Message msg) {
+	public GenericMessageTimer(Message msg) {
 		this.msg = msg;
 		this.receiver = null; // indicates broadcasting
 	}
@@ -35,9 +37,11 @@ public class EtxMessageTimer extends Timer {
 	@Override
 	public void fire() {
 		if(receiver != null) { // there's a receiver => unicast the message
-			((NodeEtx) this.node ).sendUnicastBetEtxMsg(this.msg, this.receiver);
-		} else { // there's no reciever => broadcast the message
-			((NodeEtx) this.node).broadcastBetEtxMsg(this.msg);
+			((NodeEtx) this.node ).sendUnicastMsg(this.msg, this.receiver);
+		}  else  if(this.msg instanceof EventMessage){ // there's no reciever => broadcast the message
+			((NodeEtx) this.node).broadcastWithNack(this.msg);;
+		}else{
+			((NodeEtx) this.node).broadcastMsg(this.msg);
 		}
 	}
 

@@ -105,7 +105,8 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 	@Override
 	public String toString() {
 		
-		return "EdgeRate [etx=" + String.format("%.2f", etx) +
+		return "GenericWeightedEdge" +
+				"\n[etx=" + String.format("%.2f", etx) +
 				"\nrate=" + String.format("%.2f", rate) +
 				"\nmtm=" + String.format("%.2f", mtm) +
 				"\nett=" + String.format("%.2f", ett) +

@@ -36,6 +36,9 @@
 */
 package projects.defaultProject.nodes.timers;
 
+import projects.Hop.nodes.nodeImplementations.NodeHop;
+import projects.defaultProject.nodes.messages.EventMessage;
+import Analises.InterfaceEventTest;
 import Analises.StatisticsNode;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Message;
@@ -45,7 +48,7 @@ import sinalgo.nodes.timers.Timer;
  * A timer that sends a message at a given time.
  * The message may be unicast to a specific node or broadcast. 
  */
-public class MessageTimer extends Timer {
+public class GenericMessageTimer extends Timer {
 	private Node receiver; // the receiver of the message, null if the message should be broadcast
 	private Message msg; // the message to be sent
 	
@@ -57,7 +60,7 @@ public class MessageTimer extends Timer {
 	 * @param msg The message to be sent when this timer fires.
 	 * @param receiver The receiver of the message.
 	 */
-	public MessageTimer(Message msg, Node receiver) {
+	public GenericMessageTimer(Message msg, Node receiver) {
 		this.msg = msg;
 		this.receiver = receiver;
 	}
@@ -67,7 +70,7 @@ public class MessageTimer extends Timer {
 	 *
 	 * @param msg The message to be sent when this timer fires.
 	 */
-	public MessageTimer(Message msg) {
+	public GenericMessageTimer(Message msg) {
 		this.msg = msg;
 		this.receiver = null; // indicates broadcasting
 	}
@@ -75,9 +78,11 @@ public class MessageTimer extends Timer {
 	@Override
 	public void fire() {
 		if(receiver != null) { // there's a receiver => unicast the message
-			this.node.send(msg, receiver);
-		} else { // there's no reciever => broadcast the message
-			this.node.broadcast(msg);
+			((InterfaceEventTest) this.node ).sendUnicastMsg(this.msg, this.receiver);
+		} else  if(this.msg instanceof EventMessage){ // there's no reciever => broadcast the message
+			((InterfaceEventTest) this.node).broadcastWithNack(this.msg);;
+		}else{
+			((InterfaceEventTest) this.node).broadcastMsg(this.msg);
 		}
 	}
 }

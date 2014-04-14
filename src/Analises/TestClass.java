@@ -127,7 +127,7 @@ public class TestClass {
 	}
 	
 	private void selectNodeEvent(InterfaceEventTest n){
-		n.sentEvent_IEV(1.);
+		n.sentEventRelative(1.);
 	}
 	
 	/**
@@ -151,7 +151,7 @@ public class TestClass {
 			
 			int qntEventos = (int) ((duration / 60) * rate);
 			while (qntEventos > 0) {
-				n.sentEvent_IEV(time);
+				n.sentEventRelative(time);
 				time += interval;
 				qntEventos -= 1;
 			}
