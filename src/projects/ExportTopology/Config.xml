@@ -251,7 +251,7 @@
 <ConfigTest>
 	<idTopology value="1"/>
 	<NodeEvents percent="50" distribution="Uniform" lambda="10" />
-	<Traffic distribution="Uniform" lambda="10" duration="60" />
+	<Traffic distribution="Uniform" lambda="60" duration="60" />
 </ConfigTest>
 
 </Custom>

@@ -372,12 +372,12 @@ public class NodeBetEtt extends Node {
 		// super.drawAsRoute(g, pt, highlight, 30);
 	}
 
-	public void sendUnicastRateMsg(Message msg, Node receiver) {
+	public void sendUnicastBetEttMsg(Message msg, Node receiver) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void broadcastRateMsg(Message msg) {
+	public void broadcastBetEttMsg(Message msg) {
 		if (msg instanceof BetEttHelloMessage) {
 			BetEttHelloMessage m = (BetEttHelloMessage) msg;
 			m.setHops(hops);

@@ -144,6 +144,13 @@ public abstract class Timer implements Comparable<Timer> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param updateTimer
+	 * @param n
+	 * @param time
+	 * @return Retorna true se conseguiu atualizar um timer, caso contrário retorna false
+	 */
 	public final boolean updateTimer(double updateTimer, Node n, double time) {
 
 		if (updateTimer <= 0) {

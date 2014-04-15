@@ -18,7 +18,7 @@ public class GenericTransModel extends MessageTransmissionModel {
 		 * 1			|	13858				|	796
 		 * */
 		//System.out.println("MTM distancia: "+Math.sqrt(dist));
-		System.out.println("MTM  Sem sqrt distancia: "+dist);
+		//System.out.println("MTM  Sem sqrt distancia: "+dist);
 		
 		if(dist < 399)						return 0.002542;
 		if(dist >= 399 && dist < 531)		return 0.003673;

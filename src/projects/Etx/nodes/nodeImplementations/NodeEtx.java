@@ -164,6 +164,14 @@ public class NodeEtx extends Node implements InterfaceEventTest{
 			nextHop = sender.ID;
 			EtxPath = msg.getPathEtx() + edgeToSender.getEtx();
 			msg.setPathEtx(EtxPath);
+			
+			//verifica se tem alguma msg na fila, caso tenha atualiza o timer em mais 1s,
+			//caso contrário envia uma nova mensagem hellow
+			if(sentMyHello){
+				if(fhp.updateTimer(1, this, fhp.getFireTime())){
+					sentMyHello = false;
+				}
+			}
 		}
 
 		

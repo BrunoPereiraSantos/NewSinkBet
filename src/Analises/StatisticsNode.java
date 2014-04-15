@@ -310,6 +310,7 @@ public class StatisticsNode {
 			totalEnergySpend = n.getStatisticNode().energy.getEnergySpendTree() + n.getStatisticNode().energy.getEnergySpendEv();
 			
 			str += node.ID
+				+ "	" + n.getHops() 
 				+ "	" + String.format("%.9f", n.getStatisticNode().energy.getEnergySpendTree())
 				+ "	" +	String.format("%.9f", n.getStatisticNode().energy.getEnergySpendEv())
 				+ "	" + String.format("%.9f", totalEnergySpend)
