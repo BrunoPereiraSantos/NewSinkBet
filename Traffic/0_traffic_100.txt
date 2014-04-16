@@ -1,0 +1,179 @@
+Number of nodes: 100
+
+------------------------------------------------------
+General Config
+------------------------------------------------------
+Command Line arguments: -project ExportTopology -batch -rounds 1 -gen 100 DummyNode Random -overwrite ConfigTest/idTopology=0 dimX=2400 dimY=2400 dimZ=0 
+Java VM arguments: -Xmx500m 
+Class path: binaries/bin:binaries/jdom.jar
+------------------------------------------------------
+Configuration settings
+------------------------------------------------------
+ Simulation Area
+    dimensions = 2
+    dimX = 2400
+    dimY = 2400
+    dimZ = 0
+ Simulation
+    asynchronousMode = false
+    mobility = false
+    interference = false
+    interferenceIsAdditive = false
+    canReceiveWhileSending = false
+    canReceiveMultiplePacketsInParallel = false
+    edgeType = projects.defaultProject.nodes.edges.GenericWeightedEdge
+    exitOnTerminationInGUI = true
+    initializeConnectionsOnStartup = false
+    refreshRate = 1
+    generateNAckMessages = false
+    handleEmptyEventQueue = true
+    javaCmd = java
+    javaVMmaxMem = 500
+ Random number generators
+    useSameSeedAsInPreviousRun = false
+    useFixedSeed = false
+    fixedSeed = 7642736381331432103
+ Logging
+    logFileName = logfile.txt
+    outputToConsole = true
+    logToTimeDirectory = true
+    logConfiguration = true
+    eagerFlush = false
+ GUI
+    extendedControl = true
+    drawArrows = false
+    zoomStep = 1.2
+    wheelZoomStep = 1.05
+    minZoomFactor = 0.05
+    draw3DGraphNodesInProperOrder = true
+    usePerspectiveView = true
+    perspectiveViewDistance = 40
+ Background map in 2D
+    useMap = false
+    map = images/map.jpg
+ Models
+    DefaultMessageTransmissionModel = ConstantTime
+    DefaultConnectivityModel = UDG
+    DefaultDistributionModel = Random
+    DefaultInterferenceModel = NoInterference
+    DefaultMobilityModel = NoMobility
+    DefaultReliabilityModel = ReliableDelivery
+    DefaultNodeImplementation = DummyNode
+    showModelsOfAllProjects = false
+ Node storage, position transformation
+    guiPositionTransformation2D = sinalgo.gui.transformation.Transformation2D
+    guiPositionTransformation3D = sinalgo.gui.transformation.Transformation3D
+    nodeCollection2D = sinalgo.runtime.nodeCollection.Geometric2DNodeCollection
+    nodeCollection3D = sinalgo.runtime.nodeCollection.Geometric3DNodeCollection
+ Export Settings
+    epsToPdfCommand = epstopdf %s
+    epsDrawDeploymentAreaBoundingBox = true
+    epsDrawBackgroundWhite = true
+ Animation Settings
+    showMessageAnimations = false
+    messageAnimationEnvelopeWidth = 30.0
+    messageAnimationEnvelopeHeight = 20.0
+    messageAnimationEnvelopeColor = r=255,g=255,b=0
+ Diverse Settings
+    showOptimizationHints = true
+    drawEdges = true
+    drawNodes = true
+    shownEventQueueSize = 10
+    outputTextFieldHeight = 200
+    arrowLength = 8
+    arrowWidth = 1
+    defaultRoundNumber = 1
+------------------------------------------------------
+Custom settings
+------------------------------------------------------
+ configtest/idtopology = 0
+ configtest/nodeevents/distribution = Uniform
+ configtest/nodeevents/lambda = 10
+ configtest/nodeevents/percent = 50
+ configtest/traffic/distribution = Uniform
+ configtest/traffic/duration = 60
+ configtest/traffic/lambda = 60
+ geometricnodecollection/rmax = 796
+ messagetransmission/constanttime = 1
+ node/defaultsize = 10
+ qudg/connectionprobability = 0.6
+ qudg/probabilitytype = constant
+ qudg/rmax = 50
+ qudg/rmin = 30
+ randomdirection/movetime/distribution = Uniform
+ randomdirection/movetime/max = 20
+ randomdirection/movetime/min = 5
+ randomdirection/nodespeed/distribution = Gaussian
+ randomdirection/nodespeed/mean = 10
+ randomdirection/nodespeed/variance = 20
+ randomdirection/waitingtime/distribution = Poisson
+ randomdirection/waitingtime/lambda = 10
+ randomwaypoint/speed/distribution = Gaussian
+ randomwaypoint/speed/mean = 10
+ randomwaypoint/speed/variance = 20
+ randomwaypoint/waitingtime/distribution = Poisson
+ randomwaypoint/waitingtime/lambda = 10
+ sinr/alpha = 2
+ sinr/beta = 0.7
+ sinr/noise = 0
+ udg/rmax = 796
+------------------------------------------------------
+Seed for Random Number Generators
+------------------------------------------------------
+ Randomly selected seed: 7642736381331432103
+------------------------------------------------------
+End of settings
+------------------------------------------------------
+
+#####----- start Traffic Nodes -----#####
+2 54
+3 54
+5 73
+6 70
+8 53
+11 60
+14 67
+15 71
+17 66
+16 69
+18 57
+21 71
+23 54
+24 69
+29 66
+31 55
+34 59
+33 51
+36 56
+42 71
+40 56
+45 62
+51 62
+50 62
+48 73
+55 56
+53 75
+52 72
+59 68
+58 61
+56 54
+62 53
+61 40
+68 56
+69 62
+70 54
+64 55
+79 59
+73 60
+74 61
+84 55
+87 64
+81 63
+80 66
+83 62
+82 55
+93 56
+88 63
+98 51
+99 61
+97 48

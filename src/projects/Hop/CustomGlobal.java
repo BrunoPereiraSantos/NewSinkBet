@@ -41,6 +41,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import Analises.EdgeExportImport;
 import Analises.InterfaceEventTest;
 import Analises.TestClass;
 import Analises.TrafficModel;
@@ -140,9 +141,10 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	public void preRun() {
 		// TODO Auto-generated method stub
 		super.preRun();
+		EdgeExportImport.readEdges("./Topology/Edges/" + id_execution + "_edge_"+ Tools.getNodeList().size() + ".txt");
 		// printGraphicsINGuI();
 		// Runtime.reevaluateConnections();
-		insertEtx();
+		//insertEtx();
 
 		// tc.installEvents();
 		// tc.runTree();

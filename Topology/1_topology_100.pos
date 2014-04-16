@@ -1,0 +1,228 @@
+Number of nodes: 100
+
+------------------------------------------------------
+General Config
+------------------------------------------------------
+Command Line arguments: -project ExportTopology 
+Java VM arguments: -Xmx500m 
+Class path: binaries/bin:binaries/jdom.jar
+------------------------------------------------------
+Configuration settings
+------------------------------------------------------
+ Simulation Area
+    dimensions = 2
+    dimX = 2400
+    dimY = 2400
+    dimZ = 500
+ Simulation
+    asynchronousMode = false
+    mobility = false
+    interference = false
+    interferenceIsAdditive = false
+    canReceiveWhileSending = false
+    canReceiveMultiplePacketsInParallel = false
+    edgeType = projects.defaultProject.nodes.edges.GenericWeightedEdge
+    exitOnTerminationInGUI = true
+    initializeConnectionsOnStartup = false
+    refreshRate = 1
+    generateNAckMessages = false
+    handleEmptyEventQueue = true
+    javaCmd = java
+    javaVMmaxMem = 500
+ Random number generators
+    useSameSeedAsInPreviousRun = false
+    useFixedSeed = false
+    fixedSeed = -2020048049626934645
+ Logging
+    logFileName = logfile.txt
+    outputToConsole = true
+    logToTimeDirectory = true
+    logConfiguration = true
+    eagerFlush = false
+ GUI
+    extendedControl = true
+    drawArrows = false
+    zoomStep = 1.2
+    wheelZoomStep = 1.05
+    minZoomFactor = 0.05
+    draw3DGraphNodesInProperOrder = true
+    usePerspectiveView = true
+    perspectiveViewDistance = 40
+ Background map in 2D
+    useMap = false
+    map = images/map.jpg
+ Models
+    DefaultMessageTransmissionModel = ConstantTime
+    DefaultConnectivityModel = UDG
+    DefaultDistributionModel = Random
+    DefaultInterferenceModel = NoInterference
+    DefaultMobilityModel = NoMobility
+    DefaultReliabilityModel = ReliableDelivery
+    DefaultNodeImplementation = DummyNode
+    showModelsOfAllProjects = false
+ Node storage, position transformation
+    guiPositionTransformation2D = sinalgo.gui.transformation.Transformation2D
+    guiPositionTransformation3D = sinalgo.gui.transformation.Transformation3D
+    nodeCollection2D = sinalgo.runtime.nodeCollection.Geometric2DNodeCollection
+    nodeCollection3D = sinalgo.runtime.nodeCollection.Geometric3DNodeCollection
+ Export Settings
+    epsToPdfCommand = epstopdf %s
+    epsDrawDeploymentAreaBoundingBox = true
+    epsDrawBackgroundWhite = true
+ Animation Settings
+    showMessageAnimations = false
+    messageAnimationEnvelopeWidth = 30.0
+    messageAnimationEnvelopeHeight = 20.0
+    messageAnimationEnvelopeColor = r=255,g=255,b=0
+ Diverse Settings
+    showOptimizationHints = true
+    drawEdges = true
+    drawNodes = true
+    shownEventQueueSize = 10
+    outputTextFieldHeight = 200
+    arrowLength = 8
+    arrowWidth = 1
+    defaultRoundNumber = 1
+------------------------------------------------------
+Custom settings
+------------------------------------------------------
+ configtest/idtopology = 1
+ configtest/nodeevents/distribution = Uniform
+ configtest/nodeevents/lambda = 10
+ configtest/nodeevents/percent = 50
+ configtest/traffic/distribution = Uniform
+ configtest/traffic/duration = 60
+ configtest/traffic/lambda = 60
+ geometricnodecollection/rmax = 796
+ messagetransmission/constanttime = 1
+ node/defaultsize = 10
+ qudg/connectionprobability = 0.6
+ qudg/probabilitytype = constant
+ qudg/rmax = 50
+ qudg/rmin = 30
+ randomdirection/movetime/distribution = Uniform
+ randomdirection/movetime/max = 20
+ randomdirection/movetime/min = 5
+ randomdirection/nodespeed/distribution = Gaussian
+ randomdirection/nodespeed/mean = 10
+ randomdirection/nodespeed/variance = 20
+ randomdirection/waitingtime/distribution = Poisson
+ randomdirection/waitingtime/lambda = 10
+ randomwaypoint/speed/distribution = Gaussian
+ randomwaypoint/speed/mean = 10
+ randomwaypoint/speed/variance = 20
+ randomwaypoint/waitingtime/distribution = Poisson
+ randomwaypoint/waitingtime/lambda = 10
+ sinr/alpha = 2
+ sinr/beta = 0.7
+ sinr/noise = 0
+ udg/rmax = 796
+------------------------------------------------------
+Seed for Random Number Generators
+------------------------------------------------------
+ Randomly selected seed: -2020048049626934645
+------------------------------------------------------
+End of settings
+------------------------------------------------------
+
+#####----- start of node posiitons -----#####
+2318.564914424363, 1811.2675301770755, 0.0
+208.4200847683743, 672.0333287213815, 0.0
+2382.8898372711005, 955.3575719030043, 0.0
+1658.8619699419085, 1541.769645029741, 0.0
+1892.792666488953, 986.3843241606136, 0.0
+755.10629014735, 2164.533746603001, 0.0
+2122.759175854937, 1249.594545364304, 0.0
+1895.927319278529, 1106.1223307310745, 0.0
+1134.7164328492233, 2067.121881545004, 0.0
+1641.525518335943, 1903.4614800781912, 0.0
+2333.442653704923, 1154.0581600158534, 0.0
+1393.530811694621, 2322.9811358018997, 0.0
+684.2922746160008, 1707.01544600831, 0.0
+1662.6999944153013, 2024.9640636158354, 0.0
+853.1744582271181, 1296.0135195828332, 0.0
+399.48015632966946, 1764.313681232181, 0.0
+1502.9391552758336, 1183.497183467026, 0.0
+24.326696717138674, 1038.654069334928, 0.0
+929.5450435969522, 1362.2547237988838, 0.0
+131.3852606120002, 1650.1434417097573, 0.0
+1945.6025558733168, 1046.980067610969, 0.0
+1750.8639936109462, 1577.852450515893, 0.0
+1618.1027120014624, 1172.1875580094668, 0.0
+1742.1423237936299, 863.0261934789585, 0.0
+941.362811743106, 642.1584549746024, 0.0
+1951.3814249815969, 2090.017604918223, 0.0
+2375.4375679341224, 1246.5666875410643, 0.0
+404.11859368554735, 2101.1503023362225, 0.0
+204.46333298146362, 898.4001060505091, 0.0
+1415.048740536205, 414.23477359418143, 0.0
+1868.62276186294, 368.76179594720844, 0.0
+2083.9135813375506, 2216.9341486996946, 0.0
+1397.633844025057, 2186.105633826176, 0.0
+1008.1379556758478, 1792.640864745234, 0.0
+422.88855650055564, 235.42833111775732, 0.0
+2379.571714803353, 587.9972858068711, 0.0
+1969.583464780372, 1635.909152773165, 0.0
+2144.414805291912, 462.6603375503712, 0.0
+1729.4033273343073, 1493.4573520065878, 0.0
+1792.12059952828, 967.379396877173, 0.0
+1188.538893841226, 2117.596020262861, 0.0
+400.79312376455823, 576.9261089852018, 0.0
+435.0371915775412, 60.07980021765364, 0.0
+403.3108142141183, 2059.882234663441, 0.0
+2093.702283779617, 75.61242691451974, 0.0
+750.1287639811776, 1197.76138678189, 0.0
+435.98321762562523, 422.9998858998971, 0.0
+1931.431785207706, 1471.409592705869, 0.0
+486.50415845437163, 1618.0416013220124, 0.0
+1883.0260650919313, 313.0965882441342, 0.0
+1297.1108899385154, 817.4332519374457, 0.0
+137.07904241905675, 2278.180688407699, 0.0
+683.5263020692951, 1655.9219042254033, 0.0
+890.5342149573714, 1420.697408999801, 0.0
+1218.9268350775126, 1776.9235508833672, 0.0
+350.74706006912305, 62.69105953234355, 0.0
+2352.9693440765186, 689.7816669807243, 0.0
+579.6062487843333, 2027.577861658945, 0.0
+774.0183600063443, 1354.8142966767734, 0.0
+2294.124004512424, 863.2968012760872, 0.0
+1756.5406312683062, 40.26603151268393, 0.0
+2293.1975113446906, 1611.4743663412153, 0.0
+1834.8541467726425, 913.2493931334326, 0.0
+566.9622169253815, 1084.2969786531771, 0.0
+918.6366283553939, 919.7301638060616, 0.0
+1306.877093173079, 2391.2549097357078, 0.0
+1514.817314933483, 376.5780747218939, 0.0
+2171.3997696289453, 213.38870024293337, 0.0
+2044.6955277820855, 2141.674831257647, 0.0
+73.82872839170753, 853.1391937247225, 0.0
+744.3462150804833, 846.0392888220867, 0.0
+1045.6087298570915, 193.3705284611861, 0.0
+1110.5946140598703, 1464.8982331468578, 0.0
+2390.1143963374575, 2179.603915404244, 0.0
+2104.057181351481, 1872.6003787901193, 0.0
+1378.6440213469123, 1094.9689806265749, 0.0
+2344.967830911675, 1369.2399493771359, 0.0
+152.07759743701095, 1527.8489386000592, 0.0
+936.7253394214282, 484.8246499914058, 0.0
+2078.3685712060483, 937.6628482701594, 0.0
+1526.3176852364566, 1459.791594120608, 0.0
+977.7595633866084, 1504.6989099843736, 0.0
+759.9969647223819, 2068.643983467564, 0.0
+1764.3301523516327, 905.3806075192915, 0.0
+1816.7977408489667, 1096.4493779065447, 0.0
+1564.2044243683192, 1384.8153109919392, 0.0
+601.7102920479418, 995.9099886342128, 0.0
+257.4635168534695, 1003.9461665646012, 0.0
+1654.5395677834795, 445.6831111419283, 0.0
+1852.5281132778669, 2219.094052963737, 0.0
+879.6978600199623, 2298.599877556512, 0.0
+1938.4945358173272, 607.1472395644148, 0.0
+426.3999888442713, 751.3975857417969, 0.0
+2072.6258316425365, 580.1238749381283, 0.0
+647.9468087752606, 285.5517144901386, 0.0
+546.9199232596819, 2138.30204003029, 0.0
+1043.002757412547, 421.76017048332204, 0.0
+2139.393161187891, 1891.5799899059748, 0.0
+430.9912335895861, 998.6034172138051, 0.0
+2392.438597998232, 2334.1989227944587, 0.0

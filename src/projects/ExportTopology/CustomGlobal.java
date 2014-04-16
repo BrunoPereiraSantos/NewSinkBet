@@ -39,6 +39,7 @@ package projects.ExportTopology;
 
 import javax.swing.JOptionPane;
 
+import Analises.EdgeExportImport;
 import Analises.TrafficModel;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
@@ -103,6 +104,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		super.onExit();
 		PositionFileIO.printPos("./Topology/"+idExecution+"_topology_"+Tools.getNodeList().size()+".pos");
 		TrafficModel.writeEvents(Tools.getNodeList().size(), idExecution);
+		EdgeExportImport.writeEdges(Tools.getNodeList().size(), idExecution);
 		
 	}
 

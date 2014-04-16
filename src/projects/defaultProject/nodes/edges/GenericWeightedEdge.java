@@ -101,6 +101,14 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 		return 1000000f;
 	}
 	
+	public String printEdgeInformation(){
+		return startNode.ID +
+				"	" + endNode.ID +
+				"	" + etx +
+				"	" + rate +
+				"	" + mtm +
+				"	" + ett;
+	}
 	
 	@Override
 	public String toString() {

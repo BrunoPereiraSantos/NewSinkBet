@@ -8,7 +8,7 @@ $Version = 'Hop';
 #for($numNodes=200; $numNodes<=200; $numNodes+=100) {
 system("java -cp binaries/bin sinalgo.Run " .
 "-project $Version " .             # choose the project
-"-batch ".
+#"-batch ".
 "-gen $numNodes ".
 "$Version:Node$Version ".
 "PositionFile '('./Topology/0_topology_$numNodes.pos')' " . # generate nodes
@@ -25,7 +25,7 @@ system("java -cp binaries/bin sinalgo.Run " .
 "AutoStart=true " .               # Automatically start communication protocol
 #"outputToConsole=false " .        # Create a framework log-file for each run
 #"extendedControl=false " .        # Don't show the extended control in the GUI
-"-rounds $numRounds " .           # Number of rounds to start simulation
+#"-rounds $numRounds " .           # Number of rounds to start simulation
 "-refreshRate 10000".               # Don't draw GUI often
 "");
 #}
