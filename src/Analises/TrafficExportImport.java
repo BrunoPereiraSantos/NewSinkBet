@@ -35,7 +35,7 @@ import sinalgo.tools.statistics.Distribution;
 import sinalgo.tools.statistics.PoissonDistribution;
 import sinalgo.tools.statistics.UniformDistribution;
 
-public class TrafficModel {
+public class TrafficExportImport {
 	private static final String separator = "#####----- start Traffic Nodes -----#####";
 
 	
@@ -71,7 +71,7 @@ public class TrafficModel {
 				}
 				int n = Integer.parseInt(parts[0]);
 				int shots = Integer.parseInt(parts[1]);
-				setTrafficToNode((InterfaceEventTest) Tools.getNodeByID(n), 60, shots);
+				setTrafficToNode((InterfaceRequiredMethods) Tools.getNodeByID(n), 60, shots);
 			} catch(NumberFormatException e) {
 				throw new PositionFileException("Illegal line: expected two ints, separated by comma. Found \n" + line);
 			}
@@ -179,10 +179,10 @@ public class TrafficModel {
 			return;
 		
 		Iterator<Node> it = Tools.getNodeList().iterator();
-		InterfaceEventTest n;
+		InterfaceRequiredMethods n;
 		Node node;
 		while (it.hasNext()) {
-			n = (InterfaceEventTest) it.next();
+			n = (InterfaceRequiredMethods) it.next();
 			node = (Node) n;
 			
 			if (minHop <= n.getHops() && maxHop >= n.getHops()) {
@@ -195,7 +195,7 @@ public class TrafficModel {
 		setTrafficToRangeHops(hop, hop);
 	}
 	
-	public static void setTrafficToNode(InterfaceEventTest n, double duration,
+	public static void setTrafficToNode(InterfaceRequiredMethods n, double duration,
 			int shots) {
 
 		double interval = duration / shots;
@@ -219,9 +219,9 @@ public class TrafficModel {
 	
 	public static void changeReabilityModel(){
 		Iterator<Node> it = Tools.getNodeList().iterator();
-		InterfaceEventTest n;
+		InterfaceRequiredMethods n;
 		while(it.hasNext()){
-			n = (InterfaceEventTest) it.next();
+			n = (InterfaceRequiredMethods) it.next();
 			n.changeRequirements();
 		}
 	}

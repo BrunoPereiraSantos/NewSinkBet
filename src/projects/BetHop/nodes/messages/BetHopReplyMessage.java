@@ -14,7 +14,6 @@ public class BetHopReplyMessage extends Message {
 	private int sinkID; // ID do sink
 	private int sendTo; // next hop no nodo que enviou o pacote
 	private ArrayList<Integer> sendToNodes; //nodos que devem receber
-	private float EtxPath; //EtxPath do nodo que enviou o pacote
 	private float sBet; //metrica sBet do nodo que enviou o pacote
 	private int fwdID; //ID do no que encaminhou a mensagem por ultimo
 	
@@ -31,7 +30,7 @@ public class BetHopReplyMessage extends Message {
 	 * @param fwdID
 	 */
 	public BetHopReplyMessage(int hops, int path, int senderID, int sinkID,
-			int sendTo, ArrayList<Integer> sendToNodes, float EtxPath,
+			int sendTo, ArrayList<Integer> sendToNodes,
 			float sBet, int fwdID) {
 		super();
 		this.hops = hops;
@@ -40,7 +39,6 @@ public class BetHopReplyMessage extends Message {
 		this.sinkID = sinkID;
 		this.sendTo = sendTo;
 		this.sendToNodes = sendToNodes;
-		this.EtxPath = EtxPath;
 		this.sBet = sBet;
 		this.fwdID = fwdID;
 	}
@@ -53,7 +51,7 @@ public class BetHopReplyMessage extends Message {
 	@Override
 	public Message clone() {
 		// TODO Auto-generated method stub
-		return new BetHopReplyMessage(hops, path, senderID, sinkID, sendTo, sendToNodes, EtxPath, sBet, fwdID);
+		return new BetHopReplyMessage(hops, path, senderID, sinkID, sendTo, sendToNodes, sBet, fwdID);
 	}
 
 	@Override
@@ -64,7 +62,6 @@ public class BetHopReplyMessage extends Message {
 				+ "\n sinkID=" + sinkID 
 				+ "\n sendTo="+ sendTo 
 				+ "\n sendToNodes=" + sendToNodes 
-				+ "\n EtxPath=" + EtxPath
 				+ "\n sBet=" + sBet 
 				+ "\n fwdID=" + fwdID + "]";
 	}
@@ -117,14 +114,6 @@ public class BetHopReplyMessage extends Message {
 		this.sendToNodes = sendToNodes;
 	}
 
-	public float getEtxPath() {
-		return EtxPath;
-	}
-
-
-	public void setEtxPath(float etxPath) {
-		EtxPath = etxPath;
-	}
 
 
 	public float getsBet() {

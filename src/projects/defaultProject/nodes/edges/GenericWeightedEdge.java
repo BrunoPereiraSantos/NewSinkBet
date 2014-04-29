@@ -17,7 +17,7 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 		
 		double dist = startNode.getPosition().distanceTo(endNode.getPosition());
 		//System.out.println("Distancia na edge: "+dist);
-		if(dist < 399){
+		/*if(dist < 399){
 			setParam(0.001f, 0.24f, 11.f);
 			return;
 		}
@@ -30,11 +30,41 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 			return;
 		}
 		if(dist >= 669 && dist <= 796){
-			setParam(0.75f, 0.99f, 1.f);
+			setParam(0.75f, 0.90f, 1.f);
 			return;
-		}
+		}*/
+		
+		
+		if(dist < 399)
+			setRate(11.f);
+		else if(dist >= 399 && dist < 531)
+			setRate(5.5f);
+		else if(dist >= 531 && dist < 669)
+			setRate(2.f);
+		else if(dist >= 669 && dist <= 796)
+			setRate(2.f);
+		
+		UniformDistribution v = new UniformDistribution(0.001, 0.95);
+		setEtx((float) v.nextSample());
+		
+		setMtm(mtmWeights(getRate()));
+		
+		setEtt(getEtx() * transTime(getRate()));
+		
 	}
 	
+	private int transTime(float rate){
+		if(rate == 11f)
+			return	2542;
+		if(rate == 5.5f)
+			return 3673;
+		if(rate == 2f)
+			return 7634;
+		if(rate == 1f)
+			return 13858;
+		
+		return 13858;
+	}
 	
 	public void setParam(float min, float max, float rate){
 		UniformDistribution v = new UniformDistribution(min, max);
@@ -67,20 +97,20 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 	private float mtmWeights(float rate){
 		/* Link rate 	|	MTM Weights		|
 		 * ----------------------------------
-		 * 11			|	1				|
-		 * 5.5			|	1.44			|
-		 * 2			|	3				|
-		 * 1			|	5.45			|
+		 * 11			|	5				|
+		 * 5.5			|	7				|
+		 * 2			|	14				|
+		 * 1			|	25				|
 		 * */
 		
 		if(rate == 11f)
-			return 1f;
+			return 5f;
 		if(rate == 5.5f)
-			return 1.44f;
+			return 7f;
 		if(rate == 2f)
-			return 3f;
+			return 14f;
 		if(rate == 1f)
-			return 5.54f;
+			return 25f;
 		
 		return 5.45f;
 	}
@@ -103,11 +133,11 @@ public class GenericWeightedEdge extends BidirectionalEdge {
 	
 	public String printEdgeInformation(){
 		return startNode.ID +
-				"	" + endNode.ID +
-				"	" + etx +
-				"	" + rate +
-				"	" + mtm +
-				"	" + ett;
+				" " + endNode.ID +
+				" " + etx +
+				" " + rate +
+				" " + mtm +
+				" " + ett;
 	}
 	
 	@Override

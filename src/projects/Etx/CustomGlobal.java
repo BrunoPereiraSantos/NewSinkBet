@@ -42,8 +42,9 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import Analises.InterfaceEventTest;
-import Analises.TrafficModel;
+import Analises.EdgeExportImport;
+import Analises.InterfaceRequiredMethods;
+import Analises.TrafficExportImport;
 import projects.Etx.nodes.edges.EdgeEtx;
 import projects.Etx.nodes.nodeImplementations.NodeEtx;
 import projects.defaultProject.nodes.edges.GenericWeightedEdge;
@@ -93,9 +94,9 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		super.handleEmptyEventQueue();
 		if (exec1xTraffic) {
 			
-			TrafficModel.changeReabilityModel();
+			TrafficExportImport.changeReabilityModel();
 			
-			TrafficModel.readEvents("./Traffic/" + id_execution + "_traffic_"+ Tools.getNodeList().size() + ".txt");
+			TrafficExportImport.readEvents("./Traffic/" + id_execution + "_traffic_"+ Tools.getNodeList().size() + ".txt");
 			//TrafficModel.setTrafficToRangeHops(2, 3);
 			exec1xTraffic = false;
 		}else if (exec1xLog){
@@ -113,7 +114,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		String separator = "##############----- start new simulation -----##############";
 		
 		
-		InterfaceEventTest in = (InterfaceEventTest) Tools.getNodeByID(1);
+		InterfaceRequiredMethods in = (InterfaceRequiredMethods) Tools.getNodeByID(1);
 		
 		System.out.println(in.getStatisticNode().toString());
 		logExecution.logln(in.getStatisticNode().toString());
@@ -144,7 +145,8 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		super.preRun();
 		// printGraphicsINGuI();
 		// Runtime.reevaluateConnections();
-		insertEtx();
+		EdgeExportImport.readEdges("./Topology/Edges/" + id_execution + "_edge_"+ Tools.getNodeList().size() + ".txt");
+		//insertEtx();
 
 		// tc.installEvents();
 		// tc.runTree();

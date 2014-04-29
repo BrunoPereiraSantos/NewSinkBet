@@ -24,38 +24,47 @@ public class StatisticsNode {
 	private double timeLastEv; // tempo que o primeiro evento chegou (sink |
 								// nodo)
 	private int evReceived; // quantidades de eventos recebidos (sink)
-	
+
 	private int relayedMessages; // quantidade de mensagens retransmitidas
 									// (nodo)
-	
-	
-	private int heardMessagesEv;// quantidade de mensagens escutadas na fase de eventos (nodo)
+	private int amountSentMsg;
+
+	private int heardMessagesEv;// quantidade de mensagens escutadas na fase de
+								// eventos (nodo)
 	private int broadcastEv;// quantidade de broadcast na fase de eventos (node)
-	
-	private int heardMessagesTree;// quantidade de mensagens escutadas na fase de contrucao da arvore (nodo)
-	private int broadcastTree;// quantidade de broadcast na fase de contrucao da arvore (node)
-	
+
+	private int heardMessagesTree;// quantidade de mensagens escutadas na fase
+									// de contrucao da arvore (nodo)
+	private int broadcastTree;// quantidade de broadcast na fase de contrucao da
+								// arvore (node)
+
 	static int GlobalrelayedMessages; // quantidade de mensagens retransmitidas
 										// (Global)
 	static int GlobalDropMessages;// quantidade de mensagens perdidas (Global)
-	
+
 	EnergyModel energy; // modelo de energia para cada nodo
-	
-	private Map<Integer, ArrayList<Double>> incomingEvents; //Key=id do nodo que envou a msg. Value = lista de tempo gasto por cada mensagem
+
+	private Map<Integer, ArrayList<Double>> incomingEvents; // Key=id do nodo
+															// que envou a msg.
+															// Value = lista de
+															// tempo gasto por
+															// cada mensagem
 
 	public StatisticsNode(int id) {
 		this.timeFistEv = 0.0;
 		this.evReceived = 0;
 		this.relayedMessages = 0;
 		this.heardMessagesEv = 0;
+		this.broadcastTree = 0;
 		this.broadcastEv = 0;
 		GlobalrelayedMessages = 0;
 		GlobalDropMessages = 0;
 		energy = new EnergyModel();
-		
+		amountSentMsg = 0;
+
 		if (id == 1) {
 			incomingEvents = new HashMap<Integer, ArrayList<Double>>();
-		}else{
+		} else {
 			incomingEvents = null;
 		}
 	}
@@ -65,12 +74,11 @@ public class StatisticsNode {
 			ArrayList<Double> l = new ArrayList<Double>();
 			l.add(time);
 			incomingEvents.put(id, l);
-		}else{
+		} else {
 			incomingEvents.get(id).add(time);
 		}
-			
+
 	}
-	
 
 	public Map<Integer, ArrayList<Double>> getIncomingEvents() {
 		return incomingEvents;
@@ -84,7 +92,7 @@ public class StatisticsNode {
 		this.broadcastTree++;
 		energy.spendTx_tree();
 	}
-	
+
 	public void countBroadcastEv(GenericWeightedEdge e) {
 		this.broadcastEv++;
 		energy.spendTx_Ev(e);
@@ -102,7 +110,7 @@ public class StatisticsNode {
 		this.heardMessagesTree++;
 		energy.spendRx_tree();
 	}
-	
+
 	public void countHeardMessagesEv(GenericWeightedEdge e) {
 		this.heardMessagesEv++;
 		energy.spendRx_Ev(e);
@@ -185,7 +193,7 @@ public class StatisticsNode {
 	public void setEnergy(EnergyModel energy) {
 		this.energy = energy;
 	}
-	
+
 	public int getHeardMessagesTree() {
 		return heardMessagesTree;
 	}
@@ -201,42 +209,58 @@ public class StatisticsNode {
 	public void setBroadcastTree(int broadcastTree) {
 		this.broadcastTree = broadcastTree;
 	}
-	
+
+	public int getAmountSentMsg() {
+		return amountSentMsg;
+	}
+
+	public void setAmountSentMsg(int amountSentMsg) {
+		this.amountSentMsg = amountSentMsg;
+	}
+
+	public void countAmountSentMsg() {
+		this.amountSentMsg++;
+	}
+
 	/**
 	 * Faz a media para uma lista de valores
+	 * 
 	 * @param list
 	 * @return
 	 */
-	public double averageSimple(ArrayList<Double> list){
-		if(list == null || list.isEmpty()) return 0.0;
-		
+	public double averageSimple(ArrayList<Double> list) {
+		if (list == null || list.isEmpty())
+			return 0.0;
+
 		Double sum = 0.0;
 		int n = list.size();
-		
-		for(int i = 0; i < n; i++) sum += list.get(i);
-		
+
+		for (int i = 0; i < n; i++)
+			sum += list.get(i);
+
 		return sum / n;
 	}
-	
-	public double sum(ArrayList<Double> list){
+
+	public double sum(ArrayList<Double> list) {
 		double sum = 0.0;
-		
-		for(Double it: list) sum += it.doubleValue();
-			
+
+		for (Double it : list)
+			sum += it.doubleValue();
+
 		return sum;
 	}
-	
+
 	/**
 	 * Faz a media para nos que estao em um range de saltos do sink
 	 * 
 	 */
 	public double averageNodeHop(int minHop, int maxHop) {
-		InterfaceEventTest n;
+		InterfaceRequiredMethods n;
 		ArrayList<Double> list = new ArrayList<Double>();
 
 		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents
 				.entrySet()) {
-			n = (InterfaceEventTest) Tools.getNodeByID(entry.getKey());
+			n = (InterfaceRequiredMethods) Tools.getNodeByID(entry.getKey());
 
 			if (minHop <= n.getHops() && maxHop >= n.getHops())
 				list.add(averageSimple(entry.getValue()));
@@ -246,84 +270,82 @@ public class StatisticsNode {
 	}
 
 	public double averageNodeHop(int Hop) {
-		return averageNodeHop(Hop,Hop);
+		return averageNodeHop(Hop, Hop);
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		ArrayList<Double> list = new ArrayList<Double>();
 		String str = "";
-		
-		/*return "StatisticsNodes [timeFistEv=" +  String.format("%.3f", timeFistEv) 
-				+ ", timeLastEv="+String.format("%.3f",+ timeLastEv)
-				+ ", evRcv=" + evReceived 
-				+ ", GdropM=" + GlobalDropMessages
-				+ ", GrelayedM=" + GlobalrelayedMessages 
-				+ ", relayedM=" + relayedMessages 
-				+ ", heardEv="+ heardMessagesEv
-				+ ", heardTree=" + heardMessagesTree
-				+ ", bEv=" + broadcastEv 
-				+ ", bTree=" + broadcastTree
-				+ ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
-				+ ", eTree=" + String.format("%.7f", energy.getEnergySpendTree())
-				+ ", eGlobal=" + String.format("%.7f", EnergyModel.globalEnergySpend)
-				+ "]";*/
-		//str += timeFistEv
-		str += timeFistEv
-			+ "	" + timeLastEv
-			+ "	" + evReceived 
-			+ "	" + Tools.getGlobalTime() 
-			//+ "	" + GlobalDropMessages
-			+ "	" + GlobalrelayedMessages 
-			//+ "	" + relayedMessages 
-			//+ ", heardEv="+ heardMessagesEv
-			//+ ", heardTree=" + heardMessagesTree
-			//+ ", bEv=" + broadcastEv 
-			//+ ", bTree=" + broadcastTree
-			//+ ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
-			//+ ", eTree=" + String.format("%.7f", energy.getEnergySpendTree())
-			+ "	" + EnergyModel.globalEnergySpend;
-		
-		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents.entrySet()) {
-			//str += " node: " + entry.getKey() + " Average : "
-			//	+ averageSimple(entry.getValue());
+
+		/*
+		 * return "StatisticsNodes [timeFistEv=" + String.format("%.3f",
+		 * timeFistEv) + ", timeLastEv="+String.format("%.3f",+ timeLastEv) +
+		 * ", evRcv=" + evReceived + ", GdropM=" + GlobalDropMessages +
+		 * ", GrelayedM=" + GlobalrelayedMessages + ", relayedM=" +
+		 * relayedMessages + ", heardEv="+ heardMessagesEv + ", heardTree=" +
+		 * heardMessagesTree + ", bEv=" + broadcastEv + ", bTree=" +
+		 * broadcastTree + ", eEv=" + String.format("%.7f",
+		 * energy.getEnergySpendEv()) + ", eTree=" + String.format("%.7f",
+		 * energy.getEnergySpendTree()) + ", eGlobal=" + String.format("%.7f",
+		 * EnergyModel.globalEnergySpend) + "]";
+		 */
+		// str += timeFistEv
+		str += timeFistEv + "	" + timeLastEv + "	" + evReceived + "	"
+				+ Tools.getGlobalTime()
+				// + "	" + GlobalDropMessages
+				+ "	" + GlobalrelayedMessages
+				// + "	" + relayedMessages
+				// + ", heardEv="+ heardMessagesEv
+				// + ", heardTree=" + heardMessagesTree
+				// + ", bEv=" + broadcastEv
+				// + ", bTree=" + broadcastTree
+				// + ", eEv=" + String.format("%.7f", energy.getEnergySpendEv())
+				// + ", eTree=" + String.format("%.7f",
+				// energy.getEnergySpendTree())
+				+ "	" + EnergyModel.globalEnergySpend;
+
+		for (Entry<Integer, ArrayList<Double>> entry : incomingEvents
+				.entrySet()) {
+			// str += " node: " + entry.getKey() + " Average : "
+			// + averageSimple(entry.getValue());
 			list.add(averageSimple(entry.getValue()));
 		}
-		
+
 		str += "	" + averageSimple(list);
-		//str += "	" + averageNodeHop(2);
-		//str += "	" + averageNodeHop(3); 
-		
-		return 	str;
+		// str += "	" + averageNodeHop(2);
+		// str += "	" + averageNodeHop(3);
+
+		return str;
 	}
-	
-	public String printStatisticsPerNode(){
+
+	public String printStatisticsPerNode() {
 		String str = "";
 		Iterator<Node> it = Tools.getNodeList().iterator();
-		InterfaceEventTest n;
+		InterfaceRequiredMethods n;
 		Node node;
 		double totalEnergySpend;
-		while(it.hasNext()){
-			n = (InterfaceEventTest) it.next();
+		while (it.hasNext()) {
+			n = (InterfaceRequiredMethods) it.next();
 			node = (Node) n;
-			totalEnergySpend = n.getStatisticNode().energy.getEnergySpendTree() + n.getStatisticNode().energy.getEnergySpendEv();
-			
+			totalEnergySpend = n.getStatisticNode().energy.getEnergySpendTree()
+					+ n.getStatisticNode().energy.getEnergySpendEv();
+
 			str += node.ID
-				+ "	" + n.getHops() 
+				+ "	" + n.getHops()
 				+ "	" + String.format("%.9f", n.getStatisticNode().energy.getEnergySpendTree())
-				+ "	" +	String.format("%.9f", n.getStatisticNode().energy.getEnergySpendEv())
+				+ "	"+ String.format("%.9f", n.getStatisticNode().energy.getEnergySpendEv())
 				+ "	" + String.format("%.9f", totalEnergySpend)
 				+ "	" + n.getStatisticNode().broadcastTree
 				+ "	" + n.getStatisticNode().broadcastEv
-				+ "	" + (n.getStatisticNode().broadcastTree + n.getStatisticNode().broadcastEv) 
+				+ "	" + (n.getStatisticNode().broadcastTree + n.getStatisticNode().broadcastEv)
 				+ "	" + n.getStatisticNode().heardMessagesTree
 				+ "	" + n.getStatisticNode().heardMessagesEv
 				+ "	" + (n.getStatisticNode().heardMessagesTree + n.getStatisticNode().heardMessagesEv)
-				+ "	" + n.getStatisticNode().relayedMessages 
-				+ "\n";
+				+ "	" + n.getStatisticNode().amountSentMsg
+				+ " " + n.getStatisticNode().relayedMessages + "\n";
 		}
-		
+
 		return str;
 	}
 

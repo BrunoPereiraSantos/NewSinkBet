@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 
-import Analises.InterfaceEventTest;
+import Analises.InterfaceRequiredMethods;
 import Analises.StatisticsNode;
 import projects.BetEtt.nodes.messages.BetEttHelloMessage;
 import projects.Hop.nodes.messages.HopHelloMessage;
@@ -26,7 +26,7 @@ import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
 import sinalgo.tools.Tools;
 
-public class NodeRate extends Node implements InterfaceEventTest{
+public class NodeRate extends Node implements InterfaceRequiredMethods{
 	// Qual o papel do nodo
 	private NodeRoleRate role;
 
@@ -264,6 +264,8 @@ public class NodeRate extends Node implements InterfaceEventTest{
 		EventMessage em = new EventMessage(this.ID, nextHop, Tools.getGlobalTime()+timeStartEvents, 0);
 		GenericMessageTimer t = new GenericMessageTimer(em);
 		t.startRelative(timeStartEvents, this);
+		
+		statistics.countAmountSentMsg();
 	}
 
 	@Override
@@ -288,23 +290,33 @@ public class NodeRate extends Node implements InterfaceEventTest{
 	}
 
 	@Override
-	public void sendUnicastMsg(Message msg, Node n) {
-		// TODO Auto-generated method stub
+	public void sendUnicastMsg(Message msg, Node n, boolean fwd) {
+		
+		if(fwd){
+			this.send(msg, n);
+			return;
+		}
+		
 		if(msg instanceof RateHelloMessage){
 			RateHelloMessage m = (RateHelloMessage) msg;
 			m.setHops(hops);
 			m.setSinkID(sinkID);
 			m.setMtmPath(mtmPath);
 			
-			broadcast(m);
+			this.send(m, n);
 			
 			//statistics.countBroadcastTree();
+			return;
 		}
 	}
 
 	@Override
-	public void broadcastMsg(Message msg) {
-		// TODO Auto-generated method stub
+	public void broadcastMsg(Message msg, boolean fwd) {
+		if(fwd){
+			broadcast(msg);
+			statistics.countBroadcastTree();
+			return;
+		}
 		if(msg instanceof RateHelloMessage){
 			RateHelloMessage m = (RateHelloMessage) msg;
 			m.setHops(hops);
@@ -314,7 +326,13 @@ public class NodeRate extends Node implements InterfaceEventTest{
 			broadcast(m);
 			
 			statistics.countBroadcastTree();
+			return;
 		}
+
+		if(msg instanceof EventMessage){
+			broadcastWithNack(msg);
+		}
+		
 	}
 
 	@Override
@@ -330,7 +348,7 @@ public class NodeRate extends Node implements InterfaceEventTest{
 			this.setColor(Color.ORANGE);
 			msg.setNextHop(nextHop);
 			GenericMessageTimer mt = new GenericMessageTimer(msg);
-			mt.startRelative(0.01, this);
+			mt.startRelative(0.001, this);
 		}
 	}
 

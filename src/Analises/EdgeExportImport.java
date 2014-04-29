@@ -51,6 +51,7 @@ public class EdgeExportImport {
 		float mtm;
 		float ett;
 		
+		Tools.reevaluateConnections();
 		
 		try {
 			is = new FileInputStream(name);
@@ -75,7 +76,7 @@ public class EdgeExportImport {
 			}
 			
 			try {
-				String[] parts = line.split("	");
+				String[] parts = line.split(" ");
 				if(parts.length < 6) {
 					throw new PositionFileException("Illegal line: expected six floats, separated by tab. Found \n" + line);	
 				}
@@ -86,7 +87,7 @@ public class EdgeExportImport {
 				mtm = Float.parseFloat(parts[4]);
 				ett = Float.parseFloat(parts[5]);
 				
-				if( ! insertValuesInEdge(start, end, etx, rate, mtm, ett) ) {
+				if( !insertValuesInEdge(start, end, etx, rate, mtm, ett) ) {
 					throw new PositionFileException("Illegal line: not fond start or end nodes for insert edge values. \n" + line);
 				}
 				
@@ -99,17 +100,22 @@ public class EdgeExportImport {
 		return false;
 	}
 
-	private static boolean insertValuesInEdge(int start, int end, float etx,
+	private static boolean insertValuesInEdge(int idStartNode, int idEndNode, float etx,
 			float rate, float mtm, float ett) {
 		
+		Node startNode = Tools.getNodeByID(idStartNode);
+		Node endNode = Tools.getNodeByID(idEndNode);
 		
-		Iterator<Edge> it = Tools.getNodeByID(start).outgoingConnections.iterator();
+		if(!startNode.outgoingConnections.contains(startNode, endNode))
+			return false;
+		
+		Iterator<Edge> it = startNode.outgoingConnections.iterator();
 		GenericWeightedEdge e;
 		
 		while(it.hasNext()){
 			e = (GenericWeightedEdge) it.next();
 			
-			if(e.endNode.ID == end){
+			if(e.endNode.equals(endNode)){
 				e.setEtt(ett);
 				e.setEtx(etx);
 				e.setMtm(mtm);

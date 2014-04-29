@@ -4,25 +4,32 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import projects.BetEtx.nodes.edges.EdgeBetEtx;
+import Analises.InterfaceRequiredMethods;
+import Analises.StatisticsNode;
 import projects.BetEtx.nodes.messages.BetEtxHelloMessage;
 import projects.BetEtx.nodes.messages.BetEtxReplyMessage;
 import projects.BetEtx.nodes.nodeImplementations.NodeRoleBetEtx;
-import projects.BetEtx.nodes.timers.BetEtxMessageTimer;
+import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
+import projects.defaultProject.models.reliabilityModels.ReliableDelivery;
+import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+import projects.defaultProject.nodes.messages.EventMessage;
+import projects.defaultProject.nodes.timers.GenericMessageTimer;
 import projects.defaultProject.nodes.timers.MessageTimer;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.gui.transformation.PositionTransformation;
 import sinalgo.nodes.Node;
+import sinalgo.nodes.edges.Edge;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
 import sinalgo.runtime.Global;
 import sinalgo.tools.Tools;
 
-public class NodeBetEtx extends Node {
+public class NodeBetEtx extends Node implements InterfaceRequiredMethods{
 	// Qual o papel do nodo
 	private NodeRoleBetEtx role;
 
@@ -64,8 +71,11 @@ public class NodeBetEtx extends Node {
 	private Map<Integer, Integer> sonsPathMap = new HashMap<Integer, Integer>();
 
 	// Disparadores de flood
-	BetEtxMessageTimer fhp;
-	BetEtxMessageTimer frp;
+	GenericMessageTimer fhp;
+	GenericMessageTimer frp;
+	
+	// Coleta as estatisticas do nodo
+	StatisticsNode statistics;
 
 	@Override
 	public void handleMessages(Inbox inbox) {
@@ -74,6 +84,9 @@ public class NodeBetEtx extends Node {
 			Message m = inbox.next();
 
 			if (m instanceof BetEtxHelloMessage) {
+				
+				statistics.countHeardMessagesTree();
+				
 				BetEtxHelloMessage msg = (BetEtxHelloMessage) m;
 				System.out.println("-------------MSG arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
@@ -84,9 +97,12 @@ public class NodeBetEtx extends Node {
 				System.out.println("-------------MSG END------------------");
 
 				handleHello(inbox.getSender(), inbox.getReceiver(),
-						(EdgeBetEtx) inbox.getIncomingEdge(), msg);
+						(GenericWeightedEdge) inbox.getIncomingEdge(), msg);
 
 			} else if (m instanceof BetEtxReplyMessage) {
+				
+				statistics.countHeardMessagesTree();
+				
 				BetEtxReplyMessage msg = (BetEtxReplyMessage) m;
 				System.out.println("-------------MSG arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
@@ -97,8 +113,26 @@ public class NodeBetEtx extends Node {
 				System.out.println("-------------MSG END------------------");
 
 				handleReply(inbox.getSender(), inbox.getReceiver(),
-						(EdgeBetEtx) inbox.getIncomingEdge(), msg);
+						(GenericWeightedEdge) inbox.getIncomingEdge(), msg);
 
+			}
+			
+			
+			if (m instanceof EventMessage) {
+
+				statistics.countHeardMessagesEv((GenericWeightedEdge) inbox
+						.getIncomingEdge());
+
+				EventMessage msg = (EventMessage) m;
+				System.out
+						.println("-------------MSG EventMessage------------------");
+				System.out.println("Conteúdo: " + msg.toString());
+				System.out.println("De: " + inbox.getSender().ID);
+				System.out.println("Para: " + inbox.getReceiver().ID);
+				System.out.println("Chegou em: " + inbox.getArrivingTime());
+				System.out.println("-------------MSG END------------------");
+
+				handleEvent(inbox, msg);
 			}
 
 		}
@@ -107,20 +141,26 @@ public class NodeBetEtx extends Node {
 
 	public void handleNAckMessages(NackBox nackBox) {
 		while (nackBox.hasNext()) {
-			/*
-			 * Message msg = nackBox.next(); StringMessage m = (StringMessage)
-			 * msg;
-			 * 
-			 * System.out.println("-------------NACK arrive------------------");
-			 * System.out.println("Conteúdo: "+m.text);
-			 * System.out.println("De: "+nackBox.getSender());
-			 * System.out.println("Para: "+nackBox.getReceiver());
-			 * System.out.println("Chegou em: "+nackBox.getArrivingTime());
-			 * System.out.println("-------------NACK END------------------");
-			 * System.out.println("\n\nResending"); (new MessageTimer(m,
-			 * nackBox.getReceiver())).startRelative(1, this);
-			 */
+			Message msg = nackBox.next();
 
+			System.out.println("-------------NAckMessages------------------");
+			System.out.println("De: " + nackBox.getSender().ID);
+			System.out.println("Para: " + nackBox.getReceiver().ID);
+			System.out.println("Chegou em: " + nackBox.getArrivingTime());
+			System.out
+					.println("-------------NAckMessages END------------------");
+
+			if (msg instanceof EventMessage) {
+				EventMessage m = (EventMessage) msg;
+				if (nackBox.getReceiver().ID == nextHop) {
+					statistics.countRelayedMessages();
+
+					this.setColor(Color.RED);
+					m.setNextHop(nextHop);
+					GenericMessageTimer t = new GenericMessageTimer(m);
+					t.startRelative(0.5, this);
+				}
+			}
 		}
 	}
 
@@ -130,7 +170,7 @@ public class NodeBetEtx extends Node {
 	 * ============================================================
 	 */
 	private void handleHello(Node sender, Node receiver,
-			EdgeBetEtx incomingEdge, BetEtxHelloMessage msg) {
+			GenericWeightedEdge incomingEdge, BetEtxHelloMessage msg) {
 		
 		// no sink nao manipula pacotes hello
 		if (this.ID == msg.getSinkID()) {
@@ -138,7 +178,7 @@ public class NodeBetEtx extends Node {
 			return;
 		}
 
-		EdgeBetEtx edgeToSender = (EdgeBetEtx) incomingEdge.oppositeEdge;
+		GenericWeightedEdge edgeToSender = (GenericWeightedEdge) incomingEdge.oppositeEdge;
 		
 		System.out.println("***************Informações***************");
 		Float a = new Float(msg.getPathEtx() + edgeToSender.getEtx());
@@ -156,8 +196,10 @@ public class NodeBetEtx extends Node {
 			nextHop = sender.ID;
 		}
 
-		// nodo acaba de ser descoberto ou acabou de encontrar um caminho mais
-		// curto
+		/*
+		 *  nodo acaba de ser descoberto ou acabou de encontrar um caminho mais
+		 *  curto
+		 */
 		if ((msg.getPathEtx() + edgeToSender.getEtx() < EtxPath)
 				|| EtxPath == Float.MAX_VALUE) {
 			System.out.println("Entrei no foi descoberto"+this.ID);
@@ -180,14 +222,13 @@ public class NodeBetEtx extends Node {
 			if (!neighbors.contains(sender.ID)) {
 				neighbors.add(sender.ID);
 			}
-
+			
 			//sentMyHello = false;
 		}
 
 		// existe mais de um caminho deste no ate o sink com a mesmo etx
 		// acumulado
 		if (msg.getPathEtx() + edgeToSender.getEtx() == EtxPath) {
-			System.out.println("ENTREEEIIIIIIIIII");
 			System.out.println("Entrei no + caminhos"+this.ID);
 			this.setColor(Color.MAGENTA);
 			pathsToSink += msg.getPaths();
@@ -206,7 +247,7 @@ public class NodeBetEtx extends Node {
 		// isto e, mandar mensagens com informacoes desatualiza
 		if (!isSentMyHello()) {
 			System.out.println("Entrei no foi send hello"+this.ID);
-			fhp = new BetEtxMessageTimer(new BetEtxHelloMessage());
+			fhp = new GenericMessageTimer(msg);
 			fhp.startRelative(hops, this);
 			sentMyHello = true;
 		}
@@ -216,16 +257,17 @@ public class NodeBetEtx extends Node {
 		// nodos do tipo border e relay devem enviar tal pacote
 		if (!isSentMyReply()) {
 			System.out.println("Entrei no send reply"+this.ID);
-			frp = new BetEtxMessageTimer(new BetEtxReplyMessage());
+			frp = new GenericMessageTimer(new BetEtxReplyMessage());
 			frp.startAbsolute((float) waitingTime(), this);
 			sentMyReply = true;
 		}
 		
-		msg = null;
 	}
 
-	// atraso para enviar o pacote [referencia artigo do Eduardo]
+	
 	private float waitingTime() {
+		// atraso para enviar o pacote [referencia artigo do Eduardo]
+		
 		float waitTime = 0.0f;
 		// waitTime = 1 / (Math.exp(this.hops) * Math.pow(10, -20));
 		// waitTime = 1 / (this.hops * (Math.pow(5, -3.3)));
@@ -235,19 +277,19 @@ public class NodeBetEtx extends Node {
 	}
 
 	/*
-	 * ============================================================= Manipulando
-	 * o pacote Reply
+	 * ============================================================= 
+	 * Manipulando o pacote Reply
 	 * ============================================================
 	 */
 	private void handleReply(Node sender, Node receiver,
-			EdgeBetEtx incomingEdge, BetEtxReplyMessage msg) {
+			GenericWeightedEdge incomingEdge, BetEtxReplyMessage msg) {
 		
 		// o sink nao deve manipular pacotes do tipo Relay
 		if (this.ID == msg.getSinkID()) {
 			return;
 		}
 
-		EdgeBetEtx edgeToSender = (EdgeBetEtx) incomingEdge.oppositeEdge;
+		GenericWeightedEdge edgeToSender = (GenericWeightedEdge) incomingEdge.oppositeEdge;
 
 		// necessaria verificacao de que o no ja recebeu menssagem de um
 		// determinado descendente, isso e feito para evitar mensagens
@@ -276,7 +318,7 @@ public class NodeBetEtx extends Node {
 			// FwdPackReplyEtxBet fwdReply = new FwdPackReplyEtxBet(message);
 			//eu realmente quero que ele somente encaminhe o pacote
 			//com as informacoes acima preenchidas
-			MessageTimer fwdReply = new MessageTimer(msg);
+			GenericMessageTimer fwdReply = new GenericMessageTimer(msg, true);
 			fwdReply.startRelative(1, this);
 
 		}
@@ -337,12 +379,18 @@ public class NodeBetEtx extends Node {
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
+		statistics = new StatisticsNode(this.ID);
+		
 		if (this.ID == 1) {
-			this.setColor(Color.BLUE);
+			this.sinkID = this.ID;
+			this.nextHop = this.ID;
+			this.hops = 0;
+			this.sentMyHello = true;
+			this.pathsToSink = 1;
 			this.EtxPath = 0.0f;
-			
-			BetEtxHelloMessage hellomsg = new BetEtxHelloMessage(0, 1, this.ID, this.EtxPath);
-			MessageTimer mt = new MessageTimer(hellomsg);
+			this.setColor(Color.BLUE);
+		
+			GenericMessageTimer mt = new GenericMessageTimer(new BetEtxHelloMessage());
 			mt.startRelative(Global.currentTime + 1, this);
 		}
 	}
@@ -355,12 +403,6 @@ public class NodeBetEtx extends Node {
 
 	@Override
 	public void postStep() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void checkRequirements() throws WrongConfigurationException {
 		// TODO Auto-generated method stub
 
 	}
@@ -385,40 +427,6 @@ public class NodeBetEtx extends Node {
 		// super.drawAsRoute(g, pt, highlight, 30);
 	}
 
-	public void sendUnicastBetEtxMsg(Message msg, Node receiver) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void broadcastBetEtxMsg(Message msg) {
-		if (msg instanceof BetEtxHelloMessage) {
-			BetEtxHelloMessage m = (BetEtxHelloMessage) msg;
-			m.setHops(hops);
-			m.setPathEtx(EtxPath);
-			m.setPaths(pathsToSink);
-			m.setSinkID(sinkID);
-
-			broadcast(m);
-		}
-
-		if (msg instanceof BetEtxReplyMessage) {
-			this.setColor(Color.GREEN);
-			BetEtxReplyMessage m = (BetEtxReplyMessage) msg;
-			m.setSinkID(sinkID);
-			m.setEtxPath(EtxPath);
-			m.setFwdID(this.ID);
-			m.setHops(hops);
-			m.setPath(pathsToSink);
-			m.setsBet(sBet);
-			m.setSenderID(this.ID);
-			m.setSendTo(nextHop);
-			m.setSendToNodes(neighbors);
-
-			broadcast(m);
-		}
-
-	}
-
 	@Override
 	public String toString() {
 		return "NodeBetEtx [role=" + role + "\n sinkID=" + sinkID + "\n hops="
@@ -436,6 +444,165 @@ public class NodeBetEtx extends Node {
 
 	public boolean isSentMyReply() {
 		return sentMyReply;
+	}
+
+	@Override
+	public void checkRequirements() throws WrongConfigurationException {
+		if (!(reliabilityModel instanceof ReliableDelivery)) {
+			this.reliabilityModel = new ReliableDelivery();
+		}
+	}
+
+	@Override
+	public void changeRequirements() throws WrongConfigurationException {
+		// TODO Auto-generated method stub
+		this.reliabilityModel = new GenericReliabilityModel();
+		System.out.println(this.getReliabilityModel());
+	}
+
+	@Override
+	public void sentEventRelative(double timeStartEvents) {
+		// TODO Auto-generated method stub
+		EventMessage em = new EventMessage(this.ID, nextHop,
+				Tools.getGlobalTime() + timeStartEvents, 0);
+		GenericMessageTimer t = new GenericMessageTimer(em);
+		t.startRelative(timeStartEvents, this);
+		
+		statistics.countAmountSentMsg();
+	}
+
+	@Override
+	public void broadcastWithNack(Message m) {
+		GenericWeightedEdge edgeToTarget = null;
+		EventMessage em = (EventMessage) m;
+
+		this.setColor(Color.GRAY);
+		Iterator<Edge> it = this.outgoingConnections.iterator();
+		GenericWeightedEdge e;
+		while (it.hasNext()) {
+			e = (GenericWeightedEdge) it.next();
+			this.send(m, e.endNode);
+
+			if (em.nextHop == e.endNode.ID) {
+				edgeToTarget = e;
+			}
+		}
+
+		statistics.countBroadcastEv(edgeToTarget);
+	}
+
+	@Override
+	public void sendUnicastMsg(Message msg, Node n, boolean fwd) {
+		
+		if(fwd){
+			this.send(msg, n);
+			return;
+		}
+		
+		if (msg instanceof BetEtxHelloMessage) {
+			BetEtxHelloMessage m = (BetEtxHelloMessage) msg;
+			m.setHops(hops);
+			m.setPathEtx(EtxPath);
+			m.setPaths(pathsToSink);
+			m.setSinkID(sinkID);
+
+			this.send(m, n);
+			return;
+		}
+
+		if (msg instanceof BetEtxReplyMessage) {
+			this.setColor(Color.GREEN);
+			BetEtxReplyMessage m = (BetEtxReplyMessage) msg;
+			m.setSinkID(sinkID);
+			m.setEtxPath(EtxPath);
+			m.setFwdID(this.ID);
+			m.setHops(hops);
+			m.setPath(pathsToSink);
+			m.setsBet(sBet);
+			m.setSenderID(this.ID);
+			m.setSendTo(nextHop);
+			m.setSendToNodes(neighbors);
+
+			this.send(m, n);
+			return;
+		}
+		
+	}
+
+	@Override
+	public void broadcastMsg(Message msg, boolean fwd) {
+
+		if(fwd){
+			broadcast(msg);
+			statistics.countBroadcastTree();
+			return;
+		}
+		
+		if (msg instanceof BetEtxHelloMessage) {
+			BetEtxHelloMessage m = (BetEtxHelloMessage) msg;
+			m.setHops(hops);
+			m.setPathEtx(EtxPath);
+			m.setPaths(pathsToSink);
+			m.setSinkID(sinkID);
+
+			broadcast(m);
+			
+			statistics.countBroadcastTree();
+			return;
+		}
+
+		if (msg instanceof BetEtxReplyMessage) {
+			this.setColor(Color.GREEN);
+			BetEtxReplyMessage m = (BetEtxReplyMessage) msg;
+			m.setSinkID(sinkID);
+			m.setEtxPath(EtxPath);
+			m.setFwdID(this.ID);
+			m.setHops(hops);
+			m.setPath(pathsToSink);
+			m.setsBet(sBet);
+			m.setSenderID(this.ID);
+			m.setSendTo(nextHop);
+			m.setSendToNodes(neighbors);
+
+			broadcast(m);
+			
+			statistics.countBroadcastTree();
+			
+			return;
+		}
+
+		if(msg instanceof EventMessage){
+			broadcastWithNack(msg);
+		}
+
+	}
+
+	@Override
+	public void handleEvent(Inbox inbox, EventMessage msg) {
+		// TODO Auto-generated method stub
+		if ((msg.getNextHop() == 1) && (this.ID == 1)) {
+			statistics.countEvReceived(inbox.getArrivingTime());
+			statistics.IncomingEvents(msg.idSender, 
+					Tools.getGlobalTime() - msg.firedTime);
+			return;
+		}
+
+		if (msg.getNextHop() == this.ID) {
+			this.setColor(Color.ORANGE);
+			msg.setNextHop(nextHop);
+			GenericMessageTimer mt = new GenericMessageTimer(msg);
+			mt.startRelative(0.01, this);
+		}
+	}
+
+	@Override
+	public StatisticsNode getStatisticNode() {
+		return this.statistics;
+	}
+
+	@Override
+	public int getHops() {
+		return hops;
 	}
 
 }

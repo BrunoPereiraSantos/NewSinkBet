@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 
-import Analises.InterfaceEventTest;
+import Analises.InterfaceRequiredMethods;
 import Analises.StatisticsNode;
 import projects.Ett.nodes.messages.EttHelloMessage;
 import projects.Ett.nodes.nodeImplementations.NodeRoleRate;
@@ -24,7 +24,7 @@ import sinalgo.nodes.messages.NackBox;
 import sinalgo.runtime.Global;
 import sinalgo.tools.Tools;
 
-public class NodeEtt extends Node implements InterfaceEventTest {
+public class NodeEtt extends Node implements InterfaceRequiredMethods {
 	// Qual o papel do nodo
 	private NodeRoleRate role;
 
@@ -259,6 +259,8 @@ public class NodeEtt extends Node implements InterfaceEventTest {
 				Tools.getGlobalTime() + timeStartEvents, 0);
 		GenericMessageTimer t = new GenericMessageTimer(em);
 		t.startRelative(timeStartEvents, this);
+		
+		statistics.countAmountSentMsg();
 	}
 
 	@Override
@@ -284,21 +286,34 @@ public class NodeEtt extends Node implements InterfaceEventTest {
 	}
 
 	@Override
-	public void sendUnicastMsg(Message msg, Node n) {
-		// TODO Auto-generated method stub
+	public void sendUnicastMsg(Message msg, Node n, boolean fwd) {
+		if(fwd){
+			this.send(msg, n);
+			return;
+		}
+		
+		
 		if (msg instanceof EttHelloMessage) {
 			EttHelloMessage m = (EttHelloMessage) msg;
 			m.setHops(hops);
 			m.setSinkID(sinkID);
 
-			broadcast(m);
+			this.send(m, n);
 
 			// statistics.countBroadcastTree();
+			return;
 		}
 	}
 
 	@Override
-	public void broadcastMsg(Message msg) {
+	public void broadcastMsg(Message msg, boolean fwd) {
+		
+		if(fwd){
+			broadcast(msg);
+			statistics.countBroadcastTree();
+			return;
+		}
+		
 		if (msg instanceof EttHelloMessage) {
 			EttHelloMessage m = (EttHelloMessage) msg;
 			m.setHops(hops);
@@ -308,6 +323,10 @@ public class NodeEtt extends Node implements InterfaceEventTest {
 			broadcast(m);
 			
 			statistics.countBroadcastTree();
+		}
+		
+		if(msg instanceof EventMessage){
+			broadcastWithNack(msg);
 		}
 
 	}

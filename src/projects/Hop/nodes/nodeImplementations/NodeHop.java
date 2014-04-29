@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 
-import Analises.InterfaceEventTest;
+import Analises.InterfaceRequiredMethods;
 import Analises.StatisticsNode;
 import projects.Hop.nodes.messages.HopHelloMessage;
 import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
@@ -23,7 +23,7 @@ import sinalgo.runtime.Global;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
 
-public class NodeHop extends Node implements InterfaceEventTest {
+public class NodeHop extends Node implements InterfaceRequiredMethods {
 	// Qual o papel do nodo
 	private NodeRoleHop role;
 
@@ -176,8 +176,7 @@ public class NodeHop extends Node implements InterfaceEventTest {
 
 			this.setColor(Color.BLUE);
 
-			HopHelloMessage hellomsg = new HopHelloMessage();
-			GenericMessageTimer mt = new GenericMessageTimer(hellomsg);
+			GenericMessageTimer mt = new GenericMessageTimer(new HopHelloMessage());
 			mt.startRelative(Global.currentTime + 1, this);
 		}
 	}
@@ -247,6 +246,8 @@ public class NodeHop extends Node implements InterfaceEventTest {
 				Tools.getGlobalTime() + timeStartEvents, 0);
 		GenericMessageTimer t = new GenericMessageTimer(em);
 		t.startRelative(timeStartEvents, this);
+		
+		statistics.countAmountSentMsg();
 	}
 
 	@Override
@@ -269,20 +270,31 @@ public class NodeHop extends Node implements InterfaceEventTest {
 		statistics.countBroadcastEv(edgeToTarget);
 	}
 
-	public void sendUnicastMsg(Message msg, Node receiver) {
+	public void sendUnicastMsg(Message msg, Node receiver, boolean fwd) {
+		if(fwd){
+			this.send(msg, receiver);
+			return;
+		}
 		// TODO Auto-generated method stub
 		if (msg instanceof HopHelloMessage) {
 			HopHelloMessage m = (HopHelloMessage) msg;
 			m.setHops(hops);
 			m.setSinkID(sinkID);
 
-			broadcast(m);
-
+			this.send(m, receiver);
+			return;
 			// statistics.countBroadcastTree();
 		}
 	}
 
-	public void broadcastMsg(Message msg) {
+	public void broadcastMsg(Message msg, boolean fwd) {
+		
+		if(fwd){
+			broadcast(msg);
+			statistics.countBroadcastTree();
+			return;
+		}
+		
 		if (msg instanceof HopHelloMessage) {
 			HopHelloMessage m = (HopHelloMessage) msg;
 			m.setHops(hops);
@@ -291,6 +303,11 @@ public class NodeHop extends Node implements InterfaceEventTest {
 			broadcast(m);
 
 			statistics.countBroadcastTree();
+			return;
+		}
+
+		if(msg instanceof EventMessage){
+			broadcastWithNack(msg);
 		}
 
 	}

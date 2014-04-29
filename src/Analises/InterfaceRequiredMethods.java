@@ -6,7 +6,7 @@ import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 
-public interface InterfaceEventTest {
+public interface InterfaceRequiredMethods {
 	/**
 	 * É necessario implementar para saber se os nodos iniciam com o modelo de 
 	 * confiabilidade do tipo Reliability
@@ -37,15 +37,19 @@ public interface InterfaceEventTest {
 	/**
 	 * Faz o envio unicast de uma mensagem
 	 * @param m mensagem a ser enviada
-	 * @param n no de destino para a menssagem 
+	 * @param n no de destino para a menssagem
+	 * @param fwd se true o nodo deve somente encaminhar a mensagem,
+	 * caso contrário o nodo deve atualizar as informacoes do pacote  
 	 */
-	void sendUnicastMsg(Message m, Node n);
+	void sendUnicastMsg(Message m, Node n, boolean fwd);
 	
 	/**
 	 * Faz um broadcast comum da mensagem
 	 * @param m mensagem que deve ser enviada por broadcast
+	 * @param fwd se true o nodo deve somente encaminhar a mensagem,
+	 * caso contrário o nodo deve atualizar as informacoes do pacote
 	 */
-	void broadcastMsg(Message m);
+	void broadcastMsg(Message m, boolean fwd);
 	
 	/**
 	 * Manipulador para eventos, recebe um evento e verifica se o nodo é o destinatário da mensagem. Caso seja envaminha para o nextHop,

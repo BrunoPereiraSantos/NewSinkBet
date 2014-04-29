@@ -38,7 +38,7 @@
 		<canReceiveMultiplePacketsInParallel value="true" />
 
 		<!--The default type of edges to be used-->
-		<edgeType value="BaseTest:MyEdge" />
+		<edgeType value="GenericWeightedEdge" />
 
 		<!--If set to true, the application exits as soon as the termination criteria is met. This flag only affects the GUI mode.-->
 		<exitOnTerminationInGUI value="false" />
@@ -250,6 +250,6 @@
 
 <NodeEvents percent="50"/> 
 		
-</Custom>
+	</Custom>
 </Document>
 

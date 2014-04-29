@@ -7,7 +7,6 @@ public class BetHopHelloMessage extends Message {
 	private int hops; //numero de hops do nodo que o enviou o pacote
 	private int paths; //numeros de caminho do nodo que o enviou o pacote
 	private int sinkID; // ID do sink
-	private float pathEtx; // ETX do caminho percorrido pela msg
 	
 	
 	
@@ -18,12 +17,11 @@ public class BetHopHelloMessage extends Message {
 	 * @param sinkID
 	 * @param pathEtx
 	 */
-	public BetHopHelloMessage(int hops, int paths, int sinkID, float pathEtx) {
+	public BetHopHelloMessage(int hops, int paths, int sinkID) {
 		super();
 		this.hops = hops;
 		this.paths = paths;
 		this.sinkID = sinkID;
-		this.pathEtx = pathEtx;
 	}
 
 
@@ -38,7 +36,7 @@ public class BetHopHelloMessage extends Message {
 	@Override
 	public Message clone() {
 		// TODO Auto-generated method stub
-		return new BetHopHelloMessage(hops, paths, sinkID, pathEtx);
+		return new BetHopHelloMessage(hops, paths, sinkID);
 	}
 
 	@Override
@@ -46,20 +44,10 @@ public class BetHopHelloMessage extends Message {
 		return "BetEtxHelloMessage [hops=" + hops + 
 				"\n path=" + paths+ 
 				"\n sinkID=" + sinkID + 
-				"\n pathEtx=" + pathEtx + "]";
+				"]";
 	}
 
 	
-
-	public float getPathEtx() {
-		return pathEtx;
-	}
-
-
-	public void setPathEtx(float pathEtx) {
-		this.pathEtx = pathEtx;
-	}
-
 
 	public int getHops() {
 		return hops;

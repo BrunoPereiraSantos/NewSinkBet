@@ -38,7 +38,7 @@ package projects.defaultProject.nodes.timers;
 
 import projects.Hop.nodes.nodeImplementations.NodeHop;
 import projects.defaultProject.nodes.messages.EventMessage;
-import Analises.InterfaceEventTest;
+import Analises.InterfaceRequiredMethods;
 import Analises.StatisticsNode;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Message;
@@ -49,8 +49,9 @@ import sinalgo.nodes.timers.Timer;
  * The message may be unicast to a specific node or broadcast. 
  */
 public class GenericMessageTimer extends Timer {
-	private Node receiver; // the receiver of the message, null if the message should be broadcast
-	private Message msg; // the message to be sent
+	private Node receiver; 
+	private Message msg; 
+	private boolean fwd;
 	
 	/**
 	 * Creates a new MessageTimer object that unicasts a message to a given receiver when the timer fires.
@@ -60,29 +61,54 @@ public class GenericMessageTimer extends Timer {
 	 * @param msg The message to be sent when this timer fires.
 	 * @param receiver The receiver of the message.
 	 */
-	public GenericMessageTimer(Message msg, Node receiver) {
+	public GenericMessageTimer(Message msg, Node receiver, boolean fwd) {
 		this.msg = msg;
 		this.receiver = receiver;
+		this.fwd = fwd;
 	}
 	
 	/**
 	 * Creates a MessageTimer object that broadcasts a message when the timer fires.
 	 *
 	 * @param msg The message to be sent when this timer fires.
+	 * @param fwd se true o nodo deve somente encaminhar a mensagem,
+	 * caso contrário o nodo deve atualizar as informacoes do pacote
+	 */
+	public GenericMessageTimer(Message msg, boolean fwd) {
+		this.msg = msg;
+		this.receiver = null; // indicates broadcasting
+		this.fwd = fwd;
+	}
+	
+	/**
+	 * Creates a MessageTimer object that broadcasts a message when the timer fires.
+	 *
+	 * @param msg The message to be sent when this timer fires.
+	 * @param fwd se true o nodo deve somente encaminhar a mensagem,
+	 * caso contrário o nodo deve atualizar as informacoes do pacote
 	 */
 	public GenericMessageTimer(Message msg) {
 		this.msg = msg;
 		this.receiver = null; // indicates broadcasting
+		this.fwd = false;
 	}
+	
 	
 	@Override
 	public void fire() {
-		if(receiver != null) { // there's a receiver => unicast the message
-			((InterfaceEventTest) this.node ).sendUnicastMsg(this.msg, this.receiver);
-		} else  if(this.msg instanceof EventMessage){ // there's no reciever => broadcast the message
-			((InterfaceEventTest) this.node).broadcastWithNack(this.msg);;
+		
+		if(receiver != null){
+			((InterfaceRequiredMethods) this.node ).sendUnicastMsg(this.msg, this.receiver, fwd);
 		}else{
-			((InterfaceEventTest) this.node).broadcastMsg(this.msg);
+			((InterfaceRequiredMethods) this.node).broadcastMsg(this.msg, fwd);
 		}
+		
+		/*if(receiver != null) { // there's a receiver => unicast the message
+			((InterfaceRequiredMethods) this.node ).sendUnicastMsg(this.msg, this.receiver);
+		} else  if(this.msg instanceof EventMessage){ // there's no reciever => broadcast the message
+			((InterfaceRequiredMethods) this.node).broadcastWithNack(this.msg);;
+		}else{
+			
+		}*/
 	}
 }

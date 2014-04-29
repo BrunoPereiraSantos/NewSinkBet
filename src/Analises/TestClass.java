@@ -109,7 +109,7 @@ public class TestClass {
 		
 		it = nodesEvent.iterator();
 		while(it.hasNext()){
-			setTrafficNodes( (InterfaceEventTest) Tools.getNodeByID(it.next()), trafficDuration, distTraffic);
+			setTrafficNodes( (InterfaceRequiredMethods) Tools.getNodeByID(it.next()), trafficDuration, distTraffic);
 		}
 		
 		
@@ -126,7 +126,7 @@ public class TestClass {
 		changeReabilityModel();
 	}
 	
-	private void selectNodeEvent(InterfaceEventTest n){
+	private void selectNodeEvent(InterfaceRequiredMethods n){
 		n.sentEventRelative(1.);
 	}
 	
@@ -135,7 +135,7 @@ public class TestClass {
 	 * @param duration, duracao que vai levar aquele tráfego
 	 * @param dist, distribuição que indica qual a taxa aquele nodo vai enviar, esta taxa é dada como números de eventos a cada 60s
 	 */
-	private void setTrafficNodes(InterfaceEventTest n, double duration,
+	private void setTrafficNodes(InterfaceRequiredMethods n, double duration,
 			Distribution dist) {
 		if (dist instanceof UniformDistribution) {
 			int rate = (int) dist.nextSample();
@@ -160,9 +160,9 @@ public class TestClass {
 	
 	public static void changeReabilityModel(){
 		Iterator<Node> it = Tools.getNodeList().iterator();
-		InterfaceEventTest n;
+		InterfaceRequiredMethods n;
 		while(it.hasNext()){
-			n = (InterfaceEventTest) it.next();
+			n = (InterfaceRequiredMethods) it.next();
 			n.changeRequirements();
 		}
 	}

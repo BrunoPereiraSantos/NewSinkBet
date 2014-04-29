@@ -17,8 +17,8 @@ system("java -cp binaries/bin sinalgo.Run " .
 #"mobility=false ".
 #"interference=true ".
 "dimX=2400 dimY=2400 dimZ=0 ".
-#"GeometricNodeCollection/rMax=100 ".
-#"UDG/rMax=100 ".
+"GeometricNodeCollection/rMax=796 ".
+"UDG/rMax=796 ".
 #"Node/defaultSize=10 ".
 #"exitAfter=true exitAfter/Rounds=$numRounds " . # number of rounds to perform & stop
 #"exitOnTerminationInGUI=true " .  # Close GUI when hasTerminated() returns true
