@@ -130,7 +130,7 @@ public class WeightEdge extends BidirectionalEdge {
 		return 1000000f;
 	}
 	
-	public String printEdgeInformation(){
+	public String printExportEdgeInformation(){
 		return startNode.ID +
 				" " + endNode.ID +
 				" " + etx +

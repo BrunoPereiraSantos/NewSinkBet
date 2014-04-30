@@ -44,8 +44,9 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 import projects.Routing.nodes.edges.WeightEdge;
+import projects.Routing.nodes.nodeImplementations.AbstractRoutingNode;
 import projects.Routing.nodes.nodeImplementations.RoutingNode;
-import projects.Routing.utilities.EdgeUtilities;
+import projects.Routing.utilities.EdgeUtility;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.gui.transformation.PositionTransformation;
@@ -76,14 +77,15 @@ import sinalgo.tools.Tools;
  */
 public class CustomGlobal extends AbstractCustomGlobal {
 
-	private int idExecution;
-	EdgeUtilities eu = new EdgeUtilities();
+	private final String edgeSourcePath = "./Topology/Edges/";
+	private final String topologySourcePath = "./Topology/";
+	private final String trafficSourcePath = "./Traffic/";
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see runtime.AbstractCustomGlobal#hasTerminated()
-	 */
+	EdgeUtility edgeUtil = new EdgeUtility(); // utilitario para exportar e
+	// importar valores das arestas
+
+	private int idExecution;
+
 	public boolean hasTerminated() {
 		return false;
 	}
@@ -298,10 +300,41 @@ public class CustomGlobal extends AbstractCustomGlobal {
 		super.customPaint(g, pt);
 	}
 
+	boolean once = true;
+
 	@Override
 	public void handleEmptyEventQueue() {
-		// TODO Auto-generated method stub
 		super.handleEmptyEventQueue();
+
+		if (once) {
+			// devo modificar o modelo de confiabilidade
+			// devo inserir os eventos para executar os testes
+
+			updateNodeConf();
+
+			once = false;
+		}
+	}
+
+	/**
+	 * MODIFIQUE SOMENTE SE SOUBER O QUE ESTA FAZENDO
+	 * 
+	 * Atualiza as configurações de um nodo chama o changeRequirements() para
+	 * cada um dos nodos que estão em execução
+	 * 
+	 * atualmente ele modifica o modelo de confiabilidade trocando de
+	 * ReabilityModel para RoutingReabilityModel
+	 */
+	private void updateNodeConf() {
+
+		Iterator<Node> it = Tools.getNodeList().iterator();
+		AbstractRoutingNode n = null;
+		while (it.hasNext()) {
+			n = (AbstractRoutingNode) it.next();
+
+			n.changeRequirements();
+
+		}
 	}
 
 	@Override
@@ -326,10 +359,22 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	}
 
 	@AbstractCustomGlobal.CustomButton(buttonText = "Read weigth edge", toolTipText = "Read from a file the weight of the edges")
-	public void ButtonEdgeValues() {
+	public void ButtonInportEdgeValues() {
 		// JOptionPane.showMessageDialog(null, "You Pressed the 'GO' button.");
 
 		loadEdgeValues();
+	}
+
+	@AbstractCustomGlobal.CustomButton(buttonText = "Export weigth edge", toolTipText = "Write in a file the weight of the edges")
+	public void ButtonExportEdgeValues() {
+		writeEdgeValues();
+	}
+
+	private void writeEdgeValues() {
+		// chava o utilitário para criar um arquivo com os referentes pesos
+		// das arestas
+		edgeUtil.exportWrite(edgeSourcePath + idExecution + "_edge_"
+				+ Tools.getNodeList().size() + ".txt");
 	}
 
 	private void loadEdgeValues() {
@@ -337,7 +382,8 @@ public class CustomGlobal extends AbstractCustomGlobal {
 
 		Tools.repaintGUI();
 		Runtime.reevaluateConnections();
-		eu.importRead("./Topology/Edges/" + idExecution + "_edge_"
+
+		edgeUtil.importRead(edgeSourcePath + idExecution + "_edge_"
 				+ Tools.getNodeList().size() + ".txt");
 	}
 

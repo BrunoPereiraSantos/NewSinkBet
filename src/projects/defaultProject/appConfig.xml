@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sinalgo>
-	<ProjectSelector windowWidth="600" windowHeight="400" lastChosenProject="Routing" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="2" />
-	<GUI windowWidth="1370" windowHeight="744" windowPosX="-2" windowPosY="0" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="true" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
-	<RandomSeed seedFromPreviousRun="-3263280707481199973" />
-	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="true" updateCheckTimeStamp="1398789868401" runCmdLineArgs="" />
-	<GenNodesDlg numNodes="9" />
+	<ProjectSelector windowWidth="600" windowHeight="400" lastChosenProject="Routing" windowPosX="-4" windowPosY="0" isMaximized="true" selectedTab="2" />
+	<GUI windowWidth="1370" windowHeight="744" windowPosX="0" windowPosY="0" isMaximized="true" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="true" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
+	<RandomSeed seedFromPreviousRun="3260296418229584465" />
+	<App lastSelectedFileDirectory="/media/bruno/Arquivos/Documentos/Bruno_cloud/Dropbox/workspace_java/NewSinkBet/Topology/" checkForUpdatesAtStartup="true" updateCheckTimeStamp="1398878315134" runCmdLineArgs="" />
+	<GenNodesDlg numNodes="100" />
 </sinalgo>
 

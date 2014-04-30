@@ -3,6 +3,7 @@ package projects.Routing.nodes.nodeImplementations;
 import java.awt.Color;
 import java.util.Iterator;
 
+import projects.Routing.models.reliabilityModels.RoutingReliabilityModel;
 import projects.Routing.nodes.edges.WeightEdge;
 import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
 import sinalgo.configuration.WrongConfigurationException;
@@ -26,8 +27,20 @@ public abstract class AbstractRoutingNode extends Node {
 	 * @throws WrongConfigurationException
 	 */
 	public void changeRequirements() throws WrongConfigurationException {
-		this.reliabilityModel = new GenericReliabilityModel();
+		this.reliabilityModel = new RoutingReliabilityModel();
 		System.out.println(this.getReliabilityModel());
+	}
+
+	/**
+	 * Insere PackEvents para utilizarem a arvore de roteamento
+	 * 
+	 * @param durationTime
+	 *            tempo de duração dos shots
+	 * @param shots
+	 *            quantidades de packevent a ser inserido
+	 */
+	public void setTraffic(double durationTime, int shots) {
+
 	}
 
 	/*
@@ -40,7 +53,8 @@ public abstract class AbstractRoutingNode extends Node {
 	/**
 	 * Envia uma mensagem (Unicast) para cada um dos vizinhos do dono.
 	 * 
-	 * @param m mensagem a ser enviada
+	 * @param m
+	 *            mensagem a ser enviada
 	 */
 	public void processBroadcastMsgWithNack(Message m) {
 		WeightEdge edge = null;
@@ -55,6 +69,6 @@ public abstract class AbstractRoutingNode extends Node {
 		this.setColor(Color.GRAY);
 	}
 	/*
-	 * Inicio dos metodos de Radio
+	 * Fim dos metodos de Radio
 	 */
 }

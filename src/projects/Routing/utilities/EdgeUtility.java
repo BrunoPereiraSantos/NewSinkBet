@@ -4,16 +4,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Scanner;
 
 import projects.Routing.nodes.edges.WeightEdge;
+import sinalgo.configuration.Configuration;
 import sinalgo.io.positionFile.PositionFileIO.PositionFileException;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.tools.Tools;
 
-public class EdgeUtilities implements UtilitiesInterface {
+public class EdgeUtility implements UtilityInterface {
 
 	private static final String separator = "#####----- start Edges -----#####";
 
@@ -104,7 +106,38 @@ public class EdgeUtilities implements UtilitiesInterface {
 	
 	@Override
 	public void exportWrite(String path) {
-		// TODO Auto-generated method stub
+		try {
+			PrintStream ps = new PrintStream(path);
+			ps.println("Number of nodes: " + Tools.getNodeList().size());
+			Configuration.printConfiguration(ps);
+			ps.println(separator);
+			
+			
+			Iterator<Node> it = Tools.getNodeList().iterator();
+			Iterator<Edge> eIt;
+			Edge e;
+ 			Node n;
+			while(it.hasNext()){
+				n = it.next();
+				eIt = n.outgoingConnections.iterator();
+				while(eIt.hasNext()){
+					e = eIt.next();
+					
+					ps.println(((WeightEdge) e).printExportEdgeInformation());
+				}
+			}
+			/*for(Node n : Tools.getNodeList()) {
+				Position p = n.getPosition();
+				ps.println(p.xCoord + ", " + p.yCoord + ", " + p.zCoord);
+			}*/
+			
+			
+			ps.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			Tools.minorError(e.getMessage());
+		}
 
 	}
 
