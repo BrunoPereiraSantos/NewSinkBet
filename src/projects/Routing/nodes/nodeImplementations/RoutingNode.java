@@ -22,6 +22,7 @@ import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
+import sinalgo.nodes.messages.NackBox;
 import sinalgo.runtime.Global;
 
 public class RoutingNode extends AbstractRoutingNode {
@@ -81,7 +82,7 @@ public class RoutingNode extends AbstractRoutingNode {
 			if (m instanceof PackHello) {
 				PackHello msg = (PackHello) m;
 
-				System.out.println("-------------MSG arrive------------------");
+				System.out.println("-------------MSG Hello arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
@@ -94,7 +95,7 @@ public class RoutingNode extends AbstractRoutingNode {
 			} else if (m instanceof PackReply) {
 				PackReply msg = (PackReply) m;
 
-				System.out.println("-------------MSG arrive------------------");
+				System.out.println("-------------MSG Reply arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
@@ -106,12 +107,39 @@ public class RoutingNode extends AbstractRoutingNode {
 
 			} else if (m instanceof PackEvent) {
 				PackEvent msg = (PackEvent) m;
+				
+				System.out.println("-------------MSG Event arrive------------------");
+				System.out.println("Conteúdo: " + msg.toString());
+				System.out.println("De: " + inbox.getSender().ID);
+				System.out.println("Para: " + inbox.getReceiver().ID);
+				System.out.println("Saiu em: " + inbox.getSendingTime());
+				System.out.println("Chegou em: " + inbox.getArrivingTime());
+				System.out.println("-------------MSG END------------------");
 
 				protocol.interceptPackEvent(inbox, msg);
 			}
 
 		}
 
+	}
+
+	@Override
+	public void handleNAckMessages(NackBox nackBox) {
+		while (nackBox.hasNext()) {
+			Message m = nackBox.next();
+			if (m instanceof PackEvent) {
+				PackEvent msg = (PackEvent) m;
+				System.out.println("-------------NACK arrive------------------");
+				System.out.println("Conteúdo: " + msg.toString());
+				System.out.println("De: " + nackBox.getSender().ID);
+				System.out.println("Para: " + nackBox.getReceiver().ID);
+				System.out.println("Saiu em: " + nackBox.getSendingTime());
+				System.out.println("Chegou em: " + nackBox.getArrivingTime());
+				System.out.println("-------------MSG END------------------");
+				
+				protocol.interceptNack(nackBox, msg);
+			}
+		}
 	}
 
 	@Override
@@ -261,6 +289,12 @@ public class RoutingNode extends AbstractRoutingNode {
 			((PackReply) m).setsBet(sBet);
 			((PackReply) m).setFwdID(this.ID);
 
+			broadcast(m);
+		}
+		
+		if(m instanceof PackEvent){
+			((PackEvent) m).setNextHop(nextHop);
+			
 			broadcast(m);
 		}
 

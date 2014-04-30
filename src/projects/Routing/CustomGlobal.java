@@ -49,7 +49,6 @@ import projects.Routing.utilities.EdgeUtilities;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.gui.transformation.PositionTransformation;
-import sinalgo.io.positionFile.PositionFileIO;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
