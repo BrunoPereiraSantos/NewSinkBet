@@ -11,6 +11,7 @@ import projects.Routing.nodes.timers.RoutingMessageTimer;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.tools.Tools;
+import sinalgo.tools.statistics.UniformDistribution;
 
 public class SinkBetweennessProtocol extends Protocol {
 
@@ -89,7 +90,7 @@ public class SinkBetweennessProtocol extends Protocol {
 
 			System.out.println("Entrei no foi send hello" + receiver.ID);
 			receiver.fhp = new RoutingMessageTimer(msg, true);
-			receiver.fhp.startRelative(receiver.hops, receiver);
+			receiver.fhp.startRelative(waitingTimeHello(receiver.hops), receiver);
 			receiver.sentMyHello = true;
 		}
 
@@ -100,23 +101,31 @@ public class SinkBetweennessProtocol extends Protocol {
 
 			System.out.println("Entrei no send reply" + receiver.ID);
 			receiver.frp = new RoutingMessageTimer(new PackReply(), true);
-			receiver.frp.startRelative((float) waitingTime(receiver.hops),
+			receiver.frp.startRelative((float) waitingTimeReply(receiver.hops),
 					receiver);
 			receiver.sentMyReply = true;
 		}
 
 	}
 
-	private float waitingTime(int x) {
+	private float waitingTimeHello(int x) {
 		// atraso para enviar o pacote [referencia artigo do Eduardo]
-
-		float waitTime = 0.0f;
+		UniformDistribution r = new UniformDistribution(0, 1);
+		return (float) (x +  r.nextSample());
+	}
+	
+	private float waitingTimeReply(int x) {
+		// atraso para enviar o pacote [referencia artigo do Eduardo]
+		UniformDistribution r = new UniformDistribution(0, 1);
+		return (float) (1/(Math.sqrt(x) * Math.pow(10, -3)) + r.nextSample());
+		
+		/*float waitTime = 0.0f;
 		// waitTime = 1 / (Math.exp(this.hops) * Math.pow(10, -20));
 		// waitTime = 1 / (this.hops * (Math.pow(5, -3.3)));
 		waitTime = (float) Math.pow(5, 3.3) / x;
 		// System.out.println(waitTime);
 		return (float) waitTime + 100; // o flood somente inicia apos o tempo
-										// 100
+										// 100*/
 	}
 
 	@Override

@@ -157,7 +157,7 @@ public class CustomGlobal extends AbstractCustomGlobal{
 		super.checkProjectRequirements();
 
 		try {
-			id_execution = Configuration.getIntegerParameter("ConfigTest/ID");
+			id_execution = Configuration.getIntegerParameter("ConfigTest/idExecution");
 		} catch (CorruptConfigurationEntryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -8,11 +8,17 @@ import java.util.Map;
 import projects.Routing.nodes.messages.PackEvent;
 import projects.Routing.nodes.messages.PackHello;
 import projects.Routing.nodes.messages.PackReply;
+import projects.Routing.nodes.nodeImplementations.MetricStrategy.EttStrategy;
+import projects.Routing.nodes.nodeImplementations.MetricStrategy.EtxStrategy;
+import projects.Routing.nodes.nodeImplementations.MetricStrategy.HopStrategy;
 import projects.Routing.nodes.nodeImplementations.MetricStrategy.MtmStrategy;
 import projects.Routing.nodes.nodeImplementations.MetricStrategy.MetricStrategyInterface;
 import projects.Routing.nodes.nodeImplementations.Protocol.Protocol;
 import projects.Routing.nodes.nodeImplementations.Protocol.SinkBetweennessProtocol;
 import projects.Routing.nodes.timers.RoutingMessageTimer;
+import projects.defaultProject.models.reliabilityModels.ReliableDelivery;
+import sinalgo.configuration.Configuration;
+import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
@@ -147,12 +153,68 @@ public class RoutingNode extends AbstractRoutingNode {
 
 	@Override
 	public void checkRequirements() throws WrongConfigurationException {
-		// Devo alterar as estratégias pelo arquivo de conf.
+		// Devo utilizar as estratégias indicadas
+		// pelo arquivo xml de conf.
 
-		strategy = new MtmStrategy();
+		if (!(reliabilityModel instanceof ReliableDelivery)) {
+			// os nodos devem iniciar com entrega confiável
 
-		protocol = new SinkBetweennessProtocol();
+			this.reliabilityModel = new ReliableDelivery();
+		}
 
+		try {
+			// Set o protocolo utilizado no algoritmo
+			// caso o protocolo informado não esteja implementado
+			// será utilizado o protocolo sinkBetweenness por default
+
+			String protocolPraram = "";
+			protocolPraram = Configuration.getStringParameter("Protocol");
+
+			protocol = chosenProtocol(protocolPraram);
+
+		} catch (CorruptConfigurationEntryException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			// Set a metrica utilizada no algoritmo
+			// se a métrica não foi implementada será utilizada
+			// a métrica hop por default
+
+			String metricParam = "";
+			metricParam = Configuration.getStringParameter("Metric/strategy");
+
+			strategy = chosenStrategy(metricParam);
+		} catch (CorruptConfigurationEntryException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private Protocol chosenProtocol(String protocolPraram) {
+		ProtocolEnum p = ProtocolEnum.valueOf(protocolPraram);
+
+		switch (p) {
+		case SinkBetweenness:
+			return new SinkBetweennessProtocol();
+		default:
+			return new SinkBetweennessProtocol();
+		}
+	}
+
+	private MetricStrategyInterface chosenStrategy(String metricParam) {
+		MetricEnum m = MetricEnum.valueOf(metricParam);
+
+		switch (m) {
+		case ETX:
+			return new EtxStrategy();
+		case ETT:
+			return new EttStrategy();
+		case MTM:
+			return new MtmStrategy();
+		default:
+			return new HopStrategy();
+		}
 	}
 
 	public boolean isSentMyHello() {
@@ -208,7 +270,7 @@ public class RoutingNode extends AbstractRoutingNode {
 	public void processBroadcastMsgWithNack(Message m) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public String toString() {
 		return "RoutingNode [sinkID=" + sinkID + "\nnextHop=" + nextHop

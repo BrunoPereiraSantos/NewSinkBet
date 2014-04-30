@@ -1,5 +1,7 @@
 package projects.Routing.nodes.nodeImplementations;
 
+import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
+import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Message;
 /**
@@ -10,6 +12,17 @@ import sinalgo.nodes.messages.Message;
  */
 public abstract class AbstractRoutingNode extends Node {
 	
+	
+	/**
+	 * SOMENTE MECHA NESSE MÉTODO SE VC SABE O QUE ESTA FAZENDO
+	 * Este método pode ser utilizado para alterar 
+	 * em tempo de execução alguma das configurações iniciais.
+	 * @throws WrongConfigurationException
+	 */
+	public void changeRequirements() throws WrongConfigurationException{
+		this.reliabilityModel = new GenericReliabilityModel();
+		System.out.println(this.getReliabilityModel());
+	}
 	
 	/*
 	 * Inicio dos metodos de Radio
