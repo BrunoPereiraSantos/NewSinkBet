@@ -48,7 +48,7 @@ public class TrafficUtility implements UtilityInterface {
 				int shots = Integer.parseInt(parts[1]);
 				((AbstractRoutingNode) Tools.getNodeByID(n)).setTraffic(60.0, shots);
 				
-				//setTrafficToNode((InterfaceRequiredMethods) Tools.getNodeByID(n), 60, shots);
+				// setTrafficToNode((InterfaceRequiredMethods) Tools.getNodeByID(n), 60, shots);
 			} catch(NumberFormatException e) {
 				throw new PositionFileException("Illegal line: expected two ints, separated by comma. Found \n" + line);
 			}
