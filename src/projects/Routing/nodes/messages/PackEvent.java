@@ -36,6 +36,12 @@ public class PackEvent extends Message implements Pack {
 		this.idSender = idSender;
 		this.timeFired = timeFire;
 	}
+	
+	public PackEvent() {
+		super();
+	}
+
+
 
 	@Override
 	public float getMetric() {

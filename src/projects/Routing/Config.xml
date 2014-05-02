@@ -250,7 +250,13 @@
 
 <Metric strategy="ETX"/>
 <Protocol value="SinkBetweenness"/>
-<ConfSimulation idExecution="0"	numNodes="0"/>
-		</Custom>
+
+<ConfSimulation>
+	<idExecution value="0"/>
+	<numNodes value="0"/>
+	<traffic percentNodes="50" distribution="poisson" lambda="10"/>
+</ConfSimulation>
+
+</Custom>
 </Document>
 

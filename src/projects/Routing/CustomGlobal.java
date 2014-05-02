@@ -47,6 +47,7 @@ import projects.Routing.nodes.edges.WeightEdge;
 import projects.Routing.nodes.nodeImplementations.AbstractRoutingNode;
 import projects.Routing.nodes.nodeImplementations.RoutingNode;
 import projects.Routing.utilities.EdgeUtility;
+import projects.Routing.utilities.TrafficUtility;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.gui.transformation.PositionTransformation;
@@ -81,7 +82,6 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	private final String topologySourcePath = "./Topology/";
 	private final String trafficSourcePath = "./Traffic/";
 
-	EdgeUtility edgeUtil = new EdgeUtility(); // utilitario para exportar e
 	// importar valores das arestas
 
 	private int idExecution;
@@ -373,6 +373,8 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	private void writeEdgeValues() {
 		// chava o utilitário para criar um arquivo com os referentes pesos
 		// das arestas
+
+		EdgeUtility edgeUtil = new EdgeUtility(); // utilitario para exportar e
 		edgeUtil.exportWrite(edgeSourcePath + idExecution + "_edge_"
 				+ Tools.getNodeList().size() + ".txt");
 	}
@@ -380,11 +382,37 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	private void loadEdgeValues() {
 		// carrega valores pesos das arestas
 
+		EdgeUtility edgeUtil = new EdgeUtility(); // utilitario para exportar e
 		Tools.repaintGUI();
 		Runtime.reevaluateConnections();
 
 		edgeUtil.importRead(edgeSourcePath + idExecution + "_edge_"
 				+ Tools.getNodeList().size() + ".txt");
+	}
+
+	@AbstractCustomGlobal.CustomButton(buttonText = "Import Traffic", toolTipText = "Read in a file with traffic")
+	public void ButtonImportTraffic() {
+		loadTraffic();
+	}
+
+	private void loadTraffic() {
+		TrafficUtility tu = new TrafficUtility();
+
+		tu.importRead(trafficSourcePath + idExecution + "_traffic_"
+				+ Tools.getNodeList().size() + ".txt");
+	}
+	
+	@AbstractCustomGlobal.CustomButton(buttonText = "Export Traffic", toolTipText = "Write in a file the traffic")
+	public void ButtonExportTraffic() {
+		writeTraffic();
+	}
+
+	private void writeTraffic() {
+		TrafficUtility tu = new TrafficUtility();
+
+		tu.exportWrite(trafficSourcePath + idExecution + "_traffic_"
+				+ Tools.getNodeList().size() + ".txt");
+		
 	}
 
 	@Override
