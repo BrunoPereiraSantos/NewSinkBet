@@ -3,8 +3,11 @@ package projects.Routing.nodes.nodeImplementations;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import projects.Routing.models.energyModel.RoutingEnergyModel;
+import projects.Routing.nodes.edges.WeightEdge;
 import projects.Routing.nodes.messages.PackEvent;
 import projects.Routing.nodes.messages.PackHello;
 import projects.Routing.nodes.messages.PackReply;
@@ -18,10 +21,13 @@ import projects.Routing.nodes.nodeImplementations.Protocol.Protocol;
 import projects.Routing.nodes.nodeImplementations.Protocol.ProtocolEnum;
 import projects.Routing.nodes.nodeImplementations.Protocol.SinkBetweennessProtocol;
 import projects.Routing.nodes.timers.RoutingMessageTimer;
+import projects.Routing.utilities.Statistics;
 import projects.defaultProject.models.reliabilityModels.ReliableDelivery;
+import projects.defaultProject.nodes.messages.EventMessage;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.configuration.WrongConfigurationException;
+import sinalgo.nodes.edges.Edge;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.Message;
 import sinalgo.nodes.messages.NackBox;
@@ -76,15 +82,21 @@ public class RoutingNode extends AbstractRoutingNode {
 	public RoutingMessageTimer fhp;
 	public RoutingMessageTimer frp;
 
+	// Estatisticas
+	public Statistics statistic = new Statistics(this.ID);
+
 	@Override
 	public void handleMessages(Inbox inbox) {
 		while (inbox.hasNext()) {
 			Message m = inbox.next();
 
 			if (m instanceof PackHello) {
+				statistic.countHeardMessagesTree();
+
 				PackHello msg = (PackHello) m;
 
-				System.out.println("-------------MSG Hello arrive------------------");
+				System.out
+						.println("-------------MSG Hello arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
@@ -95,9 +107,13 @@ public class RoutingNode extends AbstractRoutingNode {
 				protocol.interceptPackHello(inbox, msg);
 
 			} else if (m instanceof PackReply) {
+
+				statistic.countHeardMessagesTree();
+
 				PackReply msg = (PackReply) m;
 
-				System.out.println("-------------MSG Reply arrive------------------");
+				System.out
+						.println("-------------MSG Reply arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
@@ -108,9 +124,14 @@ public class RoutingNode extends AbstractRoutingNode {
 				protocol.interceptPackReply(inbox, msg);
 
 			} else if (m instanceof PackEvent) {
+
+				statistic.countHeardMessagesEv((WeightEdge) inbox
+						.getIncomingEdge());
+
 				PackEvent msg = (PackEvent) m;
-				
-				System.out.println("-------------MSG Event arrive------------------");
+
+				System.out
+						.println("-------------MSG Event arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + inbox.getSender().ID);
 				System.out.println("Para: " + inbox.getReceiver().ID);
@@ -131,14 +152,15 @@ public class RoutingNode extends AbstractRoutingNode {
 			Message m = nackBox.next();
 			if (m instanceof PackEvent) {
 				PackEvent msg = (PackEvent) m;
-				System.out.println("-------------NACK arrive------------------");
+				System.out
+						.println("-------------NACK arrive------------------");
 				System.out.println("Conteúdo: " + msg.toString());
 				System.out.println("De: " + nackBox.getSender().ID);
 				System.out.println("Para: " + nackBox.getReceiver().ID);
 				System.out.println("Saiu em: " + nackBox.getSendingTime());
 				System.out.println("Chegou em: " + nackBox.getArrivingTime());
 				System.out.println("-------------MSG END------------------");
-				
+
 				protocol.interceptNack(nackBox, msg);
 			}
 		}
@@ -152,7 +174,6 @@ public class RoutingNode extends AbstractRoutingNode {
 
 	@Override
 	public void init() {
-
 		if (this.ID == 1) {
 			this.sinkID = this.ID;
 			this.nextHop = this.ID;
@@ -167,6 +188,13 @@ public class RoutingNode extends AbstractRoutingNode {
 			this.setColor(Color.BLUE);
 		}
 
+	}
+
+	@NodePopupMethod(menuText = "SendEvent")
+	public void myPopupMethod() {
+		PackEvent msg = new PackEvent(this.ID, this.nextHop, Global.currentTime + 1, 0);
+		RoutingMessageTimer timer = new RoutingMessageTimer(msg, true);
+		timer.startRelative(1, this);
 	}
 
 	@Override
@@ -186,6 +214,8 @@ public class RoutingNode extends AbstractRoutingNode {
 		// Devo utilizar as estratégias indicadas
 		// pelo arquivo xml de conf.
 
+		this.statistic = new Statistics(this.ID);
+
 		if (!(reliabilityModel instanceof ReliableDelivery)) {
 			// os nodos devem iniciar com entrega confiável
 
@@ -198,7 +228,8 @@ public class RoutingNode extends AbstractRoutingNode {
 			// será utilizado o protocolo sinkBetweenness por default
 
 			String protocolPraram = "";
-			protocolPraram = Configuration.getStringParameter("Protocol");
+			protocolPraram = Configuration
+					.getStringParameter("ConfSimulation/Protocol");
 
 			protocol = chosenProtocol(protocolPraram);
 
@@ -212,7 +243,8 @@ public class RoutingNode extends AbstractRoutingNode {
 			// a métrica hop por default
 
 			String metricParam = "";
-			metricParam = Configuration.getStringParameter("Metric/strategy");
+			metricParam = Configuration
+					.getStringParameter("ConfSimulation/Metric/strategy");
 
 			strategy = chosenStrategy(metricParam);
 		} catch (CorruptConfigurationEntryException e) {
@@ -266,6 +298,8 @@ public class RoutingNode extends AbstractRoutingNode {
 	@Override
 	public void forwardMsg(Message m) {
 		broadcast(m);
+
+		statistic.countBroadcastTree();
 	}
 
 	@Override
@@ -278,6 +312,8 @@ public class RoutingNode extends AbstractRoutingNode {
 			((PackHello) m).setSinkID(sinkID);
 
 			broadcast(m);
+
+			statistic.countBroadcastTree();
 		}
 
 		if (m instanceof PackReply) {
@@ -292,19 +328,49 @@ public class RoutingNode extends AbstractRoutingNode {
 			((PackReply) m).setFwdID(this.ID);
 
 			broadcast(m);
+			statistic.countBroadcastTree();
 		}
-		
-		if(m instanceof PackEvent){
+
+		if (m instanceof PackEvent) {
+			// a energia gasta esta implementada dentro
+			// do broadcastMsgWithNack
+
 			((PackEvent) m).setNextHop(nextHop);
-			
-			broadcast(m);
+
+			broadcastMsgWithNack(m);
 		}
 
 	}
 
 	@Override
-	public void processBroadcastMsgWithNack(Message m) {
+	public void broadcastMsgWithNack(Message m) {
+		WeightEdge edge = null, e = null;
+		Iterator<Edge> it = this.outgoingConnections.iterator();
+
+		PackEvent msg = (PackEvent) m;
+
+		while (it.hasNext()) {
+			edge = (WeightEdge) it.next();
+
+			this.send(m, edge.endNode);
+
+			if (msg.getNextHop() == edge.endNode.ID) {
+				e = edge;
+			}
+		}
+
+		statistic.countBroadcastEv(e);
+
+		this.setColor(Color.GRAY);
+	}
+
+	@Override
+	public void setTraffic(double duration, int shots) {
 		// TODO Auto-generated method stub
+		super.setTraffic(duration, shots);
+
+		statistic.setSentEvent(shots);
+
 	}
 
 	@Override

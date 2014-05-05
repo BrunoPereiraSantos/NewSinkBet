@@ -10,6 +10,9 @@ import projects.Routing.nodes.timers.RoutingMessageTimer;
 import projects.defaultProject.nodes.timers.GenericMessageTimer;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.NackBox;
+import sinalgo.runtime.Global;
+import sinalgo.runtime.Runtime;
+import sinalgo.tools.Tools;
 
 public abstract class Protocol {
 
@@ -63,6 +66,10 @@ public abstract class Protocol {
 		RoutingNode receiver = (RoutingNode) inbox.getReceiver();
 
 		if ((msg.getNextHop() == 1) && (receiver.ID == 1)) {
+			receiver.statistic.countEvReceived(inbox.getArrivingTime());
+			receiver.statistic.arriveMessage(msg.idSender, Global.currentTime
+					- msg.timeFired);
+			
 			return;
 		}
 
@@ -93,6 +100,8 @@ public abstract class Protocol {
 			msg.setNextHop(sender.nextHop);
 			RoutingMessageTimer mt = new RoutingMessageTimer(msg, true);
 			mt.startRelative(0.5, sender);
+			
+			sender.statistic.countRelayedMessages();
 		}
 	}
 }

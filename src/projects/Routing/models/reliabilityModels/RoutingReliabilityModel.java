@@ -6,7 +6,7 @@ import sinalgo.nodes.messages.Packet;
 import sinalgo.tools.statistics.UniformDistribution;
 
 public class RoutingReliabilityModel extends ReliabilityModel {
-	UniformDistribution ud = new UniformDistribution(.001, 0.99);
+	UniformDistribution ud = new UniformDistribution(.001, 1);
 	float etxLink = 0.0f;
 	
 	@Override

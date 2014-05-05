@@ -1,9 +1,11 @@
-package Analises;
+package projects.Routing.models.energyModel;
 
-import projects.defaultProject.nodes.edges.GenericWeightedEdge;
+import projects.Routing.nodes.edges.WeightEdge;
+import sinalgo.models.Model;
+import sinalgo.models.ModelType;
 
-public class EnergyModel {
-	
+public class RoutingEnergyModel extends Model {
+
 	/**
 	 * Custo = Etxelec + (Eamp * dist^alpha) + sum(Etrelec) 
 	 */
@@ -37,14 +39,12 @@ public class EnergyModel {
 		globalEnergySpend += Rx(1000000f);
 	}
 	
-	public void spendTx_Ev(GenericWeightedEdge e){
-		float d = (float) e.startNode.getPosition().distanceTo(e.endNode.getPosition());
-		float spend = Tx(e.getRateBits(), d);
-		energySpendEv += spend;
-		globalEnergySpend += spend;
+	public void spendTx_Ev(WeightEdge e){
+		energySpendEv += Tx(e.getRateBits());
+		globalEnergySpend += Tx(e.getRateBits());
 	}
 	
-	public void spendRx_Ev(GenericWeightedEdge e){
+	public void spendRx_Ev(WeightEdge e){
 		energySpendEv += Rx(e.getRateBits());
 		globalEnergySpend += Rx(e.getRateBits());
 	}
@@ -54,11 +54,7 @@ public class EnergyModel {
 	}
 	
 	private float Tx(float b){
-		return (float) (Ptxelec/(b * Eamp * Math.pow(dist, alpha)));
-	}
-	
-	private float Tx(float b, float d){
-		return (float) (Ptxelec/(b * Eamp * Math.pow(d, alpha)));
+		return Ptxelec/b * Eamp * dist;
 	}
 	
 	public static float getGlobalEnergySpend() {
@@ -66,7 +62,7 @@ public class EnergyModel {
 	}
 
 	public static void setGlobalEnergySpend(float globalEnergySpend) {
-		EnergyModel.globalEnergySpend = globalEnergySpend;
+		RoutingEnergyModel.globalEnergySpend = globalEnergySpend;
 	}
 	
 	public float getEnergySpendEv() {
@@ -137,7 +133,18 @@ public class EnergyModel {
 	public String toString() {
 		return "	" +  String.format("%.9f", energySpendTree) + "	" + String.format("%.9f", energySpendEv);
 	}
+
+	
+	/*
+	 * MODIFICAR CASO EVENTUALMENTE EU O IMPLEMENTE DENTRO DO SIMULADOR
+	 */
+	@Override
+	public ModelType getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	
+
 }

@@ -50,7 +50,7 @@
 		<refreshRate value="1" />
 
 		<!--If set to true, the framework will inform a sender whenever  a unicast message is dropped. In synchronous mode, the sender  is informed in the round after the message should have arrived, and  immediately upon arrival in asynchronous mode.-->
-		<generateNAckMessages value="false" />
+		<generateNAckMessages value="true" />
 
 		<!--This flag only affects the asynchronous simulation mode.  When set to true, the framework calls handleEmptyEventQueue  on the project specific CustomGlobal whenever the event queue  becomes empty.-->
 		<handleEmptyEventQueue value="true" />
@@ -253,10 +253,12 @@
 
 <ConfSimulation>
 	<idExecution value="0"/>
+	<Protocol value="SinkBetweenness"/>
+	<Metric strategy="HOP"/>
 	<numNodes value="0"/>
 	<traffic percentNodes="50" distribution="poisson" lambda="10"/>
 </ConfSimulation>
 
-</Custom>
+	</Custom>
 </Document>
 

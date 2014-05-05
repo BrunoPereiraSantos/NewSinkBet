@@ -8,6 +8,7 @@ import projects.Routing.nodes.edges.WeightEdge;
 import projects.Routing.nodes.messages.PackEvent;
 import projects.Routing.nodes.timers.RoutingMessageTimer;
 import projects.defaultProject.models.reliabilityModels.GenericReliabilityModel;
+import projects.defaultProject.nodes.messages.EventMessage;
 import sinalgo.configuration.WrongConfigurationException;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.edges.Edge;
@@ -77,18 +78,7 @@ public abstract class AbstractRoutingNode extends Node {
 	 * @param m
 	 *            mensagem a ser enviada
 	 */
-	public void processBroadcastMsgWithNack(Message m) {
-		WeightEdge edge = null;
-		Iterator<Edge> it = this.outgoingConnections.iterator();
-
-		while (it.hasNext()) {
-			edge = (WeightEdge) it.next();
-
-			this.send(m, edge.endNode);
-		}
-
-		this.setColor(Color.GRAY);
-	}
+	public abstract void broadcastMsgWithNack(Message m);
 	/*
 	 * Fim dos metodos de Radio
 	 */

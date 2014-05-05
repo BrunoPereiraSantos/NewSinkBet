@@ -300,7 +300,8 @@ public class CustomGlobal extends AbstractCustomGlobal {
 		super.customPaint(g, pt);
 	}
 
-	boolean once = true;
+	boolean once = true , exec1xLog = true;
+	
 
 	@Override
 	public void handleEmptyEventQueue() {
@@ -311,9 +312,23 @@ public class CustomGlobal extends AbstractCustomGlobal {
 			// devo inserir os eventos para executar os testes
 
 			updateNodeConf();
-
+			
+			loadTraffic();
+			
 			once = false;
+		}else if (exec1xLog){
+			
+			
+			printLog();
+			
+			exec1xLog = false;
 		}
+	}
+
+	private void printLog() {
+		
+		 System.out.println( ((RoutingNode)Tools.getNodeByID(1)).statistic.printStatisticsPerNode());
+		 //((RoutingNode)Tools.getNodeByID(1)).statistic.exportWrite("");
 	}
 
 	/**
@@ -341,6 +356,10 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	public void onExit() {
 		// TODO Auto-generated method stub
 		super.onExit();
+		
+		if(Tools.getNodeList().size() > 0){
+			( (RoutingNode) Tools.getNodeByID(1)).statistic.printStatisticsPerNode();
+		}
 	}
 
 	@Override
