@@ -192,9 +192,7 @@ public class RoutingNode extends AbstractRoutingNode {
 
 	@NodePopupMethod(menuText = "SendEvent")
 	public void myPopupMethod() {
-		PackEvent msg = new PackEvent(this.ID, this.nextHop, Global.currentTime + 1, 0);
-		RoutingMessageTimer timer = new RoutingMessageTimer(msg, true);
-		timer.startRelative(1, this);
+		setTraffic(1, 1);
 	}
 
 	@Override
@@ -231,7 +229,11 @@ public class RoutingNode extends AbstractRoutingNode {
 			protocolPraram = Configuration
 					.getStringParameter("ConfSimulation/Protocol");
 
-			protocol = chosenProtocol(protocolPraram);
+			double timeInAgreggation = 0.001;
+			timeInAgreggation = Configuration
+					.getDoubleParameter("ConfSimulation/Protocol/timeInAgreggation");
+
+			protocol = chosenProtocol(protocolPraram, timeInAgreggation);
 
 		} catch (CorruptConfigurationEntryException e1) {
 			e1.printStackTrace();
@@ -253,14 +255,15 @@ public class RoutingNode extends AbstractRoutingNode {
 
 	}
 
-	private Protocol chosenProtocol(String protocolPraram) {
+	private Protocol chosenProtocol(String protocolPraram,
+			double timeInAgreggation) {
 		ProtocolEnum p = ProtocolEnum.valueOf(protocolPraram);
 
 		switch (p) {
 		case SinkBetweenness:
-			return new SinkBetweennessProtocol();
+			return new SinkBetweennessProtocol(timeInAgreggation);
 		default:
-			return new SinkBetweennessProtocol();
+			return new SinkBetweennessProtocol(timeInAgreggation);
 		}
 	}
 
@@ -338,6 +341,8 @@ public class RoutingNode extends AbstractRoutingNode {
 			((PackEvent) m).setNextHop(nextHop);
 
 			broadcastMsgWithNack(m);
+			
+			protocol.setInAgregation(false);
 		}
 
 	}
@@ -369,7 +374,7 @@ public class RoutingNode extends AbstractRoutingNode {
 		// TODO Auto-generated method stub
 		super.setTraffic(duration, shots);
 
-		statistic.setSentEvent(shots);
+		statistic.setSentEvent(statistic.getSentEvent() + shots);
 
 	}
 

@@ -253,7 +253,7 @@
 
 <ConfSimulation>
 	<idExecution value="0"/>
-	<Protocol value="SinkBetweenness"/>
+	<Protocol value="SinkBetweenness" timeInAgreggation="0.001"/>
 	<Metric strategy="HOP"/>
 	<numNodes value="0"/>
 	<traffic percentNodes="50" distribution="poisson" lambda="10"/>

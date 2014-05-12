@@ -279,10 +279,6 @@ public class CustomGlobal extends AbstractCustomGlobal {
 		n.finishInitializationWithDefaultModels(true);
 		myNodes.add(n);
 
-		n = new RoutingNode();
-		n.setPosition(400, 600, 0);
-		n.finishInitializationWithDefaultModels(true);
-		myNodes.add(n);
 		// Repaint the GUI as we have added some nodes
 		Tools.repaintGUI();
 
@@ -313,7 +309,7 @@ public class CustomGlobal extends AbstractCustomGlobal {
 
 			updateNodeConf();
 			
-			loadTraffic();
+			//loadTraffic();
 			
 			once = false;
 		}else if (exec1xLog){

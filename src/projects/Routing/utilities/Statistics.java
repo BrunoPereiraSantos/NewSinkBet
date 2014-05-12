@@ -40,7 +40,9 @@ public class Statistics implements UtilityInterface {
 	static int GlobalrelayedMessages; // quantidade de mensagens retransmitidas
 	// (Global)
 	static int GlobalDropMessages;// quantidade de mensagens perdidas (Global)
-
+	
+	private int aggregateMsg;// quantidade de mensagens agregradas
+	
 	RoutingEnergyModel energy; // modelo de energia para cada nodo
 
 	Map<Integer, ArrayList<Double>> incomingEvents; // Key=id do nodo
@@ -60,6 +62,7 @@ public class Statistics implements UtilityInterface {
 		GlobalDropMessages = 0;
 		energy = new RoutingEnergyModel();
 		sentEvent = 0;
+		aggregateMsg = 0;
 
 		if (id == 1) {
 			incomingEvents = new HashMap<Integer, ArrayList<Double>>();
@@ -221,6 +224,19 @@ public class Statistics implements UtilityInterface {
 		this.sentEvent++;
 	}
 
+	
+	public void countAggregateMsg() {
+		this.aggregateMsg++;
+	}
+	
+	public int getAggregateMsg() {
+		return aggregateMsg;
+	}
+
+	public void setAggregateMsg(int aggregateMsg) {
+		this.aggregateMsg = aggregateMsg;
+	}
+
 	/**
 	 * Faz a media para uma lista de valores
 	 * 
@@ -355,14 +371,14 @@ public class Statistics implements UtilityInterface {
 					+ "	"
 					+ (n.statistic.heardMessagesTree + n.statistic.heardMessagesEv)
 					+ "	" + n.statistic.sentEvent 
-					+ "	" + n.statistic.relayedMessages;
+					+ "	" + n.statistic.relayedMessages
+					+ "	" + n.statistic.aggregateMsg;
 			
 					if(nodeOne.statistic.incomingEvents.containsKey(n.ID)){
-						str += "	" + averageSimple(nodeOne.statistic.incomingEvents.get(n.ID));
-						str += "	" + nodeOne.statistic.incomingEvents.get(n.ID).size();
+						str += "	" + String.format("%.3f",
+								averageSimple(nodeOne.statistic.incomingEvents.get(n.ID)));
 					}else{
-						str += "	0.0";
-						str += "	0.0";
+						str += "	0.000";
 					}
 					
 					

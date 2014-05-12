@@ -16,6 +16,18 @@ import sinalgo.tools.Tools;
 
 public abstract class Protocol {
 
+	
+	private boolean inAgregation = false;
+	protected double timeInAgregation = 0.001;
+	
+	/**
+	 * @param timeInAgregation
+	 */
+	public Protocol(double timeInAgregation) {
+		super();
+		this.timeInAgregation = timeInAgregation;
+	}
+
 	/**
 	 * Ao interceptar uma mensagem do tipo Hello o protocolo deve seguir os
 	 * procedimentos para manipular tal pacote, i.e, são verificados: Se o nó
@@ -62,24 +74,8 @@ public abstract class Protocol {
 	 * @param msg
 	 *            mensagem Event a ser tratada
 	 */
-	public void interceptPackEvent(Inbox inbox, PackEvent msg) {
-		RoutingNode receiver = (RoutingNode) inbox.getReceiver();
-
-		if ((msg.getNextHop() == 1) && (receiver.ID == 1)) {
-			receiver.statistic.countEvReceived(inbox.getArrivingTime());
-			receiver.statistic.arriveMessage(msg.idSender, Global.currentTime
-					- msg.timeFired);
-			
-			return;
-		}
-
-		if (msg.getNextHop() == receiver.ID) {
-			receiver.setColor(Color.ORANGE);
-			msg.setNextHop(receiver.nextHop);
-			RoutingMessageTimer mt = new RoutingMessageTimer(msg, true);
-			mt.startRelative(0.001, receiver);
-		}
-	}
+	public abstract void interceptPackEvent(Inbox inbox, PackEvent msg);
+	public abstract void funcAgreggation();
 
 	/**
 	 * Manipula nack messagens. Caso o receptor da mensagem não receba um ack
@@ -104,4 +100,14 @@ public abstract class Protocol {
 			sender.statistic.countRelayedMessages();
 		}
 	}
+
+	public boolean isInAgregation() {
+		return inAgregation;
+	}
+
+	public void setInAgregation(boolean inAgregation) {
+		this.inAgregation = inAgregation;
+	}
+	
+	
 }

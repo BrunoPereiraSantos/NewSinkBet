@@ -4,16 +4,24 @@ import java.awt.Color;
 import java.util.Map.Entry;
 
 import projects.Routing.nodes.edges.WeightEdge;
+import projects.Routing.nodes.messages.PackEvent;
 import projects.Routing.nodes.messages.PackHello;
 import projects.Routing.nodes.messages.PackReply;
 import projects.Routing.nodes.nodeImplementations.RoutingNode;
 import projects.Routing.nodes.timers.RoutingMessageTimer;
 import sinalgo.nodes.Node;
 import sinalgo.nodes.messages.Inbox;
+import sinalgo.runtime.Global;
 import sinalgo.tools.Tools;
 import sinalgo.tools.statistics.UniformDistribution;
 
 public class SinkBetweennessProtocol extends Protocol {
+	
+
+	public SinkBetweennessProtocol(double timeInAgregation) {
+		super(timeInAgregation);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void interceptPackHello(Inbox inbox, PackHello msg) {
@@ -216,4 +224,39 @@ public class SinkBetweennessProtocol extends Protocol {
 		n.sBet = tmp;
 	}
 
+	@Override
+	public void interceptPackEvent(Inbox inbox, PackEvent msg) {
+		RoutingNode receiver = (RoutingNode) inbox.getReceiver();
+
+		if ((msg.getNextHop() == 1) && (receiver.ID == 1)) {
+			receiver.statistic.countEvReceived(inbox.getArrivingTime());
+			receiver.statistic.arriveMessage(msg.idSender, Global.currentTime
+					- msg.timeFired);
+			
+			return;
+		}
+
+		if (msg.getNextHop() == receiver.ID) {
+			receiver.setColor(Color.ORANGE);
+			
+			if(!isInAgregation()){
+				System.out.printf("No[%d] em agregação...\n", receiver.ID);
+				msg.setNextHop(receiver.nextHop);
+				RoutingMessageTimer mt = new RoutingMessageTimer(msg, true);
+				mt.startRelative(timeInAgregation, receiver);
+				setInAgregation(true);
+			}else{
+				receiver.statistic.countAggregateMsg();
+			}
+			
+			
+		}
+	}
+
+	
+	public void funcAgreggation(){
+		
+	}
+	
+	
 }
