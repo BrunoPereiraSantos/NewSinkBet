@@ -1,4 +1,4 @@
-NewSinkBet
+NewSinkBet.
 ==========
 
 Projeto SinkBet refatorado e com modificações. 
