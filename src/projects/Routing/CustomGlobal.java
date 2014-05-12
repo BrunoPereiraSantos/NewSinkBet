@@ -56,6 +56,7 @@ import sinalgo.nodes.edges.Edge;
 import sinalgo.runtime.AbstractCustomGlobal;
 import sinalgo.runtime.Runtime;
 import sinalgo.tools.Tools;
+import sinalgo.tools.logging.Logging;
 
 /**
  * This class holds customized global state and methods for the framework. The
@@ -85,6 +86,7 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	// importar valores das arestas
 
 	private int idExecution;
+	private String metricStrategy = "";
 
 	public boolean hasTerminated() {
 		return false;
@@ -309,7 +311,7 @@ public class CustomGlobal extends AbstractCustomGlobal {
 
 			updateNodeConf();
 			
-			//loadTraffic();
+			loadTraffic();
 			
 			once = false;
 		}else if (exec1xLog){
@@ -322,9 +324,14 @@ public class CustomGlobal extends AbstractCustomGlobal {
 	}
 
 	private void printLog() {
-		
-		 System.out.println( ((RoutingNode)Tools.getNodeByID(1)).statistic.printStatisticsPerNode());
-		 //((RoutingNode)Tools.getNodeByID(1)).statistic.exportWrite("");
+
+		System.out.println(((RoutingNode) Tools.getNodeByID(1)).statistic
+				.printStatisticsPerNode());
+		Logging myLog = Logging.getLogger(metricStrategy + "_"
+				+ Tools.getNodeList().size() + ".txt", true);
+		myLog.logln(((RoutingNode) Tools.getNodeByID(1)).statistic
+				.printStatisticsPerNode());
+		// ((RoutingNode)Tools.getNodeByID(1)).statistic.exportWrite("");
 	}
 
 	/**
@@ -448,6 +455,9 @@ public class CustomGlobal extends AbstractCustomGlobal {
 		try {
 			idExecution = Configuration
 					.getIntegerParameter("ConfSimulation/idExecution");
+			
+			metricStrategy = Configuration.getStringParameter("ConfSimulation/Metric/strategy");
+			
 		} catch (CorruptConfigurationEntryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
