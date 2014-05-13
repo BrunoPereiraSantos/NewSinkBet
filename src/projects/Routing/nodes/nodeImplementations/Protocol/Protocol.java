@@ -7,25 +7,22 @@ import projects.Routing.nodes.messages.PackHello;
 import projects.Routing.nodes.messages.PackReply;
 import projects.Routing.nodes.nodeImplementations.RoutingNode;
 import projects.Routing.nodes.timers.RoutingMessageTimer;
-import projects.defaultProject.nodes.timers.GenericMessageTimer;
 import sinalgo.nodes.messages.Inbox;
 import sinalgo.nodes.messages.NackBox;
-import sinalgo.runtime.Global;
-import sinalgo.runtime.Runtime;
-import sinalgo.tools.Tools;
 
 public abstract class Protocol {
 
-	
-	private boolean inAgregation = false;
 	protected double timeInAgregation = 0.001;
-	
+	protected boolean activeAgregation = false;
+	private boolean inAgregation = false;
+
 	/**
 	 * @param timeInAgregation
 	 */
-	public Protocol(double timeInAgregation) {
+	public Protocol(boolean activeAgregation, double timeInAgregation) {
 		super();
 		this.timeInAgregation = timeInAgregation;
+		this.activeAgregation = activeAgregation;
 	}
 
 	/**
@@ -75,7 +72,31 @@ public abstract class Protocol {
 	 *            mensagem Event a ser tratada
 	 */
 	public abstract void interceptPackEvent(Inbox inbox, PackEvent msg);
-	public abstract void funcAgreggation();
+
+	/**
+	 * Funcao de agregação que recebe uma ou mais mensagens e envia somente uma
+	 * mensagem. O tempo de espera de cada mensagem é definido por
+	 * timeInAgregation passado pelo arquivo conf.xml. Por default o nó espera
+	 * 0.001 para sair do modo de agregacao
+	 * 
+	 * @param inbox
+	 *            informações sobre receptor, emissor etc.
+	 * @param msg
+	 *            mensagem que será agregada.
+	 */
+	public void funcAgreggation(Inbox inbox, PackEvent m) {
+		RoutingNode receiver = (RoutingNode) inbox.getReceiver();
+
+		if (!isInAgregation()) {
+			System.out.printf("No[%d] em agregação...\n", receiver.ID);
+			m.setNextHop(receiver.nextHop);
+			RoutingMessageTimer mt = new RoutingMessageTimer(m, true);
+			mt.startRelative(timeInAgregation, receiver);
+			setInAgregation(true);
+		} else {
+			receiver.statistic.countAggregateMsg();
+		}
+	}
 
 	/**
 	 * Manipula nack messagens. Caso o receptor da mensagem não receba um ack
@@ -96,7 +117,7 @@ public abstract class Protocol {
 			msg.setNextHop(sender.nextHop);
 			RoutingMessageTimer mt = new RoutingMessageTimer(msg, true);
 			mt.startRelative(0.5, sender);
-			
+
 			sender.statistic.countRelayedMessages();
 		}
 	}
@@ -108,6 +129,5 @@ public abstract class Protocol {
 	public void setInAgregation(boolean inAgregation) {
 		this.inAgregation = inAgregation;
 	}
-	
-	
+
 }

@@ -16,10 +16,10 @@ import sinalgo.tools.Tools;
 import sinalgo.tools.statistics.UniformDistribution;
 
 public class SinkBetweennessProtocol extends Protocol {
-	
 
-	public SinkBetweennessProtocol(double timeInAgregation) {
-		super(timeInAgregation);
+	public SinkBetweennessProtocol(boolean activeAgregation,
+			double timeInAgregation) {
+		super(activeAgregation, timeInAgregation);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -98,7 +98,8 @@ public class SinkBetweennessProtocol extends Protocol {
 
 			System.out.println("Entrei no foi send hello" + receiver.ID);
 			receiver.fhp = new RoutingMessageTimer(msg, true);
-			receiver.fhp.startRelative(waitingTimeHello(receiver.hops), receiver);
+			receiver.fhp.startRelative(waitingTimeHello(receiver.hops),
+					receiver);
 			receiver.sentMyHello = true;
 		}
 
@@ -119,21 +120,21 @@ public class SinkBetweennessProtocol extends Protocol {
 	private float waitingTimeHello(int x) {
 		// atraso para enviar o pacote [referencia artigo do Eduardo]
 		UniformDistribution r = new UniformDistribution(0, 1);
-		return (float) (x +  r.nextSample());
+		return (float) (x + r.nextSample());
 	}
-	
+
 	private float waitingTimeReply(int x) {
 		// atraso para enviar o pacote [referencia artigo do Eduardo]
 		UniformDistribution r = new UniformDistribution(0, 1);
-		return (float) (1/(Math.sqrt(x) * Math.pow(10, -3)) + r.nextSample());
-		
-		/*float waitTime = 0.0f;
-		// waitTime = 1 / (Math.exp(this.hops) * Math.pow(10, -20));
-		// waitTime = 1 / (this.hops * (Math.pow(5, -3.3)));
-		waitTime = (float) Math.pow(5, 3.3) / x;
-		// System.out.println(waitTime);
-		return (float) waitTime + 100; // o flood somente inicia apos o tempo
-										// 100*/
+		return (float) (1 / (Math.sqrt(x) * Math.pow(10, -3)) + r.nextSample());
+
+		/*
+		 * float waitTime = 0.0f; // waitTime = 1 / (Math.exp(this.hops) *
+		 * Math.pow(10, -20)); // waitTime = 1 / (this.hops * (Math.pow(5,
+		 * -3.3))); waitTime = (float) Math.pow(5, 3.3) / x; //
+		 * System.out.println(waitTime); return (float) waitTime + 100; // o
+		 * flood somente inicia apos o tempo // 100
+		 */
 	}
 
 	@Override
@@ -232,31 +233,21 @@ public class SinkBetweennessProtocol extends Protocol {
 			receiver.statistic.countEvReceived(inbox.getArrivingTime());
 			receiver.statistic.arriveMessage(msg.idSender, Global.currentTime
 					- msg.timeFired);
-			
+
 			return;
 		}
 
 		if (msg.getNextHop() == receiver.ID) {
 			receiver.setColor(Color.ORANGE);
-			
-			if(!isInAgregation()){
-				System.out.printf("No[%d] em agregação...\n", receiver.ID);
-				msg.setNextHop(receiver.nextHop);
+
+			if (activeAgregation) {
+				funcAgreggation(inbox, msg);
+			} else {
 				RoutingMessageTimer mt = new RoutingMessageTimer(msg, true);
 				mt.startRelative(timeInAgregation, receiver);
-				setInAgregation(true);
-			}else{
-				receiver.statistic.countAggregateMsg();
 			}
-			
-			
+
 		}
 	}
 
-	
-	public void funcAgreggation(){
-		
-	}
-	
-	
 }

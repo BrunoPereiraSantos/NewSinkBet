@@ -259,6 +259,6 @@
 	<traffic percentNodes="50" distribution="poisson" lambda="10"/>
 </ConfSimulation>
 
-	</Custom>
+		</Custom>
 </Document>
 

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import projects.Routing.models.energyModel.RoutingEnergyModel;
 import projects.Routing.nodes.edges.WeightEdge;
 import projects.Routing.nodes.messages.PackEvent;
 import projects.Routing.nodes.messages.PackHello;
@@ -23,7 +22,6 @@ import projects.Routing.nodes.nodeImplementations.Protocol.SinkBetweennessProtoc
 import projects.Routing.nodes.timers.RoutingMessageTimer;
 import projects.Routing.utilities.Statistics;
 import projects.defaultProject.models.reliabilityModels.ReliableDelivery;
-import projects.defaultProject.nodes.messages.EventMessage;
 import sinalgo.configuration.Configuration;
 import sinalgo.configuration.CorruptConfigurationEntryException;
 import sinalgo.configuration.WrongConfigurationException;
@@ -229,11 +227,16 @@ public class RoutingNode extends AbstractRoutingNode {
 			protocolPraram = Configuration
 					.getStringParameter("ConfSimulation/Protocol");
 
+			boolean activeAggregation = false;
+			activeAggregation = Configuration
+					.getBooleanParameter("ConfSimulation/Protocol/ActiveAggregation");
+
 			double timeInAgreggation = 0.001;
 			timeInAgreggation = Configuration
-					.getDoubleParameter("ConfSimulation/Protocol/timeInAgreggation");
+					.getDoubleParameter("ConfSimulation/Protocol/timeInAggregation");
 
-			protocol = chosenProtocol(protocolPraram, timeInAgreggation);
+			protocol = chosenProtocol(protocolPraram, activeAggregation,
+					timeInAgreggation);
 
 		} catch (CorruptConfigurationEntryException e1) {
 			e1.printStackTrace();
@@ -256,14 +259,16 @@ public class RoutingNode extends AbstractRoutingNode {
 	}
 
 	private Protocol chosenProtocol(String protocolPraram,
-			double timeInAgreggation) {
+			boolean activeAgregation, double timeInAgreggation) {
 		ProtocolEnum p = ProtocolEnum.valueOf(protocolPraram);
 
 		switch (p) {
 		case SinkBetweenness:
-			return new SinkBetweennessProtocol(timeInAgreggation);
+			return new SinkBetweennessProtocol(activeAgregation,
+					timeInAgreggation);
 		default:
-			return new SinkBetweennessProtocol(timeInAgreggation);
+			return new SinkBetweennessProtocol(activeAgregation,
+					timeInAgreggation);
 		}
 	}
 
@@ -341,7 +346,7 @@ public class RoutingNode extends AbstractRoutingNode {
 			((PackEvent) m).setNextHop(nextHop);
 
 			broadcastMsgWithNack(m);
-			
+
 			protocol.setInAgregation(false);
 		}
 
