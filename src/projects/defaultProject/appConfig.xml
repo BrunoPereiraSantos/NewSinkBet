@@ -2,7 +2,7 @@
 <sinalgo>
 	<ProjectSelector windowWidth="600" windowHeight="400" lastChosenProject="Routing" windowPosX="0" windowPosY="0" isMaximized="true" selectedTab="2" />
 	<GUI windowWidth="1362" windowHeight="382" windowPosX="2" windowPosY="0" isMaximized="false" ControlPanelExpandSimulation="true" ControlPanelShowFullViewPanel="true" ControlPanelShowTextPanel="true" ControlPanelShowProjectControl="true" RunOperationIsLimited="true" helpWindowWidth="500" helpWindowHeight="500" helpWindowPosX="200" helpWindowPosY="200" helpWindowIsMaximized="false" />
-	<RandomSeed seedFromPreviousRun="6291576485860200175" />
+	<RandomSeed seedFromPreviousRun="-7667532974290496385" />
 	<App lastSelectedFileDirectory="/home/bruno/git/NewSinkBet/Topology/" checkForUpdatesAtStartup="true" updateCheckTimeStamp="1399899942081" runCmdLineArgs="" />
 	<GenNodesDlg numNodes="9" />
 </sinalgo>
