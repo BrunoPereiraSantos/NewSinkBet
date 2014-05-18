@@ -1,5 +1,6 @@
 package projects.Routing.utilities;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -340,7 +341,6 @@ public class Statistics implements UtilityInterface {
 		RoutingNode n, nodeOne = (RoutingNode) Tools.getNodeByID(1);
 		
 		
-		
 		double totalEnergySpend;
 		while (it.hasNext()) {
 			n = (RoutingNode) it.next();
@@ -351,13 +351,11 @@ public class Statistics implements UtilityInterface {
 					+ "	"
 					+ n.hops
 					+ "	"
-					+ String.format("%.9f",
-							n.statistic.energy.getEnergySpendTree())
+					+ n.statistic.energy.getEnergySpendTree()
 					+ "	"
-					+ String.format("%.9f",
-							n.statistic.energy.getEnergySpendEv())
+					+ n.statistic.energy.getEnergySpendEv()
 					+ "	"
-					+ String.format("%.9f", totalEnergySpend)
+					+ totalEnergySpend
 					+ "	"
 					+ n.statistic.broadcastTree
 					+ "	"
@@ -375,8 +373,7 @@ public class Statistics implements UtilityInterface {
 					+ "	" + n.statistic.aggregateMsg;
 			
 					if(nodeOne.statistic.incomingEvents.containsKey(n.ID)){
-						str += "	" + String.format("%.3f",
-								averageSimple(nodeOne.statistic.incomingEvents.get(n.ID)));
+						str += "	" + averageSimple(nodeOne.statistic.incomingEvents.get(n.ID));
 					}else{
 						str += "	0.000";
 					}
